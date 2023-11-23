@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace 'myplayground.example.jakpost'
+    namespace 'myplayground.example.learningq'
     compileSdk 33
 
     defaultConfig {
-        applicationId "myplayground.example.jakpost"
+        applicationId "myplayground.example.learningq"
         minSdk 24
         targetSdk 33
         versionCode 1
