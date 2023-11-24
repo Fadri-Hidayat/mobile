@@ -18,7 +18,7 @@ import myplayground.example.learningq.ui.utils.ViewModelFactory
 class MainActivity : AppCompatActivity() {
     private val themeViewModel: ThemeViewModel by viewModels {
         ViewModelFactory(
-            Injection.provideNewsRepository(context = this),
+            Injection.provideRepository(context = this),
             DatastoreSettings.getInstance(applicationContext.dataStore),
         )
     }

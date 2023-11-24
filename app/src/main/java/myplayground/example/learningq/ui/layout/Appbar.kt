@@ -1,12 +1,14 @@
 package myplayground.example.learningq.ui.layout
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +24,7 @@ import myplayground.example.learningq.ui.theme.LearningQTheme
 @Composable
 fun Appbar(
     navController: NavHostController,
+    displayBackButton: Boolean = false,
     trailing: @Composable () -> Unit = {},
 ) {
     Box(
@@ -31,18 +34,30 @@ fun Appbar(
             .background(color = MaterialTheme.colorScheme.primary)
             .padding(start = 12.dp, end = 12.dp)
     ) {
-        Icon(
-            imageVector = Icons.Outlined.Menu,
-            contentDescription = "Menu",
-            tint = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier
-                .size(40.dp)
-                .align(Alignment.CenterStart)
-        )
+        if (displayBackButton) {
+            Icon(imageVector = Icons.Outlined.ArrowBack,
+                contentDescription = "Arrow Back",
+                tint = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier
+                    .size(40.dp)
+                    .align(Alignment.CenterStart)
+                    .clickable {
+                        navController.navigateUp()
+                    })
+        } else {
+            Icon(
+                imageVector = Icons.Outlined.Menu,
+                contentDescription = "Menu",
+                tint = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier
+                    .size(40.dp)
+                    .align(Alignment.CenterStart)
+            )
+        }
 
-            Box(modifier = Modifier.align(Alignment.CenterEnd)) {
-                trailing()
-            }
+        Box(modifier = Modifier.align(Alignment.CenterEnd)) {
+            trailing()
+        }
     }
 }
 

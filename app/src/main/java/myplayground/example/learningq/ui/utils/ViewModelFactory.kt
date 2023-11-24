@@ -19,7 +19,7 @@ class ViewModelFactory(
         } else if (modelClass.isAssignableFrom(ThemeViewModel::class.java)) {
             return ThemeViewModel.getInstance(localStorageManager) as T
         } else if (modelClass.isAssignableFrom(SignInViewModel::class.java)) {
-            return SignInViewModel(repository) as T
+            return SignInViewModel() as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
