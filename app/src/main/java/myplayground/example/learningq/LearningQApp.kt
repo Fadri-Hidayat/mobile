@@ -19,6 +19,7 @@ import myplayground.example.learningq.ui.navigation.Screen
 import myplayground.example.learningq.ui.screens.home.HomeScreen
 import myplayground.example.learningq.ui.screens.landing.LandingScreen
 import myplayground.example.learningq.ui.screens.sign_in.SignInScreen
+import myplayground.example.learningq.ui.screens.sign_up.SignUpScreen
 
 @Composable
 fun LearningQApp(
@@ -37,6 +38,7 @@ fun LearningQApp(
         modifier = modifier,
         topBar = {
             if (!(currentRoute == Screen.SignIn.route ||
+                        currentRoute == Screen.SignUp.route ||
                         currentRoute == Screen.Landing.route
                         )
             ) {
@@ -62,6 +64,13 @@ fun LearningQApp(
                     navController = navController,
                 )
             }
+
+            composable(Screen.SignUp.route) {
+                SignUpScreen(
+                    navController = navController
+                )
+            }
+
             composable(Screen.Home.route) {
                 HomeScreen()
             }

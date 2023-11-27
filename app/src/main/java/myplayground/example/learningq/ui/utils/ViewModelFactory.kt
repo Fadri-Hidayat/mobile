@@ -7,6 +7,7 @@ import myplayground.example.learningq.local_storage.LocalStorageManager
 import myplayground.example.learningq.repository.Repository
 import myplayground.example.learningq.ui.screens.home.HomeViewModel
 import myplayground.example.learningq.ui.screens.sign_in.SignInViewModel
+import myplayground.example.learningq.ui.screens.sign_up.SignUpViewModel
 
 @Suppress("UNCHECKED_CAST")
 class ViewModelFactory(
@@ -19,7 +20,9 @@ class ViewModelFactory(
         } else if (modelClass.isAssignableFrom(ThemeViewModel::class.java)) {
             return ThemeViewModel.getInstance(localStorageManager) as T
         } else if (modelClass.isAssignableFrom(SignInViewModel::class.java)) {
-            return SignInViewModel() as T
+            return SignInViewModel(repository) as T
+        } else if (modelClass.isAssignableFrom(SignUpViewModel::class.java)) {
+            return SignUpViewModel(repository) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

@@ -1,4 +1,4 @@
-package myplayground.example.learningq.ui.screens.sign_in
+package myplayground.example.learningq.ui.screens.sign_up
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.clickable
@@ -37,9 +37,9 @@ import myplayground.example.learningq.ui.theme.LearningQTheme
 import myplayground.example.learningq.ui.utils.ViewModelFactory
 
 @Composable
-fun SignInScreen(
+fun SignUpScreen(
     modifier: Modifier = Modifier,
-    vm: SignInViewModel = viewModel(
+    vm: SignUpViewModel = viewModel(
         factory = ViewModelFactory(
             Injection.provideRepository(LocalContext.current),
             DatastoreSettings.getInstance(LocalContext.current.dataStore),
@@ -49,15 +49,19 @@ fun SignInScreen(
 ) {
     val inputData by vm.uiState
 
-    SignInContent(
+    SignUpContent(
         modifier = modifier,
+        inputData.name,
         inputData.username,
-        inputData.hasUsernameError,
         inputData.password,
+        inputData.confirmPassword,
+        inputData.hasNameError,
+        inputData.hasUsernameError,
         inputData.hasPasswordError,
+        inputData.hasConfirmPasswordError,
         vm::onEvent,
     ) {
-        navController.navigate(Screen.SignUp.route) {
+        navController.navigate(Screen.SignIn.route) {
             popUpTo(Screen.Landing.route) {
                 inclusive = false
             }
@@ -66,14 +70,18 @@ fun SignInScreen(
 }
 
 @Composable
-fun SignInContent(
+fun SignUpContent(
     modifier: Modifier = Modifier,
+    name: String = "",
     username: String = "",
-    hasUsernameError: Boolean = false,
     password: String = "",
+    confirmPassword: String = "",
+    hasNameError: Boolean = false,
+    hasUsernameError: Boolean = false,
     hasPasswordError: Boolean = false,
-    onEvent: (SignInUIEvent) -> Unit = {},
-    navigateToSignUp: () -> Unit = {},
+    hasConfirmPasswordError: Boolean = false,
+    onEvent: (SignUpUIEvent) -> Unit = {},
+    navigateToSignIn: () -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -84,7 +92,7 @@ fun SignInContent(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = "Sign In",
+            text = "Sign Up",
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurface,
         )
@@ -93,9 +101,35 @@ fun SignInContent(
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
+            value = name,
+            onValueChange = {
+                onEvent(SignUpUIEvent.NameChanged(it))
+            },
+            label = {
+                Text(
+                    "Name",
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+            },
+            isError = hasNameError,
+            supportingText = {
+                if (hasNameError) {
+                    Text(
+                        "Temporary Input Error",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                }
+            }
+        )
+
+        Box(modifier = Modifier.height(12.dp))
+
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
             value = username,
             onValueChange = {
-                onEvent(SignInUIEvent.UsernameChanged(it))
+                onEvent(SignUpUIEvent.UsernameChanged(it))
             },
             label = {
                 Text(
@@ -121,7 +155,7 @@ fun SignInContent(
             modifier = Modifier.fillMaxWidth(),
             value = password,
             onValueChange = {
-                onEvent(SignInUIEvent.PasswordChanged(it))
+                onEvent(SignUpUIEvent.PasswordChanged(it))
             },
             label = {
                 Text(
@@ -142,31 +176,46 @@ fun SignInContent(
         )
 
         Box(
-            modifier = Modifier.height(4.dp),
+            modifier = Modifier.height(12.dp),
         )
 
 
-        Text(
-            modifier = Modifier
-                .align(Alignment.End)
-                .clickable { }
-                .padding(10.dp, 4.dp, 0.dp, 8.dp),
-            text = "Forgot Password",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.error,
+        PasswordOutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = confirmPassword,
+            onValueChange = {
+                onEvent(SignUpUIEvent.ConfirmPasswordChanged(it))
+            },
+            label = {
+                Text(
+                    "Confirm Password",
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+            },
+            isError = hasConfirmPasswordError,
+            supportingText = {
+                if (hasConfirmPasswordError) {
+                    Text(
+                        "Temporary Input Error",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                }
+            }
         )
 
         Box(
             modifier = Modifier.height(12.dp),
         )
 
+
         Button(
             onClick = {
-                onEvent(SignInUIEvent.Submit)
+                onEvent(SignUpUIEvent.Submit)
             }, shape = MaterialTheme.shapes.small, modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                "Login",
+                "Register",
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onPrimary,
             )
@@ -177,16 +226,16 @@ fun SignInContent(
         Row(modifier = Modifier
             .align(Alignment.Start)
             .clickable {
-                navigateToSignUp()
+                navigateToSignIn()
             }
             .padding(0.dp, 4.dp, 10.dp, 8.dp)) {
             Text(
-                "Don't have an Account? ",
+                "Already have an Account? ",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
             )
             Text(
-                "Sign Up",
+                "Sign In",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onBackground,
             )
@@ -197,9 +246,9 @@ fun SignInContent(
 @Preview(showBackground = true, device = Devices.PIXEL_4)
 @Preview(showBackground = true, device = Devices.PIXEL_4, uiMode = UI_MODE_NIGHT_YES)
 @Composable
-fun SignInContentPreview() {
+fun SignUpContentPreview() {
     LearningQTheme {
-        SignInContent()
+        SignUpContent()
     }
 }
 

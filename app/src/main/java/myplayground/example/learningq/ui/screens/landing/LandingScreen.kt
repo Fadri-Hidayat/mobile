@@ -56,6 +56,7 @@ fun LandingContent(
             Button(
                 modifier = Modifier.weight(1F),
                 onClick = {
+                    navController.navigate(Screen.SignUp.route)
                 },
             ) {
                 Text("Register")
