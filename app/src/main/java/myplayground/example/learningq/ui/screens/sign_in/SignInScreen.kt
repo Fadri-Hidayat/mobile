@@ -31,6 +31,7 @@ import androidx.navigation.compose.rememberNavController
 import myplayground.example.learningq.di.Injection
 import myplayground.example.learningq.local_storage.DatastoreSettings
 import myplayground.example.learningq.local_storage.dataStore
+import myplayground.example.learningq.ui.components.PasswordOutlinedTextField
 import myplayground.example.learningq.ui.theme.LearningQTheme
 import myplayground.example.learningq.ui.utils.ViewModelFactory
 
@@ -93,11 +94,8 @@ fun SignInContent(
 
         Box(modifier = Modifier.height(12.dp))
 
-        OutlinedTextField(
+        PasswordOutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-            ),
             value = password,
             onValueChange = {
                 onEvent(SignInUIEvent.PasswordChanged(it))
