@@ -36,10 +36,15 @@ fun LearningQApp(
     Scaffold(
         modifier = modifier,
         topBar = {
-            Appbar(
-                navController = navController,
-                displayBackButton = hasNavPreviousBackStack,
-            )
+            if (!(currentRoute == Screen.SignIn.route ||
+                        currentRoute == Screen.Landing.route
+                        )
+            ) {
+                Appbar(
+                    navController = navController,
+                    displayBackButton = hasNavPreviousBackStack,
+                )
+            }
         },
     ) { innerPadding ->
         NavHost(
