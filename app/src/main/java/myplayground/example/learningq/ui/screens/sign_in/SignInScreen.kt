@@ -1,5 +1,6 @@
 package myplayground.example.learningq.ui.screens.sign_in
 
+import android.app.Application
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -9,7 +10,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +32,7 @@ import androidx.navigation.compose.rememberNavController
 import myplayground.example.learningq.di.Injection
 import myplayground.example.learningq.local_storage.DatastoreSettings
 import myplayground.example.learningq.local_storage.dataStore
+import myplayground.example.learningq.model.User
 import myplayground.example.learningq.ui.components.PasswordOutlinedTextField
 import myplayground.example.learningq.ui.navigation.Screen
 import myplayground.example.learningq.ui.theme.LearningQTheme
@@ -41,13 +43,18 @@ fun SignInScreen(
     modifier: Modifier = Modifier,
     vm: SignInViewModel = viewModel(
         factory = ViewModelFactory(
+            LocalContext.current.applicationContext as Application,
             Injection.provideRepository(LocalContext.current),
             DatastoreSettings.getInstance(LocalContext.current.dataStore),
         )
     ),
     navController: NavHostController = rememberNavController(),
 ) {
+
     val inputData by vm.uiState
+
+    val isLoading by vm.authManager.isLoading.collectAsState()
+    val user by vm.authManager.user.collectAsState()
 
     SignInContent(
         modifier = modifier,
@@ -55,6 +62,7 @@ fun SignInScreen(
         inputData.hasUsernameError,
         inputData.password,
         inputData.hasPasswordError,
+        user,
         vm::onEvent,
     ) {
         navController.navigate(Screen.SignUp.route) {
@@ -72,6 +80,7 @@ fun SignInContent(
     hasUsernameError: Boolean = false,
     password: String = "",
     hasPasswordError: Boolean = false,
+    user: User? = null,
     onEvent: (SignInUIEvent) -> Unit = {},
     navigateToSignUp: () -> Unit = {},
 ) {
@@ -83,6 +92,12 @@ fun SignInContent(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        Text(
+            text = user.toString(),
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onSurface,
+        )
+
         Text(
             text = "Sign In",
             style = MaterialTheme.typography.titleLarge,

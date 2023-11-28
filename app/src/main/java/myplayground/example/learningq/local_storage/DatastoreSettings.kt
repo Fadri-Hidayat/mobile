@@ -5,15 +5,32 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "learningq_ds")
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "learning_ds")
 
 class DatastoreSettings private constructor(private val dataStore: DataStore<Preferences>) :
     LocalStorageManager {
+    override suspend fun saveUserToken(token: String) {
+        dataStore.edit { preferences ->
+            preferences[KEY_USER_TOKEN] = token
+        }
+    }
+
+    override fun getUserTokenAsync(): Flow<String> {
+        return dataStore.data.map { preferences ->
+            preferences[KEY_USER_TOKEN] ?: ""
+        }
+    }
+
+    override suspend fun getUserToken(): String {
+        return getUserTokenAsync().first()
+    }
+
     override suspend fun saveDarkThemeSettings(isDarkTheme: Boolean) {
         dataStore.edit { preferences ->
             preferences[KEY_DARK_THEME] = isDarkTheme
@@ -32,6 +49,7 @@ class DatastoreSettings private constructor(private val dataStore: DataStore<Pre
 
 
     companion object {
+        private val KEY_USER_TOKEN = stringPreferencesKey("user_token")
         private val KEY_DARK_THEME = booleanPreferencesKey("is_dark_theme")
 
         @Volatile

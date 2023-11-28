@@ -1,5 +1,6 @@
 package myplayground.example.learningq.ui.screens.sign_up
 
+import android.app.Application
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -41,6 +42,7 @@ fun SignUpScreen(
     modifier: Modifier = Modifier,
     vm: SignUpViewModel = viewModel(
         factory = ViewModelFactory(
+            LocalContext.current.applicationContext as Application,
             Injection.provideRepository(LocalContext.current),
             DatastoreSettings.getInstance(LocalContext.current.dataStore),
         )

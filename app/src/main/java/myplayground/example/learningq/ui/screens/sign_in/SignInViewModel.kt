@@ -6,15 +6,27 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
+import myplayground.example.learningq.local_storage.LocalStorageManager
 import myplayground.example.learningq.repository.Repository
 import myplayground.example.learningq.repository.UserLoginInput
+import myplayground.example.learningq.utils.AuthManager
 import myplayground.example.learningq.utils.allTrue
 
-class SignInViewModel(private val repository: Repository) : ViewModel() {
+class SignInViewModel(
+    private val repository: Repository,
+    private val localStorageManager: LocalStorageManager,
+    val authManager: AuthManager,
+) : ViewModel() {
     private val _uiState = mutableStateOf(SignInInputData())
     val uiState: State<SignInInputData> = _uiState
 
     val validationEvent = MutableSharedFlow<SignInUIEvent.ValidationEvent>()
+
+    fun testLogin() {
+        viewModelScope.launch {
+            localStorageManager.saveUserToken("token")
+        }
+    }
 
     fun onEvent(event: SignInUIEvent) {
         when (event) {
@@ -36,8 +48,8 @@ class SignInViewModel(private val repository: Repository) : ViewModel() {
         val usernameResultError = _uiState.value.username.isEmpty()
         val passwordResultError = _uiState.value.password.isEmpty()
 
-        _uiState.value = _uiState.value.copy(hasUsernameError =  usernameResultError)
-        _uiState.value = _uiState.value.copy(hasPasswordError =  passwordResultError)
+        _uiState.value = _uiState.value.copy(hasUsernameError = usernameResultError)
+        _uiState.value = _uiState.value.copy(hasPasswordError = passwordResultError)
 
         val hasError = listOf(
             usernameResultError,

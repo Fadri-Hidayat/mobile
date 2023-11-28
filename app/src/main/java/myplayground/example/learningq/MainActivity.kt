@@ -14,17 +14,24 @@ import myplayground.example.learningq.local_storage.DatastoreSettings
 import myplayground.example.learningq.local_storage.dataStore
 import myplayground.example.learningq.ui.theme.LearningQTheme
 import myplayground.example.learningq.ui.utils.ViewModelFactory
+import myplayground.example.learningq.utils.AuthManager
 
 class MainActivity : AppCompatActivity() {
     private val themeViewModel: ThemeViewModel by viewModels {
         ViewModelFactory(
+            this.application,
             Injection.provideRepository(context = this),
             DatastoreSettings.getInstance(applicationContext.dataStore),
         )
     }
 
+    private lateinit var authManager: AuthManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        authManager = Injection.provideAuthManager(this)
+
         setContent {
             val isDarkTheme = themeViewModel.isDarkMode.collectAsState(initial = false)
 
@@ -39,5 +46,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        authManager.cancel()
     }
 }
