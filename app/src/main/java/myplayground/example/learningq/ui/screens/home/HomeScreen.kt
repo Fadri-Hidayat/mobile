@@ -3,7 +3,9 @@ package myplayground.example.learningq.ui.screens.home
 import android.app.Application
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Devices
@@ -18,7 +20,7 @@ import myplayground.example.learningq.ui.utils.ViewModelFactory
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = viewModel(
+    vm: HomeViewModel = viewModel(
         factory = ViewModelFactory(
             LocalContext.current.applicationContext as Application,
             Injection.provideRepository(LocalContext.current),
@@ -26,8 +28,12 @@ fun HomeScreen(
         )
     )
 ) {
-    Box(modifier = modifier) {
+    val user = vm.authManager.user.collectAsState()
 
+    Box(modifier = modifier) {
+        Text(
+            user.value.toString()
+        )
     }
 }
 

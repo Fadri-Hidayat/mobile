@@ -9,24 +9,16 @@ import kotlinx.coroutines.launch
 import myplayground.example.learningq.local_storage.LocalStorageManager
 import myplayground.example.learningq.repository.Repository
 import myplayground.example.learningq.repository.UserLoginInput
-import myplayground.example.learningq.utils.AuthManager
 import myplayground.example.learningq.utils.allTrue
 
 class SignInViewModel(
     private val repository: Repository,
     private val localStorageManager: LocalStorageManager,
-    val authManager: AuthManager,
 ) : ViewModel() {
     private val _uiState = mutableStateOf(SignInInputData())
     val uiState: State<SignInInputData> = _uiState
 
     val validationEvent = MutableSharedFlow<SignInUIEvent.ValidationEvent>()
-
-    fun testLogin() {
-        viewModelScope.launch {
-            localStorageManager.saveUserToken("token")
-        }
-    }
 
     fun onEvent(event: SignInUIEvent) {
         when (event) {
@@ -58,15 +50,21 @@ class SignInViewModel(
 
         viewModelScope.launch {
             if (!hasError) {
-                repository.userLogin(
+                validationEvent.emit(SignInUIEvent.ValidationEvent.Loading())
+
+                val token = repository.userLogin(
                     UserLoginInput(
                         username = _uiState.value.username,
                         password = _uiState.value.password,
                     )
-                ).collect { token ->
-                    validationEvent.emit(SignInUIEvent.ValidationEvent.Success(token))
-                }
+                )
 
+                validationEvent.emit(SignInUIEvent.ValidationEvent.None())
+
+                if (token?.auth_token != null && token.auth_token.isNotEmpty()) {
+                    localStorageManager.saveUserToken(token?.auth_token ?: "")
+                    validationEvent.emit(SignInUIEvent.ValidationEvent.Success())
+                }
             } else {
                 validationEvent.emit(SignInUIEvent.ValidationEvent.Failure(0, "Validation Failed"))
             }

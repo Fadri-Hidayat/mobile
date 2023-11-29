@@ -1,7 +1,5 @@
 package myplayground.example.learningq.ui.screens.sign_in
 
-import myplayground.example.learningq.model.Token
-
 data class SignInInputData(
     val username: String = "",
     val password: String = "",
@@ -17,7 +15,9 @@ sealed class SignInUIEvent {
     object Submit : SignInUIEvent()
 
     sealed class ValidationEvent {
-        class Success(val token: Token?) : ValidationEvent()
+        class None() : ValidationEvent()
+        class Loading() : ValidationEvent()
+        class Success() : ValidationEvent()
         class Failure(val code: Int = 0, val msg: String) : ValidationEvent()
     }
 }

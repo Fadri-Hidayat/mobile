@@ -14,10 +14,11 @@ class AuthManager(
     private val repository: Repository,
     private val localStorageManager: LocalStorageManager,
 ) {
+    private val _haveToken = MutableStateFlow(false)
     private val _isLoading = MutableStateFlow(false)
-    private var isAuthenticated: Boolean = false
     private var _user = MutableStateFlow<User?>(null)
 
+    val haveToken: StateFlow<Boolean> = _haveToken
     val isLoading: StateFlow<Boolean> = _isLoading
     val user: StateFlow<User?> = _user
 
@@ -26,16 +27,14 @@ class AuthManager(
     init {
         coroutineScope.launch {
             localStorageManager.getUserTokenAsync().collect { token ->
-
                 if (token.isNotEmpty()) {
+                    _haveToken.value = true
                     _isLoading.value = true
 
-                    isAuthenticated = true
-
-                    _user.value = User(
-                        id = "1",
-                        name = "John Doe",
-                    )
+                    _user.value = repository.userMe(token)
+                } else {
+                    _haveToken.value = false
+                    _user.value = null
                 }
 
                 _isLoading.value = false
@@ -43,13 +42,9 @@ class AuthManager(
         }
     }
 
-    fun isLoggedIn(): Boolean = isAuthenticated
-
     fun logout() {
         coroutineScope.launch {
             localStorageManager.saveUserToken("")
-            
-            _user.value = null
         }
     }
 

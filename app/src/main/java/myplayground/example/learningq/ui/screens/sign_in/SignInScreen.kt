@@ -32,7 +32,6 @@ import androidx.navigation.compose.rememberNavController
 import myplayground.example.learningq.di.Injection
 import myplayground.example.learningq.local_storage.DatastoreSettings
 import myplayground.example.learningq.local_storage.dataStore
-import myplayground.example.learningq.model.User
 import myplayground.example.learningq.ui.components.PasswordOutlinedTextField
 import myplayground.example.learningq.ui.navigation.Screen
 import myplayground.example.learningq.ui.theme.LearningQTheme
@@ -52,9 +51,15 @@ fun SignInScreen(
 ) {
 
     val inputData by vm.uiState
+    val event by vm.validationEvent.collectAsState(initial = SignInUIEvent.ValidationEvent.None())
 
-    val isLoading by vm.authManager.isLoading.collectAsState()
-    val user by vm.authManager.user.collectAsState()
+    if(event is SignInUIEvent.ValidationEvent.Success) {
+        navController.navigate(Screen.Home.route) {
+            popUpTo(Screen.Landing.route) {
+                inclusive = false
+            }
+        }
+    }
 
     SignInContent(
         modifier = modifier,
@@ -62,8 +67,8 @@ fun SignInScreen(
         inputData.hasUsernameError,
         inputData.password,
         inputData.hasPasswordError,
-        user,
         vm::onEvent,
+        event,
     ) {
         navController.navigate(Screen.SignUp.route) {
             popUpTo(Screen.Landing.route) {
@@ -80,8 +85,8 @@ fun SignInContent(
     hasUsernameError: Boolean = false,
     password: String = "",
     hasPasswordError: Boolean = false,
-    user: User? = null,
     onEvent: (SignInUIEvent) -> Unit = {},
+    event: SignInUIEvent.ValidationEvent = SignInUIEvent.ValidationEvent.None(),
     navigateToSignUp: () -> Unit = {},
 ) {
     Column(
@@ -93,12 +98,6 @@ fun SignInContent(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = user.toString(),
-            style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onSurface,
-        )
-
-        Text(
             text = "Sign In",
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurface,
@@ -106,20 +105,18 @@ fun SignInContent(
 
         Box(modifier = Modifier.height(24.dp))
 
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
+        OutlinedTextField(modifier = Modifier.fillMaxWidth(),
             value = username,
             onValueChange = {
                 onEvent(SignInUIEvent.UsernameChanged(it))
             },
+            enabled = event !is SignInUIEvent.ValidationEvent.Loading,
             label = {
                 Text(
                     "Email",
                     style = MaterialTheme.typography.bodyLarge,
                 )
-            },
-            isError = hasUsernameError,
-            supportingText = {
+            }, isError = hasUsernameError, supportingText = {
                 if (hasUsernameError) {
                     Text(
                         "Temporary Input Error",
@@ -127,17 +124,16 @@ fun SignInContent(
                         color = MaterialTheme.colorScheme.error,
                     )
                 }
-            }
-        )
+            })
 
         Box(modifier = Modifier.height(12.dp))
 
-        PasswordOutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
+        PasswordOutlinedTextField(modifier = Modifier.fillMaxWidth(),
             value = password,
             onValueChange = {
                 onEvent(SignInUIEvent.PasswordChanged(it))
             },
+            enabled = event !is SignInUIEvent.ValidationEvent.Loading,
             label = {
                 Text(
                     "Password",
@@ -153,8 +149,7 @@ fun SignInContent(
                         color = MaterialTheme.colorScheme.error,
                     )
                 }
-            }
-        )
+            })
 
         Box(
             modifier = Modifier.height(4.dp),
@@ -178,7 +173,9 @@ fun SignInContent(
         Button(
             onClick = {
                 onEvent(SignInUIEvent.Submit)
-            }, shape = MaterialTheme.shapes.small, modifier = Modifier.fillMaxWidth()
+            },
+            shape = MaterialTheme.shapes.small, modifier = Modifier.fillMaxWidth(),
+            enabled = event !is SignInUIEvent.ValidationEvent.Loading
         ) {
             Text(
                 "Login",

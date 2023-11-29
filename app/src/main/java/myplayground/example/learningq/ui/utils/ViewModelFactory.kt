@@ -22,11 +22,11 @@ class ViewModelFactory(
         val authManager = Injection.provideAuthManager(application.applicationContext)
 
         if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
-            return HomeViewModel(repository) as T
+            return HomeViewModel(repository, authManager) as T
         } else if (modelClass.isAssignableFrom(ThemeViewModel::class.java)) {
             return ThemeViewModel.getInstance(localStorageManager) as T
         } else if (modelClass.isAssignableFrom(SignInViewModel::class.java)) {
-            return SignInViewModel(repository, localStorageManager, authManager) as T
+            return SignInViewModel(repository, localStorageManager) as T
         } else if (modelClass.isAssignableFrom(SignUpViewModel::class.java)) {
             return SignUpViewModel(repository) as T
         }
