@@ -53,7 +53,7 @@ fun SignInScreen(
     val inputData by vm.uiState
     val event by vm.validationEvent.collectAsState(initial = SignInUIEvent.ValidationEvent.None())
 
-    if(event is SignInUIEvent.ValidationEvent.Success) {
+    if (event is SignInUIEvent.ValidationEvent.Success) {
         navController.navigate(Screen.Home.route) {
             popUpTo(Screen.Landing.route) {
                 inclusive = false

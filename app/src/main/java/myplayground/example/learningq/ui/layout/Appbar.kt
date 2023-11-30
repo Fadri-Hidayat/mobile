@@ -25,6 +25,7 @@ import myplayground.example.learningq.ui.theme.LearningQTheme
 fun Appbar(
     navController: NavHostController,
     displayBackButton: Boolean = false,
+    onNavigationIconClick: () -> Unit = {},
     trailing: @Composable () -> Unit = {},
 ) {
     Box(
@@ -51,6 +52,9 @@ fun Appbar(
                 tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .size(40.dp)
+                    .clickable {
+                        onNavigationIconClick()
+                    }
                     .align(Alignment.CenterStart)
             )
         }
