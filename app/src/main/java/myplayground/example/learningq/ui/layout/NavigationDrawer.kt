@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Quiz
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,6 +39,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
@@ -198,15 +200,23 @@ fun DialogLogout(
     logout: () -> Unit = {},
 ) {
     AlertDialog(
-        modifier = Modifier.background(MaterialTheme.colorScheme.background),
+        containerColor = MaterialTheme.colorScheme.background,
         onDismissRequest = onDismissRequest,
         icon = { //                        Icon(icon, contentDescription = "Example Icon")
         },
         title = {
-            Text(text = "Logout")
+            Text(
+                text = "Logout",
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onBackground,
+            )
         },
         text = {
-            Text(text = "Apakah anda ingin keluar?")
+            Text(
+                text = "Apakah anda ingin keluar?",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onBackground,
+            )
         },
         confirmButton = {
             Button(onClick = {

@@ -56,9 +56,7 @@ fun SignInScreen(
 
     if (event is SignInUIEvent.ValidationEvent.Success) {
         navController.navigate(Screen.Home.route) {
-            popUpTo(Screen.Landing.route) {
-                inclusive = false
-            }
+            popUpTo(0)
         }
     }
 

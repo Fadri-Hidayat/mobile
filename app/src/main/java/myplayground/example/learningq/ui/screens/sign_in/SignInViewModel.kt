@@ -62,7 +62,7 @@ class SignInViewModel(
                 validationEvent.emit(SignInUIEvent.ValidationEvent.None())
 
                 if (token?.auth_token != null && token.auth_token.isNotEmpty()) {
-                    localStorageManager.saveUserToken(token?.auth_token ?: "")
+                    localStorageManager.saveUserToken(token.auth_token ?: "")
                     validationEvent.emit(SignInUIEvent.ValidationEvent.Success())
                 }
             } else {
