@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -103,7 +104,7 @@ fun SignInContent(
             color = MaterialTheme.colorScheme.onSurface,
         )
 
-        Box(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         OutlinedTextField(modifier = Modifier.fillMaxWidth(),
             value = username,
@@ -126,7 +127,7 @@ fun SignInContent(
                 }
             })
 
-        Box(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         PasswordOutlinedTextField(modifier = Modifier.fillMaxWidth(),
             value = password,
@@ -151,9 +152,7 @@ fun SignInContent(
                 }
             })
 
-        Box(
-            modifier = Modifier.height(4.dp),
-        )
+        Spacer(modifier = Modifier.height(4.dp))
 
 
         Text(
@@ -166,9 +165,7 @@ fun SignInContent(
             color = MaterialTheme.colorScheme.error,
         )
 
-        Box(
-            modifier = Modifier.height(12.dp),
-        )
+        Spacer(modifier = Modifier.height(12.dp))
 
         Button(
             onClick = {
@@ -184,7 +181,7 @@ fun SignInContent(
             )
         }
 
-        Box(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(4.dp))
 
         Row(modifier = Modifier
             .align(Alignment.Start)

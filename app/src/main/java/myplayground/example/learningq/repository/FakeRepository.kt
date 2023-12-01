@@ -4,6 +4,7 @@ import android.content.Context
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import myplayground.example.learningq.model.Role
 import myplayground.example.learningq.model.Token
 import myplayground.example.learningq.model.User
 
@@ -31,7 +32,9 @@ class FakeRepository(context: Context) : Repository {
     override fun userMe(token: String): User? {
         return User(
             id = "1",
-            name = "Student"
+            name = "Student",
+            image_url = "https://miro.medium.com/v2/resize:fill:110:110/1*x1I-A7aVdqWFelvJakKWBg.jpeg",
+            role = Role.Student,
         )
     }
 

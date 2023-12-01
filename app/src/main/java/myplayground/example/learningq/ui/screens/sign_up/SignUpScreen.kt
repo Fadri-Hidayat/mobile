@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -99,7 +100,7 @@ fun SignUpContent(
             color = MaterialTheme.colorScheme.onSurface,
         )
 
-        Box(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
@@ -125,7 +126,7 @@ fun SignUpContent(
             }
         )
 
-        Box(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
@@ -151,7 +152,7 @@ fun SignUpContent(
             }
         )
 
-        Box(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         PasswordOutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
@@ -177,9 +178,7 @@ fun SignUpContent(
             }
         )
 
-        Box(
-            modifier = Modifier.height(12.dp),
-        )
+        Spacer(modifier = Modifier.height(12.dp))
 
 
         PasswordOutlinedTextField(
@@ -206,9 +205,7 @@ fun SignUpContent(
             }
         )
 
-        Box(
-            modifier = Modifier.height(12.dp),
-        )
+        Spacer(modifier = Modifier.height(12.dp))
 
 
         Button(
@@ -223,7 +220,7 @@ fun SignUpContent(
             )
         }
 
-        Box(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(4.dp))
 
         Row(modifier = Modifier
             .align(Alignment.Start)

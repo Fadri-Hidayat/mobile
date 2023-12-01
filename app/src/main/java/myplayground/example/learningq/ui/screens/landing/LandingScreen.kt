@@ -4,6 +4,7 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
@@ -49,9 +50,7 @@ fun LandingContent(
                 Text("Login")
             }
 
-            Box(
-                modifier = Modifier.width(20.dp),
-            )
+            Spacer(modifier = Modifier.width(20.dp))
 
             Button(
                 modifier = Modifier.weight(1F),
