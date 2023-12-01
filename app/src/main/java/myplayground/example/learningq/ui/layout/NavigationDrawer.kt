@@ -181,17 +181,25 @@ fun DrawerBodyStudent(
     })
 
     if (isLogoutModalOpen.value) {
-        DialogLogout(onDismissRequest = {
-            isLogoutModalOpen.value = false
-        })
+        DialogLogout(
+            onDismissRequest = {
+                isLogoutModalOpen.value = false
+            },
+            logout = {
+                authManager.logout()
+            }
+        )
     }
 }
 
 @Composable
 fun DialogLogout(
     onDismissRequest: () -> Unit = {},
+    logout: () -> Unit = {},
 ) {
-    AlertDialog(onDismissRequest = onDismissRequest,
+    AlertDialog(
+        modifier = Modifier.background(MaterialTheme.colorScheme.background),
+        onDismissRequest = onDismissRequest,
         icon = { //                        Icon(icon, contentDescription = "Example Icon")
         },
         title = {
@@ -201,13 +209,17 @@ fun DialogLogout(
             Text(text = "Apakah anda ingin keluar?")
         },
         confirmButton = {
-            Button(onClick = {}) {
+            Button(onClick = {
+                logout()
+            }) {
                 Text("Confirm")
             }
         },
         dismissButton = {
-            Button(onClick = {}) {
-                Text("Dismiss")
+            Button(onClick = {
+                onDismissRequest()
+            }) {
+                Text("Cancel")
             }
         })
 }
