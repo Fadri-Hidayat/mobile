@@ -1,5 +1,6 @@
 package myplayground.example.learningq.ui.screens.sign_in
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -63,6 +64,7 @@ class SignInViewModel(
 
                 if (token?.auth_token != null && token.auth_token.isNotEmpty()) {
                     localStorageManager.saveUserToken(token.auth_token ?: "")
+
                     validationEvent.emit(SignInUIEvent.ValidationEvent.Success())
                 }
             } else {

@@ -2,6 +2,7 @@ package myplayground.example.learningq.ui.screens.sign_in
 
 import android.app.Application
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -54,9 +56,11 @@ fun SignInScreen(
     val inputData by vm.uiState
     val event by vm.validationEvent.collectAsState(initial = SignInUIEvent.ValidationEvent.None())
 
-    if (event is SignInUIEvent.ValidationEvent.Success) {
-        navController.navigate(Screen.Home.route) {
-            popUpTo(0)
+    LaunchedEffect(event) {
+        if (event is SignInUIEvent.ValidationEvent.Success) {
+            navController.navigate(Screen.Home.route) {
+                popUpTo(0)
+            }
         }
     }
 
@@ -68,6 +72,9 @@ fun SignInScreen(
         inputData.hasPasswordError,
         vm::onEvent,
         event,
+        {
+            navController.navigate(Screen.Home.route)
+        },
     ) {
         navController.navigate(Screen.SignUp.route) {
             popUpTo(Screen.Landing.route) {
@@ -86,6 +93,7 @@ fun SignInContent(
     hasPasswordError: Boolean = false,
     onEvent: (SignInUIEvent) -> Unit = {},
     event: SignInUIEvent.ValidationEvent = SignInUIEvent.ValidationEvent.None(),
+    az: () -> Unit = {},
     navigateToSignUp: () -> Unit = {},
 ) {
     Column(
@@ -167,6 +175,7 @@ fun SignInContent(
 
         Button(
             onClick = {
+//                az()
                 onEvent(SignInUIEvent.Submit)
             },
             shape = MaterialTheme.shapes.small, modifier = Modifier.fillMaxWidth(),

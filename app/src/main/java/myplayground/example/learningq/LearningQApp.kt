@@ -1,24 +1,13 @@
 package myplayground.example.learningq
 
 import android.app.Application
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import android.util.Log
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Logout
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -37,10 +26,8 @@ import kotlinx.coroutines.launch
 import myplayground.example.learningq.di.Injection
 import myplayground.example.learningq.model.Role
 import myplayground.example.learningq.ui.layout.Appbar
-import myplayground.example.learningq.ui.layout.DrawerBody
 import myplayground.example.learningq.ui.layout.DrawerBodyStudent
 import myplayground.example.learningq.ui.layout.DrawerHeader
-import myplayground.example.learningq.ui.layout.MenuItem
 import myplayground.example.learningq.ui.navigation.Screen
 import myplayground.example.learningq.ui.screens.home.HomeScreen
 import myplayground.example.learningq.ui.screens.landing.LandingScreen
@@ -54,8 +41,8 @@ fun LearningQApp(
     drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
 ) {
     val scope = rememberCoroutineScope()
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
+    val navBackStackEntry = navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry.value?.destination?.route
     val hasNavPreviousBackStack by remember(navBackStackEntry) {
         derivedStateOf {
             navController.previousBackStackEntry != null
@@ -80,15 +67,13 @@ fun LearningQApp(
                     if (user.value != null) {
                         when (user.value!!.role) {
                             Role.Student -> {
-                                DrawerBodyStudent(
-                                    navController = navController,
+                                DrawerBodyStudent(navController = navController,
                                     authManager = authManager,
                                     closeDrawer = {
                                         scope.launch {
                                             drawerState.close()
                                         }
-                                    }
-                                )
+                                    })
 
                             }
 
@@ -98,24 +83,19 @@ fun LearningQApp(
 
                 }
             }
-        }) {
+        },
+    ) {
         Scaffold(
             modifier = modifier,
             topBar = {
-                if (!(currentRoute == Screen.SignIn.route ||
-                            currentRoute == Screen.SignUp.route ||
-                            currentRoute == Screen.Landing.route
-                            )
-                ) {
-                    Appbar(
-                        navController = navController,
+                if (!(currentRoute == Screen.SignIn.route || currentRoute == Screen.SignUp.route || currentRoute == Screen.Landing.route)) {
+                    Appbar(navController = navController,
                         displayBackButton = hasNavPreviousBackStack,
                         onNavigationIconClick = {
                             scope.launch {
                                 drawerState.open()
                             }
-                        }
-                    )
+                        })
                 }
             },
         ) { innerPadding ->

@@ -46,6 +46,7 @@ import coil.compose.AsyncImage
 import myplayground.example.learningq.R
 import myplayground.example.learningq.di.Injection
 import myplayground.example.learningq.model.User
+import myplayground.example.learningq.ui.navigation.Screen
 import myplayground.example.learningq.ui.utils.debugPlaceholder
 import myplayground.example.learningq.utils.AuthManager
 
@@ -189,6 +190,10 @@ fun DrawerBodyStudent(
             },
             logout = {
                 authManager.logout()
+
+                navController.navigate(Screen.SignIn.route) {
+                    popUpTo(0)
+                }
             }
         )
     }
