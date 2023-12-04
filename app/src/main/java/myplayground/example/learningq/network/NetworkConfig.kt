@@ -10,7 +10,6 @@ class NetworkConfig {
         inline fun <reified T> create(
             baseUrl: String,
         ): T {
-
             // auth
             val authInterceptor = Interceptor { chain ->
                 val req = chain.request()
