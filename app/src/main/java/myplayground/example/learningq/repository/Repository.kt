@@ -8,4 +8,5 @@ interface Repository {
     suspend fun userLogin(request: UserLoginInput): Token?
     fun userRegister(request: UserRegisterInput): Flow<Token?>
     fun userMe(token: String): User?
+
 }

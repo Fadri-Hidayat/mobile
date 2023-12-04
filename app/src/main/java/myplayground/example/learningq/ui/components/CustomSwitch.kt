@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,12 +29,16 @@ fun CustomSwitch(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier,
     ) {
-        Switch(checked = checked, onCheckedChange = onCheckedChange, enabled = enabled)
+        Switch(
+            checked = checked,
+            onCheckedChange = onCheckedChange, enabled = enabled,
+        )
         if (text != null) {
             Spacer(modifier = Modifier.width(12.dp))
             Text(
                 text = text,
                 color = MaterialTheme.colorScheme.onBackground,
+                style = MaterialTheme.typography.headlineSmall,
             )
         }
     }

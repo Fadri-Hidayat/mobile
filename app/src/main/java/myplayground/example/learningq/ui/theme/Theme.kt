@@ -31,8 +31,8 @@ private fun customDynamicLightColorScheme(context: Context): ColorScheme {
 
             onPrimary = White,
             onSecondary = White,
-            onTertiary = OnTertiary,
-            onSurface = Black,
+            onTertiary = TertiaryDark,
+            onSurface = Primary,
             onPrimaryContainer = White,
             onBackground = Black,
 
@@ -65,13 +65,13 @@ private fun customDynamicDarkColorScheme(context: Context): ColorScheme {
         ColorScheme(
             primary = Primary,
             secondary = Secondary,
-            tertiary = Tertiary,
+            tertiary = TertiaryDark,
             background = Background,
             primaryContainer = Primary,
 
             onPrimary = White,
             onSecondary = White,
-            onTertiary = OnTertiary,
+            onTertiary = TertiaryDark,
             onSurface = White,
             onPrimaryContainer = White,
             onBackground = White,
@@ -101,13 +101,13 @@ private fun customDynamicDarkColorScheme(context: Context): ColorScheme {
 private val DarkColorScheme = darkColorScheme(
     primary = Primary,
     secondary = Secondary,
-    tertiary = Tertiary,
+    tertiary = TertiaryDark,
     background = Background,
     primaryContainer = Primary,
 
     onPrimary = White,
     onSecondary = White,
-    onTertiary = OnTertiary,
+    onTertiary = TertiaryDark,
     onSurface = White,
     onPrimaryContainer = White,
     onBackground = White,
@@ -122,8 +122,8 @@ private val LightColorScheme = lightColorScheme(
 
     onPrimary = White,
     onSecondary = White,
-    onTertiary = OnTertiary,
-    onSurface = Black,
+    onTertiary = TertiaryDark,
+    onSurface = Primary,
     onPrimaryContainer = White,
     onBackground = Black,
 )
@@ -131,7 +131,8 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun LearningQTheme(
     darkTheme: Boolean = isSystemInDarkTheme(), // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true, content: @Composable () -> Unit
+    dynamicColor: Boolean = true,
+    content: @Composable () -> Unit,
 ) {
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
@@ -154,7 +155,6 @@ fun LearningQTheme(
         }
     }
 
-    val context = LocalContext.current
 
     MaterialTheme(
         colorScheme = colorScheme, typography = Typography, content = content

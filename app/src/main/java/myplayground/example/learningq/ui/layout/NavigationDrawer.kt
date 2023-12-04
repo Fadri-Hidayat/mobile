@@ -72,7 +72,7 @@ fun DrawerHeader(
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = user.name,
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                     style = MaterialTheme.typography.titleSmall,
                 )
             }
