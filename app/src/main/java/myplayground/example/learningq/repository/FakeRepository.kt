@@ -10,7 +10,9 @@ import myplayground.example.learningq.model.User
 
 class FakeRepository(context: Context) : Repository {
 
-    override fun userLogin(request: UserLoginInput): Token? {
+    override suspend fun userLogin(request: UserLoginInput): Token? {
+        delay(1500)
+
         for (existingAccount in existingAccounts) {
             if (request.username == existingAccount.username && request.password == existingAccount.password) {
                 return Token(

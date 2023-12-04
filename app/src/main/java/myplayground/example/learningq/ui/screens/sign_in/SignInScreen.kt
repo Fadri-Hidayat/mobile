@@ -9,13 +9,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -35,6 +38,7 @@ import androidx.navigation.compose.rememberNavController
 import myplayground.example.learningq.di.Injection
 import myplayground.example.learningq.local_storage.DatastoreSettings
 import myplayground.example.learningq.local_storage.dataStore
+import myplayground.example.learningq.ui.components.CustomButton
 import myplayground.example.learningq.ui.components.PasswordOutlinedTextField
 import myplayground.example.learningq.ui.navigation.Screen
 import myplayground.example.learningq.ui.theme.LearningQTheme
@@ -55,6 +59,7 @@ fun SignInScreen(
 
     val inputData by vm.uiState
     val event by vm.validationEvent.collectAsState(initial = SignInUIEvent.ValidationEvent.None())
+    val isLoading by vm.isLoading
 
     LaunchedEffect(event) {
         if (event is SignInUIEvent.ValidationEvent.Success) {
@@ -70,11 +75,9 @@ fun SignInScreen(
         inputData.hasUsernameError,
         inputData.password,
         inputData.hasPasswordError,
+        isLoading,
         vm::onEvent,
         event,
-        {
-            navController.navigate(Screen.Home.route)
-        },
     ) {
         navController.navigate(Screen.SignUp.route) {
             popUpTo(Screen.Landing.route) {
@@ -91,9 +94,9 @@ fun SignInContent(
     hasUsernameError: Boolean = false,
     password: String = "",
     hasPasswordError: Boolean = false,
+    isLoading: Boolean = false,
     onEvent: (SignInUIEvent) -> Unit = {},
     event: SignInUIEvent.ValidationEvent = SignInUIEvent.ValidationEvent.None(),
-    az: () -> Unit = {},
     navigateToSignUp: () -> Unit = {},
 ) {
     Column(
@@ -117,7 +120,7 @@ fun SignInContent(
             onValueChange = {
                 onEvent(SignInUIEvent.UsernameChanged(it))
             },
-            enabled = event !is SignInUIEvent.ValidationEvent.Loading,
+            enabled = !isLoading,
             label = {
                 Text(
                     "Email",
@@ -140,7 +143,7 @@ fun SignInContent(
             onValueChange = {
                 onEvent(SignInUIEvent.PasswordChanged(it))
             },
-            enabled = event !is SignInUIEvent.ValidationEvent.Loading,
+            enabled = !isLoading,
             label = {
                 Text(
                     "Password",
@@ -173,13 +176,13 @@ fun SignInContent(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        Button(
+        CustomButton(
             onClick = {
-//                az()
                 onEvent(SignInUIEvent.Submit)
             },
             shape = MaterialTheme.shapes.small, modifier = Modifier.fillMaxWidth(),
-            enabled = event !is SignInUIEvent.ValidationEvent.Loading
+            enabled = !isLoading,
+            isLoading = isLoading,
         ) {
             Text(
                 "Login",

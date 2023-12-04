@@ -20,26 +20,21 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Quiz
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Button
-import androidx.compose.material3.DrawerState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
@@ -98,29 +93,38 @@ fun DrawerBody(
             .background(MaterialTheme.colorScheme.background),
     ) {
         items(items) { item ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        onItemClick(item)
+            if (item.isSpacing) {
+                // how to make this work
+                Spacer(modifier = Modifier.height(56.dp))
+            } else {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            onItemClick(item)
+                        }
+                        .padding(12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    if (item.icon != null) {
+                        Icon(
+                            tint = item.color,
+                            imageVector = item.icon,
+                            contentDescription = item.contentDescription,
+                        )
                     }
-                    .padding(12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Icon(
-                    imageVector = item.icon,
-                    contentDescription = item.contentDescription,
-                )
 
-                Spacer(modifier = Modifier.width(16.dp))
+                    Spacer(modifier = Modifier.width(16.dp))
 
-                Text(
-                    text = item.title,
-                    style = MaterialTheme.typography.titleSmall,
-                    modifier = Modifier.weight(1f),
-                )
+                    Text(
+                        modifier = Modifier.weight(1f),
+                        text = item.title,
+                        color = item.color,
+                        style = MaterialTheme.typography.titleSmall,
+                    )
+                }
+                Spacer(modifier = Modifier.height(8.dp))
             }
-            Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }
@@ -142,29 +146,33 @@ fun DrawerBodyStudent(
             title = "Home",
             contentDescription = "Home",
             icon = Icons.Default.Home,
+            color = MaterialTheme.colorScheme.onBackground,
         ),
         MenuItem(
             id = "presence",
             title = "Presence",
             contentDescription = "Presence",
             icon = Icons.Default.CalendarMonth,
+            color = MaterialTheme.colorScheme.onBackground,
         ),
         MenuItem(
             id = "quiz",
             title = "Quiz",
             contentDescription = "Quiz",
             icon = Icons.Default.Quiz,
+            color = MaterialTheme.colorScheme.onBackground,
         ),
+        MenuItem(isSpacing = true),
         MenuItem(
             id = "logout",
             title = "Logout",
             contentDescription = "Logout",
             icon = Icons.Default.Logout,
+            color = MaterialTheme.colorScheme.error,
         ),
     ), onItemClick = { menuItem ->
         when (menuItem.id) {
             "home" -> {
-
             }
 
             "presence" -> {
@@ -240,10 +248,12 @@ fun DialogLogout(
 }
 
 data class MenuItem(
-    val id: String,
-    val title: String,
-    val contentDescription: String?,
-    val icon: ImageVector,
+    val id: String = "",
+    val title: String = "",
+    val contentDescription: String? = null,
+    val icon: ImageVector? = null,
+    val color: Color = Color.Unspecified,
+    val isSpacing: Boolean = false,
 )
 
 

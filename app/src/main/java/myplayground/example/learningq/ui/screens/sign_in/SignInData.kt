@@ -16,7 +16,6 @@ sealed class SignInUIEvent {
 
     sealed class ValidationEvent {
         class None() : ValidationEvent()
-        class Loading() : ValidationEvent()
         class Success() : ValidationEvent()
         class Failure(val code: Int = 0, val msg: String) : ValidationEvent()
     }

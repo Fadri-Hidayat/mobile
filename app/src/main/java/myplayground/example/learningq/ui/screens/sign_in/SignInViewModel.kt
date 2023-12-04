@@ -17,7 +17,10 @@ class SignInViewModel(
     private val localStorageManager: LocalStorageManager,
 ) : ViewModel() {
     private val _uiState = mutableStateOf(SignInInputData())
+    private val _isLoading = mutableStateOf(false)
+
     val uiState: State<SignInInputData> = _uiState
+    val isLoading: State<Boolean> = _isLoading
 
     val validationEvent = MutableSharedFlow<SignInUIEvent.ValidationEvent>()
 
@@ -51,8 +54,7 @@ class SignInViewModel(
 
         viewModelScope.launch {
             if (!hasError) {
-                validationEvent.emit(SignInUIEvent.ValidationEvent.Loading())
-
+                _isLoading.value = true
                 val token = repository.userLogin(
                     UserLoginInput(
                         username = _uiState.value.username,
@@ -60,13 +62,12 @@ class SignInViewModel(
                     )
                 )
 
-                validationEvent.emit(SignInUIEvent.ValidationEvent.None())
-
                 if (token?.auth_token != null && token.auth_token.isNotEmpty()) {
                     localStorageManager.saveUserToken(token.auth_token ?: "")
 
                     validationEvent.emit(SignInUIEvent.ValidationEvent.Success())
                 }
+                _isLoading.value = false
             } else {
                 validationEvent.emit(SignInUIEvent.ValidationEvent.Failure(0, "Validation Failed"))
             }

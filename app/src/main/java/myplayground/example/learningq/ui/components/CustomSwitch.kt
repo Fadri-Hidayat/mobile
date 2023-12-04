@@ -16,10 +16,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import myplayground.example.learningq.ui.theme.LearningQTheme
 
-/*
-    This is a simple switch component that doesn't support RTL
-*/
-
 @Composable
 fun CustomSwitch(
     modifier: Modifier = Modifier,
