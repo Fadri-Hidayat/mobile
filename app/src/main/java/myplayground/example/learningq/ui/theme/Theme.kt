@@ -31,7 +31,7 @@ private fun customDynamicLightColorScheme(context: Context): ColorScheme {
 
             onPrimary = White,
             onSecondary = White,
-            onTertiary = White,
+            onTertiary = OnTertiary,
             onSurface = Black,
             onPrimaryContainer = White,
             onBackground = Black,
@@ -71,7 +71,7 @@ private fun customDynamicDarkColorScheme(context: Context): ColorScheme {
 
             onPrimary = White,
             onSecondary = White,
-            onTertiary = White,
+            onTertiary = OnTertiary,
             onSurface = White,
             onPrimaryContainer = White,
             onBackground = White,
@@ -107,7 +107,7 @@ private val DarkColorScheme = darkColorScheme(
 
     onPrimary = White,
     onSecondary = White,
-    onTertiary = White,
+    onTertiary = OnTertiary,
     onSurface = White,
     onPrimaryContainer = White,
     onBackground = White,
@@ -122,7 +122,7 @@ private val LightColorScheme = lightColorScheme(
 
     onPrimary = White,
     onSecondary = White,
-    onTertiary = White,
+    onTertiary = OnTertiary,
     onSurface = Black,
     onPrimaryContainer = White,
     onBackground = Black,

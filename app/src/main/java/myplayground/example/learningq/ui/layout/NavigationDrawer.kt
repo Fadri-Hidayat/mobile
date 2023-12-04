@@ -11,14 +11,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Quiz
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -54,7 +53,7 @@ fun DrawerHeader(
         modifier = modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.primary)
-            .padding(vertical = 64.dp),
+            .padding(vertical = 40.dp),
         contentAlignment = Alignment.Center,
     ) {
         if (user != null) {
@@ -84,15 +83,20 @@ fun DrawerHeader(
 @Composable
 fun DrawerBody(
     modifier: Modifier = Modifier,
+    currentRoute: String = "",
+    closeDrawer: () -> Unit = {},
     items: List<MenuItem> = listOf(),
     onItemClick: (menuItems: MenuItem) -> Unit = {}
 ) {
-    LazyColumn(
-        modifier = Modifier
+    Column(
+        modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
+            .background(MaterialTheme.colorScheme.background)
+            .padding(8.dp),
     ) {
-        items(items) { item ->
+        for (item in items) {
+            val isActiveRoute = (item.activeRoute != null && item.activeRoute == currentRoute)
+
             if (item.isSpacing) {
                 // how to make this work
                 Spacer(modifier = Modifier.height(56.dp))
@@ -100,8 +104,13 @@ fun DrawerBody(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .clip(MaterialTheme.shapes.medium)
+                        .background(if (isActiveRoute) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.background)
                         .clickable {
-                            onItemClick(item)
+                            if (!isActiveRoute) {
+                                onItemClick(item)
+                            }
+                            closeDrawer()
                         }
                         .padding(12.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -133,6 +142,7 @@ fun DrawerBody(
 fun DrawerBodyStudent(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
+    currentRoute: String = "",
     authManager: AuthManager = Injection.provideAuthManager(LocalContext.current),
     closeDrawer: () -> Unit = {},
 ) {
@@ -140,56 +150,77 @@ fun DrawerBodyStudent(
         mutableStateOf(false)
     }
 
-    DrawerBody(modifier = modifier, items = listOf(
-        MenuItem(
-            id = "home",
-            title = "Home",
-            contentDescription = "Home",
-            icon = Icons.Default.Home,
-            color = MaterialTheme.colorScheme.onBackground,
-        ),
-        MenuItem(
-            id = "presence",
-            title = "Presence",
-            contentDescription = "Presence",
-            icon = Icons.Default.CalendarMonth,
-            color = MaterialTheme.colorScheme.onBackground,
-        ),
-        MenuItem(
-            id = "quiz",
-            title = "Quiz",
-            contentDescription = "Quiz",
-            icon = Icons.Default.Quiz,
-            color = MaterialTheme.colorScheme.onBackground,
-        ),
-        MenuItem(isSpacing = true),
-        MenuItem(
-            id = "logout",
-            title = "Logout",
-            contentDescription = "Logout",
-            icon = Icons.Default.Logout,
-            color = MaterialTheme.colorScheme.error,
-        ),
-    ), onItemClick = { menuItem ->
-        when (menuItem.id) {
-            "home" -> {
+    DrawerBody(
+        modifier = modifier,
+        currentRoute = currentRoute,
+        closeDrawer = closeDrawer,
+        items = listOf(
+            MenuItem(
+                id = "home",
+                title = "Home",
+                contentDescription = "Home",
+                activeRoute = Screen.StudentDashboard.route,
+                icon = Icons.Default.Home,
+                color = MaterialTheme.colorScheme.onBackground,
+            ),
+            MenuItem(
+                id = "presence",
+                title = "Presence",
+                contentDescription = "Presence",
+                icon = Icons.Default.CalendarMonth,
+                color = MaterialTheme.colorScheme.onBackground,
+            ),
+            MenuItem(
+                id = "quiz",
+                title = "Quiz",
+                contentDescription = "Quiz",
+                activeRoute = Screen.StudentQuiz.route,
+                icon = Icons.Default.Quiz,
+                color = MaterialTheme.colorScheme.onBackground,
+            ),
+            MenuItem(isSpacing = true),
+            MenuItem(isSpacing = true),
+            MenuItem(
+                id = "setting",
+                title = "Settings",
+                contentDescription = "Settings",
+                icon = Icons.Default.Settings,
+                color = MaterialTheme.colorScheme.onBackground,
+            ),
+            MenuItem(
+                id = "logout",
+                title = "Logout",
+                contentDescription = "Logout",
+                icon = Icons.Default.Logout,
+                color = MaterialTheme.colorScheme.error,
+            ),
+        ), onItemClick = { menuItem ->
+            when (menuItem.id) {
+                "home" -> {
+                    navController.navigate(Screen.StudentDashboard.route) {
+                        popUpTo(0)
+                    }
+                }
+
+                "presence" -> {
+
+                }
+
+                "quiz" -> {
+                    navController.navigate(Screen.StudentQuiz.route) {
+                        popUpTo(0)
+                    }
+                }
+
+                "setting" -> {
+                    navController.navigate(Screen.Setting.route)
+                }
+
+                "logout" -> {
+                    isLogoutModalOpen.value = true
+                }
             }
-
-            "presence" -> {
-
-            }
-
-            "quiz" -> {
-
-            }
-
-            "logout" -> {
-                isLogoutModalOpen.value = true
-            }
-        }
-
-        closeDrawer()
-    })
+        })
 
     if (isLogoutModalOpen.value) {
         DialogLogout(
@@ -252,6 +283,7 @@ data class MenuItem(
     val title: String = "",
     val contentDescription: String? = null,
     val icon: ImageVector? = null,
+    val activeRoute: String? = null,
     val color: Color = Color.Unspecified,
     val isSpacing: Boolean = false,
 )

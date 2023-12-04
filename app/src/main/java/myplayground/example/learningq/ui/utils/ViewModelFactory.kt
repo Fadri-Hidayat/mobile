@@ -10,7 +10,8 @@ import myplayground.example.learningq.repository.Repository
 import myplayground.example.learningq.ui.screens.home.HomeViewModel
 import myplayground.example.learningq.ui.screens.sign_in.SignInViewModel
 import myplayground.example.learningq.ui.screens.sign_up.SignUpViewModel
-import myplayground.example.learningq.utils.AuthManager
+import myplayground.example.learningq.ui.screens.student.dashboard.StudentDashboardViewModel
+import myplayground.example.learningq.ui.screens.student.quiz.StudentQuizViewModel
 
 @Suppress("UNCHECKED_CAST")
 class ViewModelFactory(
@@ -29,6 +30,10 @@ class ViewModelFactory(
             return SignInViewModel(repository, localStorageManager) as T
         } else if (modelClass.isAssignableFrom(SignUpViewModel::class.java)) {
             return SignUpViewModel(repository) as T
+        } else if (modelClass.isAssignableFrom(StudentDashboardViewModel::class.java)) {
+            return StudentDashboardViewModel(repository, authManager) as T
+        } else if (modelClass.isAssignableFrom(StudentQuizViewModel::class.java)) {
+            return StudentQuizViewModel(repository) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

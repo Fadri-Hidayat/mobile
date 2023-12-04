@@ -63,7 +63,7 @@ fun SignInScreen(
 
     LaunchedEffect(event) {
         if (event is SignInUIEvent.ValidationEvent.Success) {
-            navController.navigate(Screen.Home.route) {
+            navController.navigate(Screen.StudentDashboard.route) {
                 popUpTo(0)
             }
         }
@@ -180,7 +180,8 @@ fun SignInContent(
             onClick = {
                 onEvent(SignInUIEvent.Submit)
             },
-            shape = MaterialTheme.shapes.small, modifier = Modifier.fillMaxWidth(),
+            shape = MaterialTheme.shapes.small,
+            modifier = Modifier.fillMaxWidth(),
             enabled = !isLoading,
             isLoading = isLoading,
         ) {
