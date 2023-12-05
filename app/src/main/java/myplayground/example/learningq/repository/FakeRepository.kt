@@ -4,11 +4,17 @@ import android.content.Context
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import myplayground.example.learningq.model.Quiz
 import myplayground.example.learningq.model.Role
 import myplayground.example.learningq.model.Token
 import myplayground.example.learningq.model.User
+import myplayground.example.learningq.network.ApiService
+import retrofit2.Call
 
-class FakeRepository(context: Context) : Repository {
+class FakeRepository(
+    context: Context,
+    private val apiService: ApiService,
+) : Repository {
 
     override suspend fun userLogin(request: UserLoginInput): Token? {
         delay(1500)
@@ -40,6 +46,11 @@ class FakeRepository(context: Context) : Repository {
         )
     }
 
+
+    override fun fetchQuiz(page: Int, limit: Int): Call<List<Quiz>> {
+        return apiService.fetchStudentQuiz(page, limit)
+    }
+
     companion object {
         @Volatile
         private var instance: FakeRepository? = null
@@ -54,8 +65,14 @@ class FakeRepository(context: Context) : Repository {
             ),
         )
 
-        fun getInstance(context: Context): FakeRepository = instance ?: synchronized(this) {
-            FakeRepository(context).apply {
+        fun getInstance(
+            context: Context,
+            apiService: ApiService,
+        ): FakeRepository = instance ?: synchronized(this) {
+            FakeRepository(
+                context,
+                apiService,
+            ).apply {
                 instance = this
             }
         }
