@@ -1,6 +1,9 @@
 package myplayground.example.learningq.repository
 
 import android.content.Context
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -9,7 +12,7 @@ import myplayground.example.learningq.model.Role
 import myplayground.example.learningq.model.Token
 import myplayground.example.learningq.model.User
 import myplayground.example.learningq.network.ApiService
-import retrofit2.Call
+import myplayground.example.learningq.repository.paging.QuizPagingSource
 
 class FakeRepository(
     context: Context,
@@ -47,8 +50,13 @@ class FakeRepository(
     }
 
 
-    override fun fetchQuiz(page: Int, limit: Int): Call<List<Quiz>> {
-        return apiService.fetchStudentQuiz(page, limit)
+    override suspend fun fetchQuiz(page: Int, limit: Int): Flow<PagingData<Quiz>> {
+        return Pager(
+            config = PagingConfig(pageSize = 5, prefetchDistance = 2),
+            pagingSourceFactory = {
+                QuizPagingSource(apiService)
+            }
+        ).flow
     }
 
     companion object {

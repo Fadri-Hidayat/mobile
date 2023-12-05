@@ -2,47 +2,57 @@ package myplayground.example.learningq.network
 
 import android.os.Handler
 import android.os.Looper
+import kotlinx.coroutines.delay
 import myplayground.example.learningq.model.Quiz
+import myplayground.example.learningq.network.utils.WithPagination
 import okhttp3.Request
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.math.ceil
 
 class FakeApiService : ApiService {
-    override fun fetchStudentQuiz(page: Int, limit: Int): Call<List<Quiz>> {
+    override suspend fun fetchStudentQuiz(page: Int, limit: Int): WithPagination<List<Quiz>> {
+        delay(1500)
+
         val startIndex = (page - 1) * limit
         val endIndex = minOf(startIndex + limit, QUIZ_LIST.size)
 
-        return object : Call<List<Quiz>> {
-            override fun enqueue(callback: Callback<List<Quiz>>) {
-                Handler(Looper.getMainLooper()).postDelayed(
-                    {
-                        callback.onResponse(
-                            this,
-                            Response.success(QUIZ_LIST.subList(startIndex, endIndex))
-                        )
-                    },
-                    1500,
-                )
-            }
-
-
-            override fun clone(): Call<List<Quiz>> = this
-
-            override fun execute(): Response<List<Quiz>> =
-                Response.success(QUIZ_LIST.subList(startIndex, endIndex))
-
-
-            override fun isExecuted() = false
-
-            override fun cancel() {}
-
-            override fun isCanceled() = false
-
-            override fun request(): Request = Request.Builder().build()
-
-
-        }
+        return WithPagination(
+            data = QUIZ_LIST.subList(startIndex, endIndex).subList(startIndex, endIndex),
+            page = page,
+            totalPage = ceil(QUIZ_LIST.size.toFloat() / limit.toFloat()).toInt(),
+        )
+//        return object : List<Quiz> {
+//            override fun enqueue(callback: Callback<List<Quiz>>) {
+//                Handler(Looper.getMainLooper()).postDelayed(
+//                    {
+//                        callback.onResponse(
+//                            this,
+//                            Response.success(QUIZ_LIST.subList(startIndex, endIndex))
+//                        )
+//                    },
+//                    1500,
+//                )
+//            }
+//
+//
+//            override fun clone(): Call<List<Quiz>> = this
+//
+//            override fun execute(): Response<List<Quiz>> =
+//                Response.success(QUIZ_LIST.subList(startIndex, endIndex))
+//
+//
+//            override fun isExecuted() = false
+//
+//            override fun cancel() {}
+//
+//            override fun isCanceled() = false
+//
+//            override fun request(): Request = Request.Builder().build()
+//
+//
+//        }
     }
 
     companion object {
