@@ -13,5 +13,5 @@ interface Repository {
     fun userRegister(request: UserRegisterInput): Flow<Token?>
     fun userMe(token: String): User?
 
-    suspend fun fetchQuiz(page: Int, limit: Int): Flow<PagingData<Quiz>>
+    suspend fun fetchQuizPaging(): Flow<PagingData<Quiz>>
 }

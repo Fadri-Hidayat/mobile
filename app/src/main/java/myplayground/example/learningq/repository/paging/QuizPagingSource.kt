@@ -1,5 +1,6 @@
 package myplayground.example.learningq.repository.paging
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import myplayground.example.learningq.model.Quiz
@@ -13,10 +14,12 @@ class QuizPagingSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Quiz> {
         return try {
+            Log.i("PARAMS", params.key.toString())
+            Log.i("PARAMS", params.loadSize.toString())
             val currentPage = params.key ?: 1
             val response = apiService.fetchStudentQuiz(
                 currentPage,
-                LIMIT,
+                params.loadSize,
             )
             val quiz = response.data
 
@@ -33,10 +36,11 @@ class QuizPagingSource(
     }
 
     override fun getRefreshKey(state: PagingState<Int, Quiz>): Int? {
-        return state.anchorPosition
-    }
-
-    companion object {
-        const val LIMIT = 5
+        Log.i("PARAMS STATE", state.toString())
+        Log.i("PARAMS STATE", state.anchorPosition.toString())
+        return state.anchorPosition?.let { anchorPosition ->
+            val anchorPage = state.closestPageToPosition(anchorPosition)
+            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
+        }
     }
 }

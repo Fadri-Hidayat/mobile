@@ -49,14 +49,18 @@ class FakeRepository(
         )
     }
 
-
-    override suspend fun fetchQuiz(page: Int, limit: Int): Flow<PagingData<Quiz>> {
+    override suspend fun fetchQuizPaging(): Flow<PagingData<Quiz>> {
         return Pager(
-            config = PagingConfig(pageSize = 5, prefetchDistance = 2),
+            config = PagingConfig(
+                pageSize = 10,
+                initialLoadSize = 10,
+                prefetchDistance = 2
+            ),
             pagingSourceFactory = {
-                QuizPagingSource(apiService)
-            }
-        ).flow
+                QuizPagingSource(
+                    apiService,
+                )
+            }).flow
     }
 
     companion object {

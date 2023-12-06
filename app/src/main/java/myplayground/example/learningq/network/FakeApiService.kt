@@ -1,14 +1,8 @@
 package myplayground.example.learningq.network
 
-import android.os.Handler
-import android.os.Looper
 import kotlinx.coroutines.delay
 import myplayground.example.learningq.model.Quiz
 import myplayground.example.learningq.network.utils.WithPagination
-import okhttp3.Request
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import kotlin.math.ceil
 
 class FakeApiService : ApiService {
@@ -19,40 +13,40 @@ class FakeApiService : ApiService {
         val endIndex = minOf(startIndex + limit, QUIZ_LIST.size)
 
         return WithPagination(
-            data = QUIZ_LIST.subList(startIndex, endIndex).subList(startIndex, endIndex),
+            data = QUIZ_LIST.subList(startIndex, endIndex),
             page = page,
             totalPage = ceil(QUIZ_LIST.size.toFloat() / limit.toFloat()).toInt(),
         )
-//        return object : List<Quiz> {
-//            override fun enqueue(callback: Callback<List<Quiz>>) {
-//                Handler(Looper.getMainLooper()).postDelayed(
-//                    {
-//                        callback.onResponse(
-//                            this,
-//                            Response.success(QUIZ_LIST.subList(startIndex, endIndex))
-//                        )
-//                    },
-//                    1500,
-//                )
-//            }
-//
-//
-//            override fun clone(): Call<List<Quiz>> = this
-//
-//            override fun execute(): Response<List<Quiz>> =
-//                Response.success(QUIZ_LIST.subList(startIndex, endIndex))
-//
-//
-//            override fun isExecuted() = false
-//
-//            override fun cancel() {}
-//
-//            override fun isCanceled() = false
-//
-//            override fun request(): Request = Request.Builder().build()
-//
-//
-//        }
+        //        return object : List<Quiz> {
+        //            override fun enqueue(callback: Callback<List<Quiz>>) {
+        //                Handler(Looper.getMainLooper()).postDelayed(
+        //                    {
+        //                        callback.onResponse(
+        //                            this,
+        //                            Response.success(QUIZ_LIST.subList(startIndex, endIndex))
+        //                        )
+        //                    },
+        //                    1500,
+        //                )
+        //            }
+        //
+        //
+        //            override fun clone(): Call<List<Quiz>> = this
+        //
+        //            override fun execute(): Response<List<Quiz>> =
+        //                Response.success(QUIZ_LIST.subList(startIndex, endIndex))
+        //
+        //
+        //            override fun isExecuted() = false
+        //
+        //            override fun cancel() {}
+        //
+        //            override fun isCanceled() = false
+        //
+        //            override fun request(): Request = Request.Builder().build()
+        //
+        //
+        //        }
     }
 
     companion object {
@@ -65,14 +59,13 @@ class FakeApiService : ApiService {
             for (i in 1..30) {
                 val quiz = Quiz(
                     id = "$i",
-                    name = "Question $i",
+                    name = "Quiz $i",
                 )
                 quizList.add(quiz)
             }
 
             quizList.toList()
         }
-
 
         fun getInstance(): FakeApiService = instance ?: synchronized(this) {
             FakeApiService(
