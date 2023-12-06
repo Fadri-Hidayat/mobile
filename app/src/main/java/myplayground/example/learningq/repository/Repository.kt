@@ -2,6 +2,7 @@ package myplayground.example.learningq.repository
 
 import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
+import myplayground.example.learningq.model.Class
 import myplayground.example.learningq.model.Quiz
 import myplayground.example.learningq.model.Token
 import myplayground.example.learningq.model.User
@@ -14,4 +15,5 @@ interface Repository {
     fun userMe(token: String): User?
 
     suspend fun fetchQuizPaging(): Flow<PagingData<Quiz>>
+    suspend fun fetchClassPaging(): Flow<PagingData<Class>>
 }

@@ -1,6 +1,8 @@
 package myplayground.example.learningq.network
 
+import android.util.Log
 import kotlinx.coroutines.delay
+import myplayground.example.learningq.model.Class
 import myplayground.example.learningq.model.Quiz
 import myplayground.example.learningq.network.utils.WithPagination
 import kotlin.math.ceil
@@ -9,7 +11,7 @@ class FakeApiService : ApiService {
     override suspend fun fetchStudentQuiz(page: Int, limit: Int): WithPagination<List<Quiz>> {
         delay(1500)
 
-        val startIndex = (page - 1) * limit
+        val startIndex = minOf((page - 1) * limit, CLASS_LIST.size)
         val endIndex = minOf(startIndex + limit, QUIZ_LIST.size)
 
         return WithPagination(
@@ -17,36 +19,19 @@ class FakeApiService : ApiService {
             page = page,
             totalPage = ceil(QUIZ_LIST.size.toFloat() / limit.toFloat()).toInt(),
         )
-        //        return object : List<Quiz> {
-        //            override fun enqueue(callback: Callback<List<Quiz>>) {
-        //                Handler(Looper.getMainLooper()).postDelayed(
-        //                    {
-        //                        callback.onResponse(
-        //                            this,
-        //                            Response.success(QUIZ_LIST.subList(startIndex, endIndex))
-        //                        )
-        //                    },
-        //                    1500,
-        //                )
-        //            }
-        //
-        //
-        //            override fun clone(): Call<List<Quiz>> = this
-        //
-        //            override fun execute(): Response<List<Quiz>> =
-        //                Response.success(QUIZ_LIST.subList(startIndex, endIndex))
-        //
-        //
-        //            override fun isExecuted() = false
-        //
-        //            override fun cancel() {}
-        //
-        //            override fun isCanceled() = false
-        //
-        //            override fun request(): Request = Request.Builder().build()
-        //
-        //
-        //        }
+    }
+
+    override suspend fun fetchStudentClasses(page: Int, limit: Int): WithPagination<List<Class>> {
+        delay(1500)
+
+        val startIndex = minOf((page - 1) * limit, CLASS_LIST.size)
+        val endIndex = minOf(startIndex + limit, CLASS_LIST.size)
+
+        return WithPagination(
+            data = CLASS_LIST.subList(startIndex, endIndex),
+            page = page,
+            totalPage = ceil(CLASS_LIST.size.toFloat() / limit.toFloat()).toInt(),
+        )
     }
 
     companion object {
@@ -65,6 +50,20 @@ class FakeApiService : ApiService {
             }
 
             quizList.toList()
+        }
+
+        val CLASS_LIST: List<Class> by lazy {
+
+            val classList = mutableListOf<Class>()
+            for (i in 1..30) {
+                val `class` = Class(
+                    id = "$i",
+                    name = "Class $i",
+                )
+                classList.add(`class`)
+            }
+
+            classList.toList()
         }
 
         fun getInstance(): FakeApiService = instance ?: synchronized(this) {

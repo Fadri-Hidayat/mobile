@@ -148,10 +148,6 @@ fun StudentQuizContent(
                         val error = quizPagingItems.loadState.refresh as LoadState.Error
                         item {
                             Text(error.toString())
-                            //                            ErrorMessage(
-                            //                                modifier = Modifier.fillParentMaxSize(),
-                            //                                message = error.error.localizedMessage!!,
-                            //                                onClickRetry = { retry() })
                         }
                     }
 
@@ -170,10 +166,6 @@ fun StudentQuizContent(
                         val error = quizPagingItems.loadState.append as LoadState.Error
                         item {
                             Text(error.toString())
-                            //                            ErrorMessage(
-                            //                                modifier = Modifier,
-                            //                                message = error.error.localizedMessage!!,
-                            //                                onClickRetry = { retry() })
                         }
                     }
                 }

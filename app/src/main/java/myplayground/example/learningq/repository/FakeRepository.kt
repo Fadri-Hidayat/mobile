@@ -7,11 +7,13 @@ import androidx.paging.PagingData
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import myplayground.example.learningq.model.Class
 import myplayground.example.learningq.model.Quiz
 import myplayground.example.learningq.model.Role
 import myplayground.example.learningq.model.Token
 import myplayground.example.learningq.model.User
 import myplayground.example.learningq.network.ApiService
+import myplayground.example.learningq.repository.paging.ClassPagingSource
 import myplayground.example.learningq.repository.paging.QuizPagingSource
 
 class FakeRepository(
@@ -58,6 +60,20 @@ class FakeRepository(
             ),
             pagingSourceFactory = {
                 QuizPagingSource(
+                    apiService,
+                )
+            }).flow
+    }
+
+    override suspend fun fetchClassPaging(): Flow<PagingData<Class>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 7,
+                initialLoadSize = 7,
+                prefetchDistance = 2
+            ),
+            pagingSourceFactory = {
+                ClassPagingSource(
                     apiService,
                 )
             }).flow

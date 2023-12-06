@@ -32,7 +32,7 @@ class ViewModelFactory(
         } else if (modelClass.isAssignableFrom(SignUpViewModel::class.java)) {
             return SignUpViewModel(repository) as T
         } else if (modelClass.isAssignableFrom(StudentDashboardViewModel::class.java)) {
-            return StudentDashboardViewModel(repository, authManager) as T
+            return StudentDashboardViewModel(repository) as T
         } else if (modelClass.isAssignableFrom(StudentQuizViewModel::class.java)) {
             return StudentQuizViewModel(repository) as T
         } else if (modelClass.isAssignableFrom(StudentQuizDetailViewModel::class.java)) {
