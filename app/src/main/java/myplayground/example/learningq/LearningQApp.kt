@@ -21,10 +21,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import kotlinx.coroutines.launch
 import myplayground.example.learningq.di.Injection
 import myplayground.example.learningq.model.Role
@@ -39,6 +41,7 @@ import myplayground.example.learningq.ui.screens.sign_in.SignInScreen
 import myplayground.example.learningq.ui.screens.sign_up.SignUpScreen
 import myplayground.example.learningq.ui.screens.student.dashboard.StudentDashboardScreen
 import myplayground.example.learningq.ui.screens.student.quiz.StudentQuizScreen
+import myplayground.example.learningq.ui.screens.student.quiz_detail.StudentQuizDetailScreen
 
 @Composable
 fun LearningQApp(
@@ -173,6 +176,18 @@ fun LearningQApp(
                 composable(Screen.StudentQuiz.route) {
                     StudentQuizScreen(
                         modifier = containerModifier,
+                        navController = navController,
+                    )
+                }
+
+                composable(
+                    Screen.StudentQuizDetail.route,
+                    arguments = listOf(navArgument("id") { type = NavType.StringType }),
+                ) {
+                    val quizId = it.arguments?.getString("id") ?: ""
+                    StudentQuizDetailScreen(
+                        modifier = containerModifier,
+                        quizId = quizId,
                     )
                 }
             }

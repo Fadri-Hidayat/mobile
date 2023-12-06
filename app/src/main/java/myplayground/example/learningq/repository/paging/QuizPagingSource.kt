@@ -14,8 +14,6 @@ class QuizPagingSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Quiz> {
         return try {
-            Log.i("PARAMS", params.key.toString())
-            Log.i("PARAMS", params.loadSize.toString())
             val currentPage = params.key ?: 1
             val response = apiService.fetchStudentQuiz(
                 currentPage,
@@ -36,8 +34,6 @@ class QuizPagingSource(
     }
 
     override fun getRefreshKey(state: PagingState<Int, Quiz>): Int? {
-        Log.i("PARAMS STATE", state.toString())
-        Log.i("PARAMS STATE", state.anchorPosition.toString())
         return state.anchorPosition?.let { anchorPosition ->
             val anchorPage = state.closestPageToPosition(anchorPosition)
             anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)

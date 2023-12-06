@@ -21,13 +21,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.paint
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -36,6 +37,7 @@ import myplayground.example.learningq.local_storage.DatastoreSettings
 import myplayground.example.learningq.local_storage.dataStore
 import myplayground.example.learningq.model.Quiz
 import myplayground.example.learningq.ui.components.shimmerBrush
+import myplayground.example.learningq.ui.navigation.Screen
 import myplayground.example.learningq.ui.theme.LearningQTheme
 import myplayground.example.learningq.ui.utils.ViewModelFactory
 
@@ -47,7 +49,8 @@ fun StudentQuizScreen(
             Injection.provideRepository(LocalContext.current),
             DatastoreSettings.getInstance(LocalContext.current.dataStore),
         ),
-    )
+    ),
+    navController: NavHostController = rememberNavController()
 ) {
     val quizPagingItems: LazyPagingItems<Quiz> = vm.quizState.collectAsLazyPagingItems()
 
@@ -56,13 +59,16 @@ fun StudentQuizScreen(
     StudentQuizContent(
         modifier = modifier,
         quizPagingItems = quizPagingItems,
-    )
+    ) { quizId ->
+        navController.navigate(Screen.StudentQuizDetail.createRoute(quizId))
+    }
 }
 
 @Composable
 fun StudentQuizContent(
     modifier: Modifier = Modifier,
     quizPagingItems: LazyPagingItems<Quiz>? = null,
+    navigateToDetail: (id: String) -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier
@@ -112,7 +118,9 @@ fun StudentQuizContent(
                         Button(
                             modifier = Modifier.align(Alignment.CenterVertically),
                             shape = MaterialTheme.shapes.small,
-                            onClick = { },
+                            onClick = {
+                                navigateToDetail(currentQuiz.id)
+                            },
                         ) {
                             Text(
                                 text = "Start",
