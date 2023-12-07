@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Quiz
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
@@ -181,6 +182,13 @@ fun DrawerBodyStudent(
             MenuItem(isSpacing = true),
             MenuItem(isSpacing = true),
             MenuItem(
+                id = "profile",
+                title = "Profile",
+                contentDescription = "Profile",
+                icon = Icons.Default.Person,
+                color = MaterialTheme.colorScheme.onBackground,
+            ),
+            MenuItem(
                 id = "setting",
                 title = "Settings",
                 contentDescription = "Settings",
@@ -212,6 +220,10 @@ fun DrawerBodyStudent(
                     navController.navigate(Screen.StudentQuiz.route) {
                         popUpTo(0)
                     }
+                }
+
+                "profile" -> {
+                    navController.navigate(Screen.StudentProfile.route)
                 }
 
                 "setting" -> {

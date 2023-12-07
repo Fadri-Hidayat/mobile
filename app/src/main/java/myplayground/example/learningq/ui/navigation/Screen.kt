@@ -7,7 +7,11 @@ sealed class Screen(val route: String) {
     object Landing : Screen("landing")
     object Setting : Screen("setting")
 
+    object AuthLoading: Screen("authloading")
+
+
     object StudentDashboard : Screen("studentdashboard")
+    object StudentProfile : Screen("studentprofile")
     object StudentQuiz : Screen("studentquiz")
 
     object StudentQuizDetail : Screen("studentquiz/{id}") {

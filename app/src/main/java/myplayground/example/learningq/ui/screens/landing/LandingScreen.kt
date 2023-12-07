@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -47,7 +48,10 @@ fun LandingContent(
                     navController.navigate(Screen.SignIn.route)
                 }
             ) {
-                Text("Login")
+                Text(
+                    text = "Login",
+                    style = MaterialTheme.typography.titleSmall,
+                )
             }
 
             Spacer(modifier = Modifier.width(20.dp))
@@ -58,7 +62,10 @@ fun LandingContent(
                     navController.navigate(Screen.SignUp.route)
                 },
             ) {
-                Text("Register")
+                Text(
+                    text = "Register",
+                    style = MaterialTheme.typography.titleSmall,
+                )
             }
         }
     }

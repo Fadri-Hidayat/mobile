@@ -12,7 +12,7 @@ import retrofit2.Call
 interface Repository {
     suspend fun userLogin(request: UserLoginInput): Token?
     fun userRegister(request: UserRegisterInput): Flow<Token?>
-    fun userMe(token: String): User?
+    suspend fun userMe(token: String): User?
 
     suspend fun fetchQuizPaging(): Flow<PagingData<Quiz>>
     suspend fun fetchClassPaging(): Flow<PagingData<Class>>

@@ -42,7 +42,9 @@ class FakeRepository(
         }
     }
 
-    override fun userMe(token: String): User? {
+    override suspend fun userMe(token: String): User? {
+        delay(1500)
+
         return User(
             id = "1",
             name = "Student",
