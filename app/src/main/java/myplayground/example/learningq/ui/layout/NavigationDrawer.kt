@@ -203,7 +203,9 @@ fun DrawerBodyStudent(
                 }
 
                 "presence" -> {
-
+                    navController.navigate(Screen.StudentPresence.route) {
+                        popUpTo(0)
+                    }
                 }
 
                 "quiz" -> {

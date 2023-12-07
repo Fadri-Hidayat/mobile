@@ -40,6 +40,7 @@ import myplayground.example.learningq.ui.screens.setting.SettingScreen
 import myplayground.example.learningq.ui.screens.sign_in.SignInScreen
 import myplayground.example.learningq.ui.screens.sign_up.SignUpScreen
 import myplayground.example.learningq.ui.screens.student.dashboard.StudentDashboardScreen
+import myplayground.example.learningq.ui.screens.student.presence.StudentPresenceScreen
 import myplayground.example.learningq.ui.screens.student.quiz.StudentQuizScreen
 import myplayground.example.learningq.ui.screens.student.quiz_detail.StudentQuizDetailScreen
 
@@ -189,6 +190,10 @@ fun LearningQApp(
                         modifier = containerModifier,
                         quizId = quizId,
                     )
+                }
+
+                composable(Screen.StudentPresence.route) {
+                    StudentPresenceScreen()
                 }
             }
         }

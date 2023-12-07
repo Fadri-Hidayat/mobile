@@ -11,6 +11,7 @@ import myplayground.example.learningq.ui.screens.home.HomeViewModel
 import myplayground.example.learningq.ui.screens.sign_in.SignInViewModel
 import myplayground.example.learningq.ui.screens.sign_up.SignUpViewModel
 import myplayground.example.learningq.ui.screens.student.dashboard.StudentDashboardViewModel
+import myplayground.example.learningq.ui.screens.student.presence.StudentPresenceViewModel
 import myplayground.example.learningq.ui.screens.student.quiz.StudentQuizViewModel
 import myplayground.example.learningq.ui.screens.student.quiz_detail.StudentQuizDetailViewModel
 
@@ -37,6 +38,8 @@ class ViewModelFactory(
             return StudentQuizViewModel(repository) as T
         } else if (modelClass.isAssignableFrom(StudentQuizDetailViewModel::class.java)) {
             return StudentQuizDetailViewModel(repository) as T
+        } else if (modelClass.isAssignableFrom(StudentPresenceViewModel::class.java)) {
+            return StudentPresenceViewModel(repository) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
