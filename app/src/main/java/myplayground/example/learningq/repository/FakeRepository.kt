@@ -1,7 +1,6 @@
 package myplayground.example.learningq.repository
 
 import android.content.Context
-import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -14,8 +13,9 @@ import myplayground.example.learningq.model.Role
 import myplayground.example.learningq.model.Token
 import myplayground.example.learningq.model.User
 import myplayground.example.learningq.network.ApiService
-import myplayground.example.learningq.repository.paging.ClassPagingSource
-import myplayground.example.learningq.repository.paging.QuizPagingSource
+import myplayground.example.learningq.repository.paging.StudentClassPagingSource
+import myplayground.example.learningq.repository.paging.StudentQuizPagingSource
+import myplayground.example.learningq.repository.paging.TeacherQuizPagingSource
 
 class FakeRepository(
     context: Context,
@@ -78,7 +78,7 @@ class FakeRepository(
         }
     }
 
-    override suspend fun fetchQuizPaging(): Flow<PagingData<Quiz>> {
+    override suspend fun fetchStudentQuizPaging(): Flow<PagingData<Quiz>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 10,
@@ -86,13 +86,13 @@ class FakeRepository(
                 prefetchDistance = 2
             ),
             pagingSourceFactory = {
-                QuizPagingSource(
+                StudentQuizPagingSource(
                     apiService,
                 )
             }).flow
     }
 
-    override suspend fun fetchClassPaging(): Flow<PagingData<Class>> {
+    override suspend fun fetchStudentClassPaging(): Flow<PagingData<Class>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 7,
@@ -100,7 +100,21 @@ class FakeRepository(
                 prefetchDistance = 2
             ),
             pagingSourceFactory = {
-                ClassPagingSource(
+                StudentClassPagingSource(
+                    apiService,
+                )
+            }).flow
+    }
+
+    override suspend fun fetchTeacherQuizPaging(): Flow<PagingData<Quiz>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                initialLoadSize = 10,
+                prefetchDistance = 2
+            ),
+            pagingSourceFactory = {
+                TeacherQuizPagingSource(
                     apiService,
                 )
             }).flow

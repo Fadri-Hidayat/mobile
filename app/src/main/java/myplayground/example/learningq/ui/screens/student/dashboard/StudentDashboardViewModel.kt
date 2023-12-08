@@ -9,9 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import myplayground.example.learningq.model.Class
-import myplayground.example.learningq.model.Quiz
 import myplayground.example.learningq.repository.Repository
-import myplayground.example.learningq.ui.screens.student.quiz.StudentQuizEvent
 
 class StudentDashboardViewModel(
     private val repository: Repository,
@@ -29,7 +27,7 @@ class StudentDashboardViewModel(
         viewModelScope.launch {
             when (event) {
                 is StudentDashboardEvent.Init -> {
-                    repository.fetchClassPaging()
+                    repository.fetchStudentClassPaging()
                         .distinctUntilChanged()
                         .cachedIn(viewModelScope)
                         .collect {

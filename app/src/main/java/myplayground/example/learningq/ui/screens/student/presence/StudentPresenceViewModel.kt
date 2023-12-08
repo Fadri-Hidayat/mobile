@@ -26,7 +26,7 @@ class StudentPresenceViewModel(
         viewModelScope.launch {
             when (event) {
                 is StudentPresenceEvent.Init -> {
-                    repository.fetchClassPaging().distinctUntilChanged().cachedIn(viewModelScope)
+                    repository.fetchStudentClassPaging().distinctUntilChanged().cachedIn(viewModelScope)
                         .collect {
                             _classState.value = it
                         }

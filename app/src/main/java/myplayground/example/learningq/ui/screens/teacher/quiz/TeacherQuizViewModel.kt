@@ -1,4 +1,4 @@
-package myplayground.example.learningq.ui.screens.student.quiz
+package myplayground.example.learningq.ui.screens.teacher.quiz
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,20 +11,23 @@ import kotlinx.coroutines.launch
 import myplayground.example.learningq.model.Quiz
 import myplayground.example.learningq.repository.Repository
 
-class StudentQuizViewModel(private val repository: Repository) : ViewModel() {
+class TeacherQuizViewModel(
+    private val repository: Repository,
+) :
+    ViewModel() {
     private val _quizState: MutableStateFlow<PagingData<Quiz>> =
         MutableStateFlow(PagingData.empty())
     val quizState: StateFlow<PagingData<Quiz>> = _quizState
 
     init {
-        onEvent(StudentQuizEvent.Init)
+        onEvent(TeacherQuizEvent.Init)
     }
 
-    fun onEvent(event: StudentQuizEvent) {
+    fun onEvent(event: TeacherQuizEvent) {
         viewModelScope.launch {
             when (event) {
-                is StudentQuizEvent.Init -> {
-                    repository.fetchStudentQuizPaging()
+                is TeacherQuizEvent.Init -> {
+                    repository.fetchTeacherQuizPaging()
                         .distinctUntilChanged()
                         .cachedIn(viewModelScope)
                         .collect {
@@ -34,4 +37,5 @@ class StudentQuizViewModel(private val repository: Repository) : ViewModel() {
             }
         }
     }
+
 }

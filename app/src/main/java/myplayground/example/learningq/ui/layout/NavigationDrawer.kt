@@ -320,9 +320,9 @@ fun DrawerBodyTeacher(
                 }
 
                 "quiz" -> {
-                    //                    navController.navigate(Screen.StudentQuiz.route) {
-                    //                        popUpTo(0)
-                    //                    }
+                    navController.navigate(Screen.TeacherQuiz.route) {
+                        popUpTo(0)
+                    }
                 }
 
                 "profile" -> {

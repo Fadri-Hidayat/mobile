@@ -11,7 +11,7 @@ class FakeApiService : ApiService {
     override suspend fun fetchStudentQuiz(page: Int, limit: Int): WithPagination<List<Quiz>> {
         delay(1500)
 
-        val startIndex = minOf((page - 1) * limit, CLASS_LIST.size)
+        val startIndex = minOf((page - 1) * limit, QUIZ_LIST.size)
         val endIndex = minOf(startIndex + limit, QUIZ_LIST.size)
 
         return WithPagination(
@@ -31,6 +31,19 @@ class FakeApiService : ApiService {
             data = CLASS_LIST.subList(startIndex, endIndex),
             page = page,
             totalPage = ceil(CLASS_LIST.size.toFloat() / limit.toFloat()).toInt(),
+        )
+    }
+
+    override suspend fun fetchTeacherQuiz(page: Int, limit: Int): WithPagination<List<Quiz>> {
+        delay(1500)
+
+        val startIndex = minOf((page - 1) * limit, QUIZ_LIST.size)
+        val endIndex = minOf(startIndex + limit, QUIZ_LIST.size)
+
+        return WithPagination(
+            data = QUIZ_LIST.subList(startIndex, endIndex),
+            page = page,
+            totalPage = ceil(QUIZ_LIST.size.toFloat() / limit.toFloat()).toInt(),
         )
     }
 

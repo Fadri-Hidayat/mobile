@@ -27,7 +27,7 @@ class TeacherDashboardViewModel(
         viewModelScope.launch {
             when (event) {
                 is TeacherDashboardEvent.Init -> {
-                    repository.fetchClassPaging()
+                    repository.fetchStudentClassPaging()
                         .distinctUntilChanged()
                         .cachedIn(viewModelScope)
                         .collect {

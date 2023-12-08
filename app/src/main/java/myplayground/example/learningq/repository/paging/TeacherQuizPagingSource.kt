@@ -1,6 +1,5 @@
 package myplayground.example.learningq.repository.paging
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import myplayground.example.learningq.model.Quiz
@@ -8,14 +7,14 @@ import myplayground.example.learningq.network.ApiService
 import retrofit2.HttpException
 import java.io.IOException
 
-class QuizPagingSource(
+class TeacherQuizPagingSource(
     private val apiService: ApiService,
 ) : PagingSource<Int, Quiz>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Quiz> {
         return try {
             val currentPage = params.key ?: 1
-            val response = apiService.fetchStudentQuiz(
+            val response = apiService.fetchTeacherQuiz(
                 currentPage,
                 params.loadSize,
             )

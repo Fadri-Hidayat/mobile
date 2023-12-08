@@ -6,14 +6,14 @@ import myplayground.example.learningq.model.Class
 import myplayground.example.learningq.model.Quiz
 import myplayground.example.learningq.model.Token
 import myplayground.example.learningq.model.User
-import myplayground.example.learningq.network.utils.WithPagination
-import retrofit2.Call
 
 interface Repository {
     suspend fun userLogin(request: UserLoginInput): Token?
     fun userRegister(request: UserRegisterInput): Flow<Token?>
     suspend fun userMe(token: String): User?
 
-    suspend fun fetchQuizPaging(): Flow<PagingData<Quiz>>
-    suspend fun fetchClassPaging(): Flow<PagingData<Class>>
+    suspend fun fetchStudentQuizPaging(): Flow<PagingData<Quiz>>
+    suspend fun fetchStudentClassPaging(): Flow<PagingData<Class>>
+
+    suspend fun fetchTeacherQuizPaging(): Flow<PagingData<Quiz>>
 }
