@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -89,22 +90,28 @@ fun DrawerBody(
     items: List<MenuItem> = listOf(),
     onItemClick: (menuItems: MenuItem) -> Unit = {}
 ) {
+    val maxVisibleItems = 6.5F // Calculate item height based on the density
+    val itemHeight = with(LocalDensity.current) {
+        (10.dp.toPx() * maxVisibleItems).toDp()
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .padding(8.dp),
+            .padding(8.dp, 4.dp),
     ) {
+
         for (item in items) {
             val isActiveRoute = (item.activeRoute != null && item.activeRoute == currentRoute)
 
-            if (item.isSpacing) {
-                // how to make this work
-                Spacer(modifier = Modifier.height(56.dp))
+            if (item.isSpacing) { // how to make this work
+                Spacer(modifier = Modifier.height(itemHeight))
             } else {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .height(itemHeight)
                         .clip(MaterialTheme.shapes.medium)
                         .background(if (isActiveRoute) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.background)
                         .clickable {
@@ -113,7 +120,7 @@ fun DrawerBody(
                             }
                             closeDrawer()
                         }
-                        .padding(12.dp),
+                        .padding(12.dp, 0.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     if (item.icon != null) {
@@ -151,8 +158,7 @@ fun DrawerBodyStudent(
         mutableStateOf(false)
     }
 
-    DrawerBody(
-        modifier = modifier,
+    DrawerBody(modifier = modifier,
         currentRoute = currentRoute,
         closeDrawer = closeDrawer,
         items = listOf(
@@ -180,7 +186,6 @@ fun DrawerBodyStudent(
                 color = MaterialTheme.colorScheme.onBackground,
             ),
             MenuItem(isSpacing = true),
-            MenuItem(isSpacing = true),
             MenuItem(
                 id = "profile",
                 title = "Profile",
@@ -202,7 +207,8 @@ fun DrawerBodyStudent(
                 icon = Icons.Default.Logout,
                 color = MaterialTheme.colorScheme.error,
             ),
-        ), onItemClick = { menuItem ->
+        ),
+        onItemClick = { menuItem ->
             when (menuItem.id) {
                 "home" -> {
                     navController.navigate(Screen.StudentDashboard.route) {
@@ -237,18 +243,113 @@ fun DrawerBodyStudent(
         })
 
     if (isLogoutModalOpen.value) {
+        DialogLogout(onDismissRequest = {
+            isLogoutModalOpen.value = false
+        }, logout = {
+            authManager.logout()
+
+            navController.navigate(Screen.SignIn.route) {
+                popUpTo(0)
+            }
+        })
+    }
+}
+
+@Composable
+fun DrawerBodyTeacher(
+    modifier: Modifier = Modifier,
+    navController: NavHostController = rememberNavController(),
+    currentRoute: String = "",
+    authManager: AuthManager = Injection.provideAuthManager(LocalContext.current),
+    closeDrawer: () -> Unit = {},
+) {
+    val isLogoutModalOpen = remember {
+        mutableStateOf(false)
+    }
+
+    DrawerBody(
+        modifier = modifier,
+        currentRoute = currentRoute,
+        closeDrawer = closeDrawer,
+        items = listOf(
+            MenuItem(
+                id = "home",
+                title = "Home",
+                contentDescription = "Home",
+                activeRoute = Screen.StudentDashboard.route,
+                icon = Icons.Default.Home,
+                color = MaterialTheme.colorScheme.onBackground,
+            ),
+            MenuItem(
+                id = "quiz",
+                title = "Quiz",
+                contentDescription = "Quiz",
+                activeRoute = Screen.StudentQuiz.route,
+                icon = Icons.Default.Quiz,
+                color = MaterialTheme.colorScheme.onBackground,
+            ),
+            MenuItem(isSpacing = true),
+            MenuItem(
+                id = "profile",
+                title = "Profile",
+                contentDescription = "Profile",
+                icon = Icons.Default.Person,
+                color = MaterialTheme.colorScheme.onBackground,
+            ),
+            MenuItem(
+                id = "setting",
+                title = "Settings",
+                contentDescription = "Settings",
+                icon = Icons.Default.Settings,
+                color = MaterialTheme.colorScheme.onBackground,
+            ),
+            MenuItem(
+                id = "logout",
+                title = "Logout",
+                contentDescription = "Logout",
+                icon = Icons.Default.Logout,
+                color = MaterialTheme.colorScheme.error,
+            ),
+        ),
+        onItemClick = { menuItem ->
+            when (menuItem.id) {
+                "home" -> {
+                    navController.navigate(Screen.TeacherDashboard.route) {
+                        popUpTo(0)
+                    }
+                }
+
+                "quiz" -> {
+                    //                    navController.navigate(Screen.StudentQuiz.route) {
+                    //                        popUpTo(0)
+                    //                    }
+                }
+
+                "profile" -> {
+                    //                    navController.navigate(Screen.StudentProfile.route)
+                }
+
+                "setting" -> {
+                    navController.navigate(Screen.Setting.route)
+                }
+
+                "logout" -> {
+                    isLogoutModalOpen.value = true
+                }
+            }
+        })
+
+    if (isLogoutModalOpen.value) {
         DialogLogout(
             onDismissRequest = {
                 isLogoutModalOpen.value = false
-            },
-            logout = {
+            }, logout = {
                 authManager.logout()
 
                 navController.navigate(Screen.SignIn.route) {
                     popUpTo(0)
                 }
-            }
-        )
+            })
     }
 }
 
@@ -257,8 +358,7 @@ fun DialogLogout(
     onDismissRequest: () -> Unit = {},
     logout: () -> Unit = {},
 ) {
-    AlertDialog(
-        containerColor = MaterialTheme.colorScheme.background,
+    AlertDialog(containerColor = MaterialTheme.colorScheme.background,
         onDismissRequest = onDismissRequest,
         icon = { //                        Icon(icon, contentDescription = "Example Icon")
         },

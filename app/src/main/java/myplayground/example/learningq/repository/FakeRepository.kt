@@ -1,6 +1,7 @@
 package myplayground.example.learningq.repository
 
 import android.content.Context
+import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -27,7 +28,7 @@ class FakeRepository(
         for (existingAccount in existingAccounts) {
             if (request.username == existingAccount.username && request.password == existingAccount.password) {
                 return Token(
-                    auth_token = "token",
+                    auth_token = "token ${existingAccount.username}",
                 )
 
             }
@@ -45,12 +46,36 @@ class FakeRepository(
     override suspend fun userMe(token: String): User? {
         delay(1500)
 
-        return User(
+        val studentUser = User(
             id = "1",
             name = "Student",
             image_url = "https://miro.medium.com/v2/resize:fill:110:110/1*x1I-A7aVdqWFelvJakKWBg.jpeg",
             role = Role.Student,
         )
+
+        val teacherUser = User(
+            id = "2",
+            name = "Teacher",
+            image_url = "https://miro.medium.com/v2/resize:fill:110:110/1*x1I-A7aVdqWFelvJakKWBg.jpeg",
+            role = Role.Teacher,
+        )
+
+
+        return when (token.substring("token ".length)) {
+            "student" -> {
+                studentUser
+            }
+
+            "teacher" -> {
+                teacherUser
+            }
+
+            //            "admin" -> {
+            //
+            //            }
+
+            else -> studentUser
+        }
     }
 
     override suspend fun fetchQuizPaging(): Flow<PagingData<Quiz>> {
@@ -87,6 +112,10 @@ class FakeRepository(
         private val existingAccounts = listOf(
             UserLoginInput(
                 username = "admin",
+                password = "pass",
+            ),
+            UserLoginInput(
+                username = "teacher",
                 password = "pass",
             ),
             UserLoginInput(

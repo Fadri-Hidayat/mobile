@@ -43,6 +43,7 @@ import myplayground.example.learningq.di.Injection
 import myplayground.example.learningq.model.Role
 import myplayground.example.learningq.ui.layout.Appbar
 import myplayground.example.learningq.ui.layout.DrawerBodyStudent
+import myplayground.example.learningq.ui.layout.DrawerBodyTeacher
 import myplayground.example.learningq.ui.layout.DrawerHeader
 import myplayground.example.learningq.ui.navigation.Screen
 import myplayground.example.learningq.ui.screens.home.HomeScreen
@@ -52,8 +53,10 @@ import myplayground.example.learningq.ui.screens.sign_in.SignInScreen
 import myplayground.example.learningq.ui.screens.sign_up.SignUpScreen
 import myplayground.example.learningq.ui.screens.student.dashboard.StudentDashboardScreen
 import myplayground.example.learningq.ui.screens.student.presence.StudentPresenceScreen
+import myplayground.example.learningq.ui.screens.student.profile.StudentProfileScreen
 import myplayground.example.learningq.ui.screens.student.quiz.StudentQuizScreen
 import myplayground.example.learningq.ui.screens.student.quiz_detail.StudentQuizDetailScreen
+import myplayground.example.learningq.ui.screens.teacher.dashboard.TeacherDashboardScreen
 import myplayground.example.learningq.ui.utils.debugPlaceholder
 
 @Composable
@@ -83,6 +86,10 @@ fun LearningQApp(
                     Screen.StudentDashboard.route
                 }
 
+                is Role.Teacher -> {
+                    Screen.TeacherDashboard.route
+                }
+
                 else -> ""
             }
         }
@@ -106,7 +113,10 @@ fun LearningQApp(
                         if (user.value != null) {
                             when (user.value!!.role) {
                                 Role.Student -> {
-                                    DrawerBodyStudent(modifier = Modifier.weight(1F),
+                                    DrawerBodyStudent(
+                                        modifier = Modifier
+                                            .weight(1F)
+                                            .verticalScroll(rememberScrollState()),
                                         navController = navController,
                                         currentRoute = currentRoute ?: "",
                                         authManager = authManager,
@@ -114,8 +124,24 @@ fun LearningQApp(
                                             scope.launch {
                                                 drawerState.close()
                                             }
-                                        })
+                                        },
+                                    )
+                                }
 
+                                Role.Teacher -> {
+                                    DrawerBodyTeacher(
+                                        modifier = Modifier
+                                            .weight(1F)
+                                            .verticalScroll(rememberScrollState()),
+                                        navController = navController,
+                                        currentRoute = currentRoute ?: "",
+                                        authManager = authManager,
+                                        closeDrawer = {
+                                            scope.launch {
+                                                drawerState.close()
+                                            }
+                                        },
+                                    )
                                 }
 
                                 Role.Admin -> {}
@@ -143,6 +169,8 @@ fun LearningQApp(
                             Screen.StudentDashboard.route,
                             Screen.StudentPresence.route,
                             Screen.StudentQuiz.route,
+
+                            Screen.TeacherDashboard.route,
                         ).contains(currentRoute)
 
                         if (displayProfile) {
@@ -173,23 +201,21 @@ fun LearningQApp(
                 }
             },
         ) { innerPadding ->
-            val containerModifier = Modifier.background(MaterialTheme.colorScheme.background)
+            val containerModifier = Modifier
+                .background(MaterialTheme.colorScheme.background)
+                .padding(8.dp)
 
             NavHost(
                 navController = navController,
                 startDestination = startDestination,
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .padding(8.dp),
+                modifier = Modifier.padding(innerPadding),
             ) {
-                composable(Screen.AuthLoading.route) {
-                    // empty
+                composable(Screen.AuthLoading.route) { // empty
                 }
 
                 composable(Screen.Landing.route) {
                     LandingScreen(
-                        modifier = containerModifier,
-                        navController = navController
+                        modifier = containerModifier, navController = navController
                     )
                 }
                 composable(Screen.SignIn.route) {
@@ -218,7 +244,7 @@ fun LearningQApp(
                 }
 
                 composable(Screen.StudentProfile.route) {
-
+                    StudentProfileScreen()
                 }
 
                 composable(Screen.StudentDashboard.route) {
@@ -246,7 +272,15 @@ fun LearningQApp(
                 }
 
                 composable(Screen.StudentPresence.route) {
-                    StudentPresenceScreen()
+                    StudentPresenceScreen(
+                        modifier = containerModifier,
+                    )
+                }
+
+                composable(Screen.TeacherDashboard.route) {
+                    TeacherDashboardScreen(
+                        modifier = containerModifier,
+                    )
                 }
             }
         }

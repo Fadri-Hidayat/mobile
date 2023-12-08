@@ -51,7 +51,7 @@ fun SettingContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(14.dp, 10.dp),
+            .padding(6.dp, 2.dp),
     ) {
         CustomSwitch(
             checked = isDarkModeChecked,

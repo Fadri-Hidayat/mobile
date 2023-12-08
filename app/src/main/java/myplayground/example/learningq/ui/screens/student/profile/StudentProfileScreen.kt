@@ -112,6 +112,10 @@ fun StudentProfileContent(
                     title = "Nomor Induk / NISN",
                     content = user.id,
                 )
+                StudentProfileInformationRow(
+                    title = "Nama",
+                    content = user.name,
+                )
             }
         }
     }
@@ -128,7 +132,6 @@ fun StudentProfileInformationRow(
         modifier = Modifier
             .fillMaxWidth()
             .drawBehind {
-
                 val strokeWidth = 4 * density
                 val y = size.height - strokeWidth / 2
 

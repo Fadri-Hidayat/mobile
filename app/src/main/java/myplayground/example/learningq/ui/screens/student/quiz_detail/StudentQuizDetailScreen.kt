@@ -60,7 +60,7 @@ fun StudentQuizDetailContent(
     isEssay: Boolean = false,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState()),
     ) {

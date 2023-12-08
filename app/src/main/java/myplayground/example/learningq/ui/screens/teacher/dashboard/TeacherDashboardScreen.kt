@@ -1,4 +1,4 @@
-package myplayground.example.learningq.ui.screens.student.dashboard
+package myplayground.example.learningq.ui.screens.teacher.dashboard
 
 import android.app.Application
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
@@ -17,7 +17,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -37,9 +36,9 @@ import myplayground.example.learningq.ui.theme.LearningQTheme
 import myplayground.example.learningq.ui.utils.ViewModelFactory
 
 @Composable
-fun StudentDashboardScreen(
+fun TeacherDashboardScreen(
     modifier: Modifier = Modifier,
-    vm: StudentDashboardViewModel = viewModel(
+    vm: TeacherDashboardViewModel = viewModel(
         factory = ViewModelFactory(
             LocalContext.current.applicationContext as Application,
             Injection.provideRepository(LocalContext.current),
@@ -49,14 +48,14 @@ fun StudentDashboardScreen(
 ) {
     val classesPagingItem = vm.classState.collectAsLazyPagingItems()
 
-    StudentDashboardContent(
+    TeacherDashboardContent(
         modifier = modifier,
         classesPagingItem = classesPagingItem
     )
 }
 
 @Composable
-fun StudentDashboardContent(
+fun TeacherDashboardContent(
     modifier: Modifier = Modifier,
     classesPagingItem: LazyPagingItems<Class>? = null,
 ) {
@@ -143,9 +142,9 @@ fun StudentDashboardContent(
 @Preview(showBackground = true, device = Devices.PIXEL_4)
 @Preview(showBackground = true, device = Devices.PIXEL_4, uiMode = UI_MODE_NIGHT_YES)
 @Composable
-fun StudentDashboardContentPreview() {
+fun TeacherDashboardContentPreview() {
     LearningQTheme {
-        StudentDashboardContent()
+        TeacherDashboardContent()
     }
 }
 
