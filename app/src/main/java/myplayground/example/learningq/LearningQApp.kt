@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -56,6 +55,8 @@ import myplayground.example.learningq.ui.screens.student.presence.StudentPresenc
 import myplayground.example.learningq.ui.screens.student.profile.StudentProfileScreen
 import myplayground.example.learningq.ui.screens.student.quiz.StudentQuizScreen
 import myplayground.example.learningq.ui.screens.student.quiz_detail.StudentQuizDetailScreen
+import myplayground.example.learningq.ui.screens.student.report.StudentReportScreen
+import myplayground.example.learningq.ui.screens.student.report_detail.StudentReportDetailScreen
 import myplayground.example.learningq.ui.screens.teacher.dashboard.TeacherDashboardScreen
 import myplayground.example.learningq.ui.screens.teacher.quiz.TeacherQuizScreen
 import myplayground.example.learningq.ui.screens.teacher.quiz_add.TeacherQuizAddScreen
@@ -275,6 +276,19 @@ fun LearningQApp(
 
                 composable(Screen.StudentPresence.route) {
                     StudentPresenceScreen(
+                        modifier = containerModifier,
+                    )
+                }
+
+                composable(Screen.StudentReport.route) {
+                    StudentReportScreen(
+                        modifier = containerModifier,
+                        navController = navController,
+                    )
+                }
+
+                composable(Screen.StudentReportDetail.route) {
+                    StudentReportDetailScreen(
                         modifier = containerModifier,
                     )
                 }

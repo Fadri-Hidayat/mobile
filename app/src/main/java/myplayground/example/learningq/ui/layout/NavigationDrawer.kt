@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.Dataset
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Person
@@ -185,6 +186,14 @@ fun DrawerBodyStudent(
                 icon = Icons.Default.Quiz,
                 color = MaterialTheme.colorScheme.onBackground,
             ),
+            MenuItem(
+                id = "report",
+                title = "Report",
+                contentDescription = "Report",
+                activeRoute = Screen.StudentReport.route,
+                icon = Icons.Default.Dataset,
+                color = MaterialTheme.colorScheme.onBackground,
+            ),
             MenuItem(isSpacing = true),
             MenuItem(
                 id = "profile",
@@ -224,6 +233,12 @@ fun DrawerBodyStudent(
 
                 "quiz" -> {
                     navController.navigate(Screen.StudentQuiz.route) {
+                        popUpTo(0)
+                    }
+                }
+
+                "report" -> {
+                    navController.navigate(Screen.StudentReport.route) {
                         popUpTo(0)
                     }
                 }
@@ -276,7 +291,7 @@ fun DrawerBodyTeacher(
                 id = "home",
                 title = "Home",
                 contentDescription = "Home",
-                activeRoute = Screen.StudentDashboard.route,
+                activeRoute = Screen.TeacherDashboard.route,
                 icon = Icons.Default.Home,
                 color = MaterialTheme.colorScheme.onBackground,
             ),
@@ -284,7 +299,7 @@ fun DrawerBodyTeacher(
                 id = "quiz",
                 title = "Quiz",
                 contentDescription = "Quiz",
-                activeRoute = Screen.StudentQuiz.route,
+                activeRoute = Screen.TeacherQuiz.route,
                 icon = Icons.Default.Quiz,
                 color = MaterialTheme.colorScheme.onBackground,
             ),
