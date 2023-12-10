@@ -37,6 +37,14 @@ class TeacherQuizAddViewModel(
                 is TeacherQuizAddEvent.ClassSelected -> {
                     _uiState.value = _uiState.value.copy(selectedClass = event.selectedClass)
                 }
+
+                is TeacherQuizAddEvent.TitleChanged -> {
+                    _uiState.value = _uiState.value.copy(title = event.title)
+                }
+
+                is TeacherQuizAddEvent.DescriptionChanged -> {
+                    _uiState.value = _uiState.value.copy(description = event.description)
+                }
             }
         }
     }

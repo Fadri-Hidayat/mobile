@@ -103,7 +103,8 @@ fun SignInContent(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        OutlinedTextField(modifier = Modifier.fillMaxWidth(),
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
             value = inputData.username,
             onValueChange = {
                 onEvent(SignInUIEvent.UsernameChanged(it))
@@ -114,7 +115,9 @@ fun SignInContent(
                     "Email",
                     style = MaterialTheme.typography.bodyLarge,
                 )
-            }, isError = inputData.hasUsernameError, supportingText = {
+            },
+            isError = inputData.hasUsernameError,
+            supportingText = {
                 if (inputData.hasUsernameError) {
                     Text(
                         "Temporary Input Error",
@@ -122,7 +125,8 @@ fun SignInContent(
                         color = MaterialTheme.colorScheme.error,
                     )
                 }
-            })
+            },
+        )
 
         Spacer(modifier = Modifier.height(12.dp))
 

@@ -15,19 +15,18 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Devices
@@ -103,12 +102,8 @@ fun TeacherQuizAddContent(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text(text = "Expanded ${isMenuExpanded.value.toString()}")
 
-        // Create a DropdownMenu with items loaded from the API
-        Box(
-            modifier = Modifier.padding(16.dp)
-        ) {
+        Box {
 
             ExposedDropdownMenuBox(
                 expanded = isMenuExpanded.value,
@@ -116,7 +111,7 @@ fun TeacherQuizAddContent(
                     isMenuExpanded.value = !isMenuExpanded.value
                 },
             ) {
-                TextField(
+                OutlinedTextField(
                     value = "",
                     onValueChange = {
                     },
@@ -128,7 +123,6 @@ fun TeacherQuizAddContent(
                         }
 
                 )
-
 
                 ExposedDropdownMenu(
                     expanded = isMenuExpanded.value,
@@ -163,13 +157,80 @@ fun TeacherQuizAddContent(
                     }
                 }
             }
-
         }
 
-        // Display the selected item
-        inputData.selectedClass?.let { selected ->
-            Text(text = "Selected Item: ${selected.name}")
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = inputData.title,
+            onValueChange = {
+                onEvent(TeacherQuizAddEvent.TitleChanged(it))
+            },
+//            enabled = !isLoading,
+            label = {
+                Text(
+                    "Title",
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+            },
+//            isError = inputData.hasUsernameError,
+//            supportingText = {
+//                if (inputData.hasUsernameError) {
+//                    Text(
+//                        "Temporary Input Error",
+//                        style = MaterialTheme.typography.bodyMedium,
+//                        color = MaterialTheme.colorScheme.error,
+//                    )
+//                }
+//            },
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = inputData.title,
+            onValueChange = {
+                onEvent(TeacherQuizAddEvent.DescriptionChanged(it))
+            },
+            minLines = 3,
+            maxLines = 5,
+//            enabled = !isLoading,
+            label = {
+                Text(
+                    "Description",
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+            },
+//            isError = inputData.hasUsernameError,
+//            supportingText = {
+//                if (inputData.hasUsernameError) {
+//                    Text(
+//                        "Temporary Input Error",
+//                        style = MaterialTheme.typography.bodyMedium,
+//                        color = MaterialTheme.colorScheme.error,
+//                    )
+//                }
+//            },
+        )
+
+        Spacer(modifier = Modifier.weight(1F))
+
+        Button(
+            modifier = Modifier
+                .padding(24.dp, 0.dp)
+                .align(Alignment.End),
+            onClick = {},
+            shape = MaterialTheme.shapes.small,
+        ) {
+            Text(
+                text = "Next",
+                style = MaterialTheme.typography.titleSmall,
+            )
         }
+
+        Spacer(modifier = Modifier.height(24.dp))
     }
 }
 
