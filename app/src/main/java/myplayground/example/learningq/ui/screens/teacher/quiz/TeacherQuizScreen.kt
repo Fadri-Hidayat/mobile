@@ -29,6 +29,8 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -37,6 +39,7 @@ import myplayground.example.learningq.local_storage.DatastoreSettings
 import myplayground.example.learningq.local_storage.dataStore
 import myplayground.example.learningq.model.Quiz
 import myplayground.example.learningq.ui.layout.FabWrapper
+import myplayground.example.learningq.ui.navigation.Screen
 import myplayground.example.learningq.ui.screens.student.quiz.StudentQuizCardSkeletonView
 import myplayground.example.learningq.ui.theme.LearningQTheme
 import myplayground.example.learningq.ui.utils.ViewModelFactory
@@ -50,13 +53,17 @@ fun TeacherQuizScreen(
             Injection.provideRepository(LocalContext.current),
             DatastoreSettings.getInstance(LocalContext.current.dataStore),
         )
-    )
+    ),
+    navController: NavHostController = rememberNavController(),
 ) {
     val quizPagingItems = vm.quizState.collectAsLazyPagingItems()
 
     TeacherQuizContent(
         modifier = modifier,
         quizPagingItems = quizPagingItems,
+        navigateToAddQuiz = {
+            navController.navigate(Screen.TeacherQuizAdd.route)
+        }
     )
 }
 
@@ -64,6 +71,7 @@ fun TeacherQuizScreen(
 fun TeacherQuizContent(
     modifier: Modifier = Modifier,
     quizPagingItems: LazyPagingItems<Quiz>? = null,
+    navigateToAddQuiz: () -> Unit = {},
 ) {
     FabWrapper(
         fab = { fabModifier ->
@@ -75,7 +83,9 @@ fun TeacherQuizContent(
                         MaterialTheme.shapes.extraLarge,
                     ),
                 shape = MaterialTheme.shapes.extraLarge,
-                onClick = {},
+                onClick = {
+                    navigateToAddQuiz()
+                },
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,

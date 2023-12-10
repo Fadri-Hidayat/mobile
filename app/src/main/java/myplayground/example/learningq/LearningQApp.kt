@@ -58,6 +58,7 @@ import myplayground.example.learningq.ui.screens.student.quiz.StudentQuizScreen
 import myplayground.example.learningq.ui.screens.student.quiz_detail.StudentQuizDetailScreen
 import myplayground.example.learningq.ui.screens.teacher.dashboard.TeacherDashboardScreen
 import myplayground.example.learningq.ui.screens.teacher.quiz.TeacherQuizScreen
+import myplayground.example.learningq.ui.screens.teacher.quiz_add.TeacherQuizAddScreen
 import myplayground.example.learningq.ui.utils.debugPlaceholder
 
 @Composable
@@ -286,6 +287,13 @@ fun LearningQApp(
 
                 composable(Screen.TeacherQuiz.route) {
                     TeacherQuizScreen(
+                        modifier = containerModifier,
+                        navController = navController,
+                    )
+                }
+
+                composable(Screen.TeacherQuizAdd.route) {
+                    TeacherQuizAddScreen(
                         modifier = containerModifier
                     )
                 }

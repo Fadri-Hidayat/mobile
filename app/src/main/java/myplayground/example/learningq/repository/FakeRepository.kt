@@ -60,6 +60,9 @@ class FakeRepository(
             role = Role.Teacher,
         )
 
+        if (token.length <= "token ".length) {
+            return studentUser
+        }
 
         return when (token.substring("token ".length)) {
             "student" -> {

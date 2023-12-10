@@ -1,5 +1,7 @@
 package myplayground.example.learningq.ui.screens.teacher.quiz_add
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -15,9 +17,11 @@ class TeacherQuizAddViewModel(
     private val repository: Repository,
 ) :
     ViewModel() {
-    private val _quizState: MutableStateFlow<PagingData<Quiz>> =
-        MutableStateFlow(PagingData.empty())
-    val quizState: StateFlow<PagingData<Quiz>> = _quizState
+
+    private val _uiState = mutableStateOf(TeacherQuizAddInputData())
+
+    val uiState: State<TeacherQuizAddInputData> = _uiState
+
 
     init {
         onEvent(TeacherQuizAddEvent.Init)
@@ -27,12 +31,11 @@ class TeacherQuizAddViewModel(
         viewModelScope.launch {
             when (event) {
                 is TeacherQuizAddEvent.Init -> {
-                    repository.fetchTeacherQuizPaging()
-                        .distinctUntilChanged()
-                        .cachedIn(viewModelScope)
-                        .collect {
-                            _quizState.value = it
-                        }
+
+                }
+
+                is TeacherQuizAddEvent.ClassSelected -> {
+                    _uiState.value = _uiState.value.copy(selectedClass = event.selectedClass)
                 }
             }
         }
