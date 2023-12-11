@@ -27,6 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import myplayground.example.learningq.di.Injection
 import myplayground.example.learningq.local_storage.DatastoreSettings
 import myplayground.example.learningq.local_storage.dataStore
+import myplayground.example.learningq.ui.components.CustomOutlinedTextField
 import myplayground.example.learningq.ui.theme.LearningQTheme
 import myplayground.example.learningq.ui.utils.ViewModelFactory
 
@@ -82,7 +83,7 @@ fun StudentQuizDetailContent(
 
 
         if (isEssay) {
-            OutlinedTextField(
+            CustomOutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = inputData.essayAnswer,
                 onValueChange = {

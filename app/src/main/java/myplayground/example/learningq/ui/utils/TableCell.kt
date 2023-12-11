@@ -21,7 +21,7 @@ fun RowScope.TableCell(
         text = text,
         color = textColor,
         modifier = modifier
-            .border(1.dp, MaterialTheme.colorScheme.primary)
+            .border(1.dp, MaterialTheme.colorScheme.onSurface)
             .weight(weight)
             .padding(8.dp)
     )

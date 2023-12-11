@@ -33,6 +33,7 @@ import myplayground.example.learningq.di.Injection
 import myplayground.example.learningq.local_storage.DatastoreSettings
 import myplayground.example.learningq.local_storage.dataStore
 import myplayground.example.learningq.ui.components.CustomButton
+import myplayground.example.learningq.ui.components.CustomOutlinedTextField
 import myplayground.example.learningq.ui.components.PasswordOutlinedTextField
 import myplayground.example.learningq.ui.navigation.Screen
 import myplayground.example.learningq.ui.theme.LearningQTheme
@@ -103,7 +104,7 @@ fun SignInContent(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        OutlinedTextField(
+        CustomOutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = inputData.username,
             onValueChange = {

@@ -37,6 +37,7 @@ import myplayground.example.learningq.di.Injection
 import myplayground.example.learningq.local_storage.DatastoreSettings
 import myplayground.example.learningq.local_storage.dataStore
 import myplayground.example.learningq.model.Class
+import myplayground.example.learningq.ui.components.CustomOutlinedTextField
 import myplayground.example.learningq.ui.theme.LearningQTheme
 import myplayground.example.learningq.ui.utils.ViewModelFactory
 
@@ -111,7 +112,7 @@ fun TeacherQuizAddContent(
                     isMenuExpanded.value = !isMenuExpanded.value
                 },
             ) {
-                OutlinedTextField(
+                CustomOutlinedTextField(
                     value = "",
                     onValueChange = {
                     },
@@ -161,7 +162,7 @@ fun TeacherQuizAddContent(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        OutlinedTextField(
+        CustomOutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = inputData.title,
             onValueChange = {
@@ -188,7 +189,7 @@ fun TeacherQuizAddContent(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        OutlinedTextField(
+        CustomOutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = inputData.title,
             onValueChange = {

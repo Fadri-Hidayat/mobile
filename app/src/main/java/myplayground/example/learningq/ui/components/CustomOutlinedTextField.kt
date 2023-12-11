@@ -3,31 +3,22 @@ package myplayground.example.learningq.ui.components
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
+import myplayground.example.learningq.ui.theme.LearningQTheme
 
 @Composable
-fun PasswordOutlinedTextField(
+fun CustomOutlinedTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -37,10 +28,13 @@ fun PasswordOutlinedTextField(
     label: @Composable (() -> Unit)? = null,
     placeholder: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
     prefix: @Composable (() -> Unit)? = null,
     suffix: @Composable (() -> Unit)? = null,
     supportingText: @Composable (() -> Unit)? = null,
     isError: Boolean = false,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     singleLine: Boolean = false,
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
@@ -53,9 +47,7 @@ fun PasswordOutlinedTextField(
         focusedLabelColor = MaterialTheme.colorScheme.onSurface,
     )
 ) {
-    var passwordVisible by rememberSaveable { mutableStateOf(false) }
-
-    CustomOutlinedTextField(
+    OutlinedTextField(
         value,
         onValueChange,
         modifier,
@@ -65,24 +57,13 @@ fun PasswordOutlinedTextField(
         label,
         placeholder,
         leadingIcon,
-        trailingIcon = {
-            val image = if (passwordVisible)
-                Icons.Filled.Visibility
-            else Icons.Filled.VisibilityOff
-
-            // Please provide localized description for accessibility services
-            val description = if (passwordVisible) "Hide password" else "Show password"
-
-            IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                Icon(imageVector = image, description)
-            }
-        },
+        trailingIcon,
         prefix,
         suffix,
         supportingText,
         isError,
-        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        visualTransformation,
+        keyboardOptions,
         keyboardActions,
         singleLine,
         maxLines,
@@ -91,4 +72,16 @@ fun PasswordOutlinedTextField(
         shape,
         colors,
     )
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun CustomOutlinedTextFieldPreview() {
+    LearningQTheme {
+        CustomOutlinedTextField(
+            value = "",
+            onValueChange = {},
+        )
+    }
 }
