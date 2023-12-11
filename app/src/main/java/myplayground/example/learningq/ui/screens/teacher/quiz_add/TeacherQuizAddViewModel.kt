@@ -34,6 +34,14 @@ class TeacherQuizAddViewModel(
 
                 }
 
+                is TeacherQuizAddEvent.QuizTypeSelected -> {
+                    if (_uiState.value.selectedQuizType == event.quizType) {
+                        _uiState.value = _uiState.value.copy(selectedQuizType = 0)
+                    } else {
+                        _uiState.value = _uiState.value.copy(selectedQuizType = event.quizType)
+                    }
+                }
+
                 is TeacherQuizAddEvent.ClassSelected -> {
                     _uiState.value = _uiState.value.copy(selectedClass = event.selectedClass)
                 }

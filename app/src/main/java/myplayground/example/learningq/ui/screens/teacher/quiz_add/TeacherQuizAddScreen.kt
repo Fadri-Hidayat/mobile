@@ -38,13 +38,13 @@ import myplayground.example.learningq.local_storage.DatastoreSettings
 import myplayground.example.learningq.local_storage.dataStore
 import myplayground.example.learningq.model.Class
 import myplayground.example.learningq.ui.components.CustomOutlinedTextField
+import myplayground.example.learningq.ui.components.CustomRadioBadge
 import myplayground.example.learningq.ui.theme.LearningQTheme
 import myplayground.example.learningq.ui.utils.ViewModelFactory
 
 @Composable
 fun TeacherQuizAddScreen(
-    modifier: Modifier = Modifier,
-    vm: TeacherQuizAddViewModel = viewModel(
+    modifier: Modifier = Modifier, vm: TeacherQuizAddViewModel = viewModel(
         factory = ViewModelFactory(
             LocalContext.current.applicationContext as Application,
             Injection.provideRepository(LocalContext.current),
@@ -84,21 +84,27 @@ fun TeacherQuizAddContent(
         )
         Spacer(modifier = Modifier.height(28.dp))
         Row {
-            Button(
+            CustomRadioBadge(
                 modifier = Modifier.weight(1F),
-                onClick = {},
-            ) {
-                Text("Essay")
-            }
+                selected = inputData.selectedQuizType == 1,
+                onClick = {
+                    onEvent(TeacherQuizAddEvent.QuizTypeSelected(1))
+                },
+                text = "Essay",
+                contentAlignment = Alignment.Center,
+            )
 
             Spacer(modifier = Modifier.width(40.dp))
 
-            Button(
+            CustomRadioBadge(
                 modifier = Modifier.weight(1F),
-                onClick = {},
-            ) {
-                Text("Pilgan")
-            }
+                selected = inputData.selectedQuizType == 2,
+                onClick = {
+                    onEvent(TeacherQuizAddEvent.QuizTypeSelected(2))
+                },
+                text = "Pilgan",
+                contentAlignment = Alignment.Center,
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -112,25 +118,20 @@ fun TeacherQuizAddContent(
                     isMenuExpanded.value = !isMenuExpanded.value
                 },
             ) {
-                CustomOutlinedTextField(
-                    value = "",
-                    onValueChange = {
-                    },
-                    label = { Text("Search") },
+                CustomOutlinedTextField(value = "",
+                    onValueChange = {},
+                    label = { Text("Class") },
                     modifier = Modifier
                         .menuAnchor()
                         .fillMaxWidth()
-                        .clickable {
-                        }
+                        .clickable {}
 
                 )
 
                 ExposedDropdownMenu(
-                    expanded = isMenuExpanded.value,
-                    onDismissRequest = {
+                    expanded = isMenuExpanded.value, onDismissRequest = {
                         isMenuExpanded.value = false
-                    },
-                    modifier = Modifier.fillMaxWidth()
+                    }, modifier = Modifier.fillMaxWidth()
                 ) { ->
                     listOf(
                         Class(
@@ -146,15 +147,12 @@ fun TeacherQuizAddContent(
                             name = "Class C",
                         ),
                     ).forEach { item ->
-                        DropdownMenuItem(
-                            onClick = {
-                                onEvent(TeacherQuizAddEvent.ClassSelected(item))
-                                isMenuExpanded.value = false
-                            },
-                            text = {
-                                Text(text = item.name)
-                            }
-                        )
+                        DropdownMenuItem(onClick = {
+                            onEvent(TeacherQuizAddEvent.ClassSelected(item))
+                            isMenuExpanded.value = false
+                        }, text = {
+                            Text(text = item.name)
+                        })
                     }
                 }
             }
@@ -216,6 +214,7 @@ fun TeacherQuizAddContent(
 //            },
         )
 
+        Spacer(modifier = Modifier.height(16.dp))
         Spacer(modifier = Modifier.weight(1F))
 
         Button(

@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -16,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -29,6 +31,7 @@ fun CustomRadioBadge(
     selected: Boolean = false,
     onClick: () -> Unit = {},
     text: String = "",
+    contentAlignment: Alignment = Alignment.CenterStart,
 ) {
     Box(
         modifier = modifier
@@ -43,7 +46,8 @@ fun CustomRadioBadge(
                 if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background,
                 shape = CircleShape
             )
-            .padding(16.dp, 8.dp)
+            .padding(16.dp, 8.dp),
+        contentAlignment = contentAlignment,
     ) {
         Text(
             text = text,
