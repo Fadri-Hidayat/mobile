@@ -21,6 +21,15 @@ class StudentQuizDetailViewModel(private val repository: Repository) : ViewModel
                 _uiState.value = _uiState.value.copy(essayAnswer = event.essayAnswer)
             }
 
+            is StudentQuizDetailEvent.SelectedMultipleChoiceChanged -> {
+                if (_uiState.value.selectedMultipleChoice == event.choice) {
+                    // reset value
+                    _uiState.value = _uiState.value.copy(selectedMultipleChoice = 0)
+                } else {
+                    _uiState.value = _uiState.value.copy(selectedMultipleChoice = event.choice)
+                }
+            }
+
             is StudentQuizDetailEvent.Submit -> {
 
             }

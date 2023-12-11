@@ -26,8 +26,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun CustomRadioBadge(
     modifier: Modifier = Modifier,
-    selected: Boolean,
-    onClick: () -> Unit,
+    selected: Boolean = false,
+    onClick: () -> Unit = {},
     text: String = "",
 ) {
     Box(

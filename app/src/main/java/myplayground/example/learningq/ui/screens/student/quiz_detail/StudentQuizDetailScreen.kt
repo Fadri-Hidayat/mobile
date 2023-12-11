@@ -2,6 +2,7 @@ package myplayground.example.learningq.ui.screens.student.quiz_detail
 
 import android.app.Application
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,6 +29,8 @@ import myplayground.example.learningq.di.Injection
 import myplayground.example.learningq.local_storage.DatastoreSettings
 import myplayground.example.learningq.local_storage.dataStore
 import myplayground.example.learningq.ui.components.CustomOutlinedTextField
+import myplayground.example.learningq.ui.components.CustomRadioBadge
+import myplayground.example.learningq.ui.components.CustomRadioBadgePreview
 import myplayground.example.learningq.ui.theme.LearningQTheme
 import myplayground.example.learningq.ui.utils.ViewModelFactory
 
@@ -93,47 +96,43 @@ fun StudentQuizDetailContent(
                 maxLines = 6,
             )
         } else {
-            OutlinedButton(
-                onClick = {},
-            ) {
-                Text(
-                    text = "A. Answer A",
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
-            }
+            CustomRadioBadge(
+                selected = inputData.selectedMultipleChoice == 1,
+                onClick = {
+                    onEvent(StudentQuizDetailEvent.SelectedMultipleChoiceChanged(1))
+                },
+                text = "A. Answer A",
+            )
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            OutlinedButton(
-                onClick = {},
-            ) {
-                Text(
-                    text = "B. Answer B",
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
-            }
+            CustomRadioBadge(
+                selected = inputData.selectedMultipleChoice == 2,
+                onClick = {
+                    onEvent(StudentQuizDetailEvent.SelectedMultipleChoiceChanged(2))
+                },
+                text = "B. Answer B",
+            )
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            OutlinedButton(
-                onClick = {},
-            ) {
-                Text(
-                    text = "C. Answer C",
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
-            }
+            CustomRadioBadge(
+                selected = inputData.selectedMultipleChoice == 3,
+                onClick = {
+                    onEvent(StudentQuizDetailEvent.SelectedMultipleChoiceChanged(3))
+                },
+                text = "C. Answer C",
+            )
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            OutlinedButton(
-                onClick = {},
-            ) {
-                Text(
-                    text = "D. Answer D",
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
-            }
+            CustomRadioBadge(
+                selected = inputData.selectedMultipleChoice == 4,
+                onClick = {
+                    onEvent(StudentQuizDetailEvent.SelectedMultipleChoiceChanged(4))
+                },
+                text = "D. Answer D",
+            )
         }
 
         Spacer(modifier = Modifier.height(24.dp))
