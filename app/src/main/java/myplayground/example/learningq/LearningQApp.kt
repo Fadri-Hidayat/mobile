@@ -101,6 +101,7 @@ fun LearningQApp(
     }
 
     ModalNavigationDrawer(
+        gesturesEnabled = !hasNavPreviousBackStack,
         drawerState = drawerState,
         drawerContent = {
             if (haveToken.value) {

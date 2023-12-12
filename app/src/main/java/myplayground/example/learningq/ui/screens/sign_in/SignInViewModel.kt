@@ -1,6 +1,5 @@
 package myplayground.example.learningq.ui.screens.sign_in
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -10,7 +9,10 @@ import kotlinx.coroutines.launch
 import myplayground.example.learningq.local_storage.LocalStorageManager
 import myplayground.example.learningq.repository.Repository
 import myplayground.example.learningq.repository.UserLoginInput
-import myplayground.example.learningq.utils.allTrue
+import myplayground.example.learningq.ui.utils.StringValidationRule
+import myplayground.example.learningq.ui.utils.validate
+import myplayground.example.learningq.utils.allNull
+import retrofit2.HttpException
 
 class SignInViewModel(
     private val repository: Repository,
@@ -41,35 +43,45 @@ class SignInViewModel(
     }
 
     private fun validateAndSubmit() {
-        val usernameResultError = _uiState.value.username.isEmpty()
-        val passwordResultError = _uiState.value.password.isEmpty()
+        val usernameResultError = _uiState.value.username.validate(
+            StringValidationRule.Required("Required field"),
+        ).toErrorMessage()
 
-        _uiState.value = _uiState.value.copy(hasUsernameError = usernameResultError)
-        _uiState.value = _uiState.value.copy(hasPasswordError = passwordResultError)
+        val passwordResultError = _uiState.value.password.validate(
+            StringValidationRule.Required("Required field")
+        ).toErrorMessage()
 
-        val hasError = listOf(
+        _uiState.value = _uiState.value.copy(usernameError = usernameResultError)
+        _uiState.value = _uiState.value.copy(passwordError = passwordResultError)
+
+        val hasError = !listOf(
             usernameResultError,
             passwordResultError,
-        ).allTrue()
+        ).allNull()
 
         viewModelScope.launch {
             if (!hasError) {
                 _isLoading.value = true
-                val token = repository.userLogin(
-                    UserLoginInput(
-                        username = _uiState.value.username,
-                        password = _uiState.value.password,
+
+                try {
+                    val token = repository.userLogin(
+                        UserLoginInput(
+                            username = _uiState.value.username,
+                            password = _uiState.value.password,
+                        )
                     )
-                )
 
-                if (token?.auth_token != null && token.auth_token.isNotEmpty()) {
-                    localStorageManager.saveUserToken(token.auth_token ?: "")
+                    if (token?.auth_token != null && token.auth_token.isNotEmpty()) {
+                        localStorageManager.saveUserToken(token.auth_token ?: "")
 
-                    validationEvent.emit(SignInUIEvent.ValidationEvent.Success())
+                        validationEvent.emit(SignInUIEvent.ValidationEvent.Success())
+                    }
+                } catch (e: HttpException) {
+                    _uiState.value =
+                        _uiState.value.copy(formError = e.response()?.errorBody()?.string())
+                } finally {
+                    _isLoading.value = false
                 }
-                _isLoading.value = false
-            } else {
-                validationEvent.emit(SignInUIEvent.ValidationEvent.Failure(0, "Validation Failed"))
             }
         }
     }

@@ -4,20 +4,17 @@ import android.app.Application
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,6 +30,7 @@ import androidx.navigation.compose.rememberNavController
 import myplayground.example.learningq.di.Injection
 import myplayground.example.learningq.local_storage.DatastoreSettings
 import myplayground.example.learningq.local_storage.dataStore
+import myplayground.example.learningq.ui.components.CustomError
 import myplayground.example.learningq.ui.components.CustomOutlinedTextField
 import myplayground.example.learningq.ui.components.PasswordOutlinedTextField
 import myplayground.example.learningq.ui.navigation.Screen
@@ -55,14 +53,7 @@ fun SignUpScreen(
 
     SignUpContent(
         modifier = modifier,
-        inputData.name,
-        inputData.username,
-        inputData.password,
-        inputData.confirmPassword,
-        inputData.hasNameError,
-        inputData.hasUsernameError,
-        inputData.hasPasswordError,
-        inputData.hasConfirmPasswordError,
+        inputData,
         vm::onEvent,
     ) {
         navController.navigate(Screen.SignIn.route) {
@@ -76,14 +67,7 @@ fun SignUpScreen(
 @Composable
 fun SignUpContent(
     modifier: Modifier = Modifier,
-    name: String = "",
-    username: String = "",
-    password: String = "",
-    confirmPassword: String = "",
-    hasNameError: Boolean = false,
-    hasUsernameError: Boolean = false,
-    hasPasswordError: Boolean = false,
-    hasConfirmPasswordError: Boolean = false,
+    inputData: SignUpInputData = SignUpInputData(),
     onEvent: (SignUpUIEvent) -> Unit = {},
     navigateToSignIn: () -> Unit = {},
 ) {
@@ -101,11 +85,20 @@ fun SignUpContent(
             color = MaterialTheme.colorScheme.onSurface,
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(12.dp))
+
+        if(!inputData.formError.isNullOrEmpty()) {
+            CustomError(
+                modifier = Modifier.fillMaxWidth(),
+                error = inputData.formError,
+            )
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
 
         CustomOutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = name,
+            value = inputData.name,
             onValueChange = {
                 onEvent(SignUpUIEvent.NameChanged(it))
             },
@@ -115,11 +108,11 @@ fun SignUpContent(
                     style = MaterialTheme.typography.bodyLarge,
                 )
             },
-            isError = hasNameError,
+            isError = !inputData.nameError.isNullOrEmpty(),
             supportingText = {
-                if (hasNameError) {
+                if (!inputData.nameError.isNullOrEmpty()) {
                     Text(
-                        "Temporary Input Error",
+                        inputData.nameError,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.error,
                     )
@@ -131,7 +124,7 @@ fun SignUpContent(
 
         CustomOutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = username,
+            value = inputData.username,
             onValueChange = {
                 onEvent(SignUpUIEvent.UsernameChanged(it))
             },
@@ -141,11 +134,11 @@ fun SignUpContent(
                     style = MaterialTheme.typography.bodyLarge,
                 )
             },
-            isError = hasUsernameError,
+            isError = !inputData.usernameError.isNullOrEmpty(),
             supportingText = {
-                if (hasUsernameError) {
+                if (!inputData.usernameError.isNullOrEmpty()) {
                     Text(
-                        "Temporary Input Error",
+                        inputData.usernameError,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.error,
                     )
@@ -157,7 +150,7 @@ fun SignUpContent(
 
         PasswordOutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = password,
+            value = inputData.password,
             onValueChange = {
                 onEvent(SignUpUIEvent.PasswordChanged(it))
             },
@@ -167,11 +160,11 @@ fun SignUpContent(
                     style = MaterialTheme.typography.bodyLarge,
                 )
             },
-            isError = hasPasswordError,
+            isError = !inputData.passwordError.isNullOrEmpty(),
             supportingText = {
-                if (hasPasswordError) {
+                if (!inputData.passwordError.isNullOrEmpty()) {
                     Text(
-                        "Temporary Input Error",
+                        inputData.passwordError,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.error,
                     )
@@ -184,7 +177,7 @@ fun SignUpContent(
 
         PasswordOutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = confirmPassword,
+            value = inputData.confirmPassword,
             onValueChange = {
                 onEvent(SignUpUIEvent.ConfirmPasswordChanged(it))
             },
@@ -194,11 +187,11 @@ fun SignUpContent(
                     style = MaterialTheme.typography.bodyLarge,
                 )
             },
-            isError = hasConfirmPasswordError,
+            isError = !inputData.confirmPasswordError.isNullOrEmpty(),
             supportingText = {
-                if (hasConfirmPasswordError) {
+                if (!inputData.confirmPasswordError.isNullOrEmpty()) {
                     Text(
-                        "Temporary Input Error",
+                        inputData.confirmPasswordError,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.error,
                     )

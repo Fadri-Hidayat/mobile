@@ -8,7 +8,11 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import myplayground.example.learningq.repository.Repository
 import myplayground.example.learningq.repository.UserRegisterInput
+import myplayground.example.learningq.ui.utils.StringValidationRule
+import myplayground.example.learningq.ui.utils.validate
+import myplayground.example.learningq.utils.allNull
 import myplayground.example.learningq.utils.allTrue
+import retrofit2.HttpException
 
 class SignUpViewModel(private val repository: Repository) : ViewModel() {
     private val _uiState = mutableStateOf(SignUpInputData())
@@ -41,39 +45,52 @@ class SignUpViewModel(private val repository: Repository) : ViewModel() {
     }
 
     private fun validateAndSubmit() {
-        val nameResultError = _uiState.value.name.isEmpty()
-        val usernameResultError = _uiState.value.username.isEmpty()
-        val passwordResultError = _uiState.value.password.isEmpty()
-        val confirmPasswordResultError = _uiState.value.confirmPassword.isEmpty()
+        val nameResultError = _uiState.value.name.validate(
+            StringValidationRule.Required("Required field")
+        ).toErrorMessage()
+        val usernameResultError = _uiState.value.username.validate(
+            StringValidationRule.Required("Required field")
+        ).toErrorMessage()
+        val passwordResultError = _uiState.value.password.validate(
+            StringValidationRule.Required("Required field")
+        ).toErrorMessage()
+        val confirmPasswordResultError = _uiState.value.confirmPassword.validate(
+            StringValidationRule.Required("Required field"),
+            StringValidationRule.SameValueAs(_uiState.value.password, "Password doesn't match")
+        ).toErrorMessage()
 
-        _uiState.value = _uiState.value.copy(hasNameError = nameResultError)
-        _uiState.value = _uiState.value.copy(hasUsernameError = usernameResultError)
-        _uiState.value = _uiState.value.copy(hasPasswordError = passwordResultError)
-        _uiState.value = _uiState.value.copy(hasConfirmPasswordError = confirmPasswordResultError)
+        _uiState.value = _uiState.value.copy(nameError = nameResultError)
+        _uiState.value = _uiState.value.copy(usernameError = usernameResultError)
+        _uiState.value = _uiState.value.copy(passwordError = passwordResultError)
+        _uiState.value = _uiState.value.copy(confirmPasswordError = confirmPasswordResultError)
 
-        val hasError = listOf(
+        val hasError = !listOf(
             nameResultError,
             usernameResultError,
             passwordResultError,
             confirmPasswordResultError,
-        ).allTrue()
+        ).allNull()
 
         viewModelScope.launch {
             if (!hasError) {
-                repository.userRegister(
-                    UserRegisterInput(
-                        name = _uiState.value.name,
-                        username = _uiState.value.username,
-                        password = _uiState.value.password,
-                    )
-                ).collect { token ->
-                    validationEvent.emit(
-                        SignUpUIEvent.ValidationEvent.Success(
-                            token
+                try {
+                    repository.userRegister(
+                        UserRegisterInput(
+                            name = _uiState.value.name,
+                            username = _uiState.value.username,
+                            password = _uiState.value.password,
                         )
-                    )
+                    ).collect { token ->
+                        validationEvent.emit(
+                            SignUpUIEvent.ValidationEvent.Success(
+                                token
+                            )
+                        )
+                    }
+                } catch (e: HttpException) {
+                    _uiState.value =
+                        _uiState.value.copy(formError = e.response()?.errorBody()?.string())
                 }
-
             } else {
                 validationEvent.emit(
                     SignUpUIEvent.ValidationEvent.Failure(

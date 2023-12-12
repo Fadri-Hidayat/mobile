@@ -2,6 +2,9 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="CustomRadioBadgePreview">
+        <State />
+      </entry>
       <entry key="WebBadgeRadioButtonPreview">
         <State />
       </entry>

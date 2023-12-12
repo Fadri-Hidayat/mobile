@@ -4,7 +4,9 @@ import android.util.Log
 import kotlinx.coroutines.delay
 import myplayground.example.learningq.model.Class
 import myplayground.example.learningq.model.Quiz
+import myplayground.example.learningq.model.User
 import myplayground.example.learningq.network.utils.WithPagination
+import retrofit2.Retrofit
 import kotlin.math.ceil
 
 class FakeApiService : ApiService {
@@ -46,6 +48,7 @@ class FakeApiService : ApiService {
             totalPage = ceil(QUIZ_LIST.size.toFloat() / limit.toFloat()).toInt(),
         )
     }
+
 
     companion object {
         @Volatile

@@ -33,6 +33,7 @@ import myplayground.example.learningq.di.Injection
 import myplayground.example.learningq.local_storage.DatastoreSettings
 import myplayground.example.learningq.local_storage.dataStore
 import myplayground.example.learningq.ui.components.CustomButton
+import myplayground.example.learningq.ui.components.CustomError
 import myplayground.example.learningq.ui.components.CustomOutlinedTextField
 import myplayground.example.learningq.ui.components.PasswordOutlinedTextField
 import myplayground.example.learningq.ui.navigation.Screen
@@ -69,7 +70,6 @@ fun SignInScreen(
         inputData,
         isLoading,
         vm::onEvent,
-        event,
     ) {
         navController.navigate(Screen.SignUp.route) {
             popUpTo(Screen.Landing.route) {
@@ -85,7 +85,6 @@ fun SignInContent(
     inputData: SignInInputData = SignInInputData(),
     isLoading: Boolean = false,
     onEvent: (SignInUIEvent) -> Unit = {},
-    event: SignInUIEvent.ValidationEvent = SignInUIEvent.ValidationEvent.None(),
     navigateToSignUp: () -> Unit = {},
 ) {
     Column(
@@ -102,7 +101,16 @@ fun SignInContent(
             color = MaterialTheme.colorScheme.onSurface,
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(12.dp))
+
+        if (!inputData.formError.isNullOrEmpty()) {
+            CustomError(
+                modifier = Modifier.fillMaxWidth(),
+                error = inputData.formError,
+            )
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
 
         CustomOutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
@@ -117,11 +125,11 @@ fun SignInContent(
                     style = MaterialTheme.typography.bodyLarge,
                 )
             },
-            isError = inputData.hasUsernameError,
+            isError = !inputData.usernameError.isNullOrEmpty(),
             supportingText = {
-                if (inputData.hasUsernameError) {
+                if (!inputData.usernameError.isNullOrEmpty()) {
                     Text(
-                        "Temporary Input Error",
+                        inputData.usernameError,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.error,
                     )
@@ -143,11 +151,11 @@ fun SignInContent(
                     style = MaterialTheme.typography.bodyLarge,
                 )
             },
-            isError = inputData.hasPasswordError,
+            isError = !inputData.passwordError.isNullOrEmpty(),
             supportingText = {
-                if (inputData.hasPasswordError) {
+                if (!inputData.passwordError.isNullOrEmpty()) {
                     Text(
-                        "Temporary Input Error",
+                        inputData.passwordError,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.error,
                     )

@@ -16,6 +16,10 @@ import myplayground.example.learningq.network.ApiService
 import myplayground.example.learningq.repository.paging.StudentClassPagingSource
 import myplayground.example.learningq.repository.paging.StudentQuizPagingSource
 import myplayground.example.learningq.repository.paging.TeacherQuizPagingSource
+import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
+import retrofit2.HttpException
+import retrofit2.Response
 
 class FakeRepository(
     context: Context,
@@ -30,9 +34,13 @@ class FakeRepository(
                 return Token(
                     auth_token = "token ${existingAccount.username}",
                 )
-
             }
         }
+
+        throw HttpException(
+            Response.error<Token?>(400, "Invalid User/Password".toResponseBody())
+        )
+
 
         return null
     }

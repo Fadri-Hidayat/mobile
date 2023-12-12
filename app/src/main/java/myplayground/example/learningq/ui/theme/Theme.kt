@@ -36,7 +36,7 @@ private fun customDynamicLightColorScheme(context: Context): ColorScheme {
             onPrimaryContainer = White,
             onBackground = Black,
 
-            error = dynamicC.error,
+            error = Error,
             errorContainer = dynamicC.errorContainer,
             inverseOnSurface = dynamicC.inverseOnSurface,
             inversePrimary = dynamicC.inversePrimary,
@@ -76,7 +76,7 @@ private fun customDynamicDarkColorScheme(context: Context): ColorScheme {
             onPrimaryContainer = White,
             onBackground = White,
 
-            error = dynamicC.error,
+            error = Error,
             errorContainer = dynamicC.errorContainer,
             inverseOnSurface = dynamicC.inverseOnSurface,
             inversePrimary = dynamicC.inversePrimary,
@@ -105,6 +105,7 @@ private val DarkColorScheme = darkColorScheme(
     background = Background,
     primaryContainer = Primary,
 
+    error = Error,
     onPrimary = White,
     onSecondary = White,
     onTertiary = TertiaryDark,
@@ -120,6 +121,7 @@ private val LightColorScheme = lightColorScheme(
     background = White,
     primaryContainer = Primary,
 
+    error = Error,
     onPrimary = White,
     onSecondary = White,
     onTertiary = TertiaryDark,

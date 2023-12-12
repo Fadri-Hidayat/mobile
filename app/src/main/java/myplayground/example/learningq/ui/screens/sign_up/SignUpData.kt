@@ -8,10 +8,11 @@ data class SignUpInputData(
     val password: String = "",
     val confirmPassword: String = "",
 
-    val hasNameError: Boolean = false,
-    val hasUsernameError: Boolean = false,
-    val hasPasswordError: Boolean = false,
-    val hasConfirmPasswordError: Boolean = false,
+    val formError: String? = null,
+    val nameError: String? = null,
+    val usernameError: String? = null,
+    val passwordError: String? = null,
+    val confirmPasswordError: String? = null,
 )
 
 sealed class SignUpUIEvent {

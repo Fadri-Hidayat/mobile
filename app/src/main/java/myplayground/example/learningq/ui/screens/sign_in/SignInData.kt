@@ -4,8 +4,9 @@ data class SignInInputData(
     val username: String = "",
     val password: String = "",
 
-    val hasUsernameError: Boolean = false,
-    val hasPasswordError: Boolean = false,
+    val formError: String? = null,
+    val usernameError: String? = null,
+    val passwordError: String? = null,
 )
 
 sealed class SignInUIEvent {

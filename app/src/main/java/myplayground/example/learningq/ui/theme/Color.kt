@@ -12,6 +12,7 @@ val TertiaryDark = Color(0xFF6D6D6D)
 // Base Color
 val Black = Color(0xFF000000)
 val White = Color(0xFFFFFFFF)
+val Error = Color(red = 179, green = 38, blue = 30)
 val LightStroke = Color(0xFFCCCCCC)
 val Disabled = Color(0xFFEBEBE4)
 val Subtitle = Color(0xFF6E6E6E)
