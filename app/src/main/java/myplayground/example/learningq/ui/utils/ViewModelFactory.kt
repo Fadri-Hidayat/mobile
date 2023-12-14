@@ -17,6 +17,7 @@ import myplayground.example.learningq.ui.screens.student.quiz.StudentQuizViewMod
 import myplayground.example.learningq.ui.screens.student.quiz_detail.StudentQuizDetailViewModel
 import myplayground.example.learningq.ui.screens.student.report.StudentReportViewModel
 import myplayground.example.learningq.ui.screens.student.report_detail.StudentReportDetailViewModel
+import myplayground.example.learningq.ui.screens.student.student_feedback.StudentFeedbackViewModel
 import myplayground.example.learningq.ui.screens.teacher.dashboard.TeacherDashboardViewModel
 import myplayground.example.learningq.ui.screens.teacher.quiz.TeacherQuizViewModel
 import myplayground.example.learningq.ui.screens.teacher.quiz_add.TeacherQuizAddViewModel
@@ -52,6 +53,8 @@ class ViewModelFactory(
             return StudentReportViewModel(repository) as T
         } else if (modelClass.isAssignableFrom(StudentReportDetailViewModel::class.java)) {
             return StudentReportDetailViewModel(repository) as T
+        } else if (modelClass.isAssignableFrom(StudentFeedbackViewModel::class.java)) {
+            return StudentFeedbackViewModel(repository) as T
         } else if (modelClass.isAssignableFrom(TeacherDashboardViewModel::class.java)) {
             return TeacherDashboardViewModel(repository) as T
         } else if (modelClass.isAssignableFrom(TeacherQuizViewModel::class.java)) {

@@ -11,11 +11,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun RowScope.TableCell(
+fun RowScope.TableCellText(
     modifier: Modifier = Modifier,
-    text: String = "",
-    textColor: Color = Color.Unspecified,
     weight: Float = 1F,
+    textColor: Color = Color.Unspecified,
+    text: String = "",
 ) {
     Text(
         text = text,
@@ -24,5 +24,19 @@ fun RowScope.TableCell(
             .border(1.dp, MaterialTheme.colorScheme.onSurface)
             .weight(weight)
             .padding(8.dp)
+    )
+}
+
+@Composable
+fun RowScope.TableCell(
+    modifier: Modifier = Modifier,
+    weight: Float = 1F,
+    content: @Composable (modifier: Modifier) -> Unit = {},
+) {
+    content(
+        modifier
+            .border(1.dp, MaterialTheme.colorScheme.onSurface)
+            .weight(weight)
+            .padding(8.dp),
     )
 }
