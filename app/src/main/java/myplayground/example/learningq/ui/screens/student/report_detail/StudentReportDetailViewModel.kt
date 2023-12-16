@@ -14,10 +14,6 @@ import myplayground.example.learningq.repository.Repository
 class StudentReportDetailViewModel(
     private val repository: Repository,
 ) : ViewModel() {
-    private val _classState: MutableStateFlow<PagingData<Class>> =
-        MutableStateFlow(PagingData.empty())
-    val classState: StateFlow<PagingData<Class>> = _classState
-
     init {
         onEvent(StudentReportDetailEvent.Init)
     }
@@ -26,10 +22,6 @@ class StudentReportDetailViewModel(
         viewModelScope.launch {
             when (event) {
                 is StudentReportDetailEvent.Init -> {
-                    repository.fetchStudentClassPaging().distinctUntilChanged().cachedIn(viewModelScope)
-                        .collect {
-                            _classState.value = it
-                        }
                 }
             }
         }

@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Quiz
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.SupervisedUserCircle
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -341,7 +342,7 @@ fun DrawerBodyTeacher(
                 }
 
                 "profile" -> {
-                    //                    navController.navigate(Screen.StudentProfile.route)
+                    navController.navigate(Screen.TeacherProfile.route)
                 }
 
                 "setting" -> {
@@ -367,6 +368,102 @@ fun DrawerBodyTeacher(
             })
     }
 }
+
+
+@Composable
+fun DrawerBodyAdmin(
+    modifier: Modifier = Modifier,
+    navController: NavHostController = rememberNavController(),
+    currentRoute: String = "",
+    authManager: AuthManager = Injection.provideAuthManager(LocalContext.current),
+    closeDrawer: () -> Unit = {},
+) {
+    val isLogoutModalOpen = remember {
+        mutableStateOf(false)
+    }
+
+    DrawerBody(
+        modifier = modifier,
+        currentRoute = currentRoute,
+        closeDrawer = closeDrawer,
+        items = listOf(
+            MenuItem(
+                id = "home",
+                title = "Home",
+                contentDescription = "Home",
+                activeRoute = Screen.AdminDashboard.route,
+                icon = Icons.Default.Home,
+                color = MaterialTheme.colorScheme.onBackground,
+            ),
+            MenuItem(
+                id = "user",
+                title = "User",
+                contentDescription = "User",
+                activeRoute = Screen.AdminUser.route,
+                icon = Icons.Default.SupervisedUserCircle,
+                color = MaterialTheme.colorScheme.onBackground,
+            ),
+
+
+            MenuItem(isSpacing = true),
+            MenuItem(
+                id = "profile",
+                title = "Profile",
+                contentDescription = "Profile",
+                icon = Icons.Default.Person,
+                color = MaterialTheme.colorScheme.onBackground,
+            ),
+            MenuItem(
+                id = "setting",
+                title = "Settings",
+                contentDescription = "Settings",
+                icon = Icons.Default.Settings,
+                color = MaterialTheme.colorScheme.onBackground,
+            ),
+            MenuItem(
+                id = "logout",
+                title = "Logout",
+                contentDescription = "Logout",
+                icon = Icons.Default.Logout,
+                color = MaterialTheme.colorScheme.error,
+            ),
+        ),
+        onItemClick = { menuItem ->
+            when (menuItem.id) {
+                "home" -> {
+                    navController.navigate(Screen.AdminDashboard.route) {
+                        popUpTo(0)
+                    }
+                }
+
+                "profile" -> {
+                    navController.navigate(Screen.AdminProfile.route)
+                }
+
+                "setting" -> {
+                    navController.navigate(Screen.Setting.route)
+                }
+
+                "logout" -> {
+                    isLogoutModalOpen.value = true
+                }
+            }
+        })
+
+    if (isLogoutModalOpen.value) {
+        DialogLogout(
+            onDismissRequest = {
+                isLogoutModalOpen.value = false
+            }, logout = {
+                authManager.logout()
+
+                navController.navigate(Screen.SignIn.route) {
+                    popUpTo(0)
+                }
+            })
+    }
+}
+
 
 @Composable
 fun DialogLogout(

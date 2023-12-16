@@ -7,6 +7,9 @@ import myplayground.example.learningq.ThemeViewModel
 import myplayground.example.learningq.di.Injection
 import myplayground.example.learningq.local_storage.LocalStorageManager
 import myplayground.example.learningq.repository.Repository
+import myplayground.example.learningq.ui.screens.admin.dashboard.AdminDashboardViewModel
+import myplayground.example.learningq.ui.screens.admin.profile.AdminProfileViewModel
+import myplayground.example.learningq.ui.screens.admin.user.AdminUserViewModel
 import myplayground.example.learningq.ui.screens.home.HomeViewModel
 import myplayground.example.learningq.ui.screens.sign_in.SignInViewModel
 import myplayground.example.learningq.ui.screens.sign_up.SignUpViewModel
@@ -17,8 +20,9 @@ import myplayground.example.learningq.ui.screens.student.quiz.StudentQuizViewMod
 import myplayground.example.learningq.ui.screens.student.quiz_detail.StudentQuizDetailViewModel
 import myplayground.example.learningq.ui.screens.student.report.StudentReportViewModel
 import myplayground.example.learningq.ui.screens.student.report_detail.StudentReportDetailViewModel
-import myplayground.example.learningq.ui.screens.student.student_feedback.StudentFeedbackViewModel
+import myplayground.example.learningq.ui.screens.student.feedback.StudentFeedbackViewModel
 import myplayground.example.learningq.ui.screens.teacher.dashboard.TeacherDashboardViewModel
+import myplayground.example.learningq.ui.screens.teacher.profile.TeacherProfileViewModel
 import myplayground.example.learningq.ui.screens.teacher.quiz.TeacherQuizViewModel
 import myplayground.example.learningq.ui.screens.teacher.quiz_add.TeacherQuizAddViewModel
 
@@ -57,10 +61,18 @@ class ViewModelFactory(
             return StudentFeedbackViewModel(repository) as T
         } else if (modelClass.isAssignableFrom(TeacherDashboardViewModel::class.java)) {
             return TeacherDashboardViewModel(repository) as T
+        } else if (modelClass.isAssignableFrom(TeacherProfileViewModel::class.java)) {
+            return TeacherProfileViewModel(authManager) as T
         } else if (modelClass.isAssignableFrom(TeacherQuizViewModel::class.java)) {
             return TeacherQuizViewModel(repository) as T
         } else if (modelClass.isAssignableFrom(TeacherQuizAddViewModel::class.java)) {
             return TeacherQuizAddViewModel(repository) as T
+        } else if (modelClass.isAssignableFrom(AdminDashboardViewModel::class.java)) {
+            return AdminDashboardViewModel() as T
+        } else if (modelClass.isAssignableFrom(AdminUserViewModel::class.java)) {
+            return AdminUserViewModel() as T
+        } else if (modelClass.isAssignableFrom(AdminProfileViewModel::class.java)) {
+            return AdminProfileViewModel(authManager) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

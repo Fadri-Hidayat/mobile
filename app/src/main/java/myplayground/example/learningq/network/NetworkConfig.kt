@@ -1,5 +1,7 @@
 package myplayground.example.learningq.network
 
+import kotlinx.coroutines.runBlocking
+import myplayground.example.learningq.local_storage.LocalStorageManager
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -9,11 +11,21 @@ class NetworkConfig {
     companion object {
         inline fun <reified T> create(
             baseUrl: String,
+            localStorageManager: LocalStorageManager? = null,
         ): T {
             // auth
             val authInterceptor = Interceptor { chain ->
                 val req = chain.request()
                 val reqBuilder = req.newBuilder()
+
+                if (localStorageManager != null) {
+                    var userToken: String = ""
+                    runBlocking {
+                        userToken = localStorageManager.getUserToken()
+                    }
+
+                    reqBuilder.addHeader("authorization", "Bearer $userToken")
+                }
 
                 val requestHeaders = reqBuilder.build()
                 chain.proceed(requestHeaders)

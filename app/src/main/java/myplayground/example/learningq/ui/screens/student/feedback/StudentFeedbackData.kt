@@ -1,4 +1,4 @@
-package myplayground.example.learningq.ui.screens.student.student_feedback
+package myplayground.example.learningq.ui.screens.student.feedback
 
 data class StudentFeedbackInputData(
     val feedbackAnswer: String = "",
@@ -6,6 +6,7 @@ data class StudentFeedbackInputData(
 
 sealed class StudentFeedbackEvent {
     object Init : StudentFeedbackEvent()
+    object Submit: StudentFeedbackEvent()
 
     data class FeedbackAnswerChanged(val feedback: String): StudentFeedbackEvent()
 }

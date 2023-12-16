@@ -1,7 +1,5 @@
 package myplayground.example.learningq.ui.navigation
 
-import myplayground.example.learningq.ui.screens.student.student_feedback.StudentFeedbackEvent
-
 sealed class Screen(val route: String) {
     object Home : Screen("home")
     object SignIn : Screen("signin")
@@ -25,7 +23,13 @@ sealed class Screen(val route: String) {
     object StudentPresence : Screen("studentpresence")
     object StudentFeedback : Screen("studentfeedback")
 
+    object TeacherProfile: Screen("teacherprofile")
     object TeacherDashboard : Screen("teacherdashboard")
     object TeacherQuiz : Screen("teacherquiz")
     object TeacherQuizAdd : Screen("teacherquizadd")
+
+
+    object AdminDashboard : Screen("admindashboard")
+    object AdminUser : Screen("adminuser")
+    object AdminProfile : Screen("adminprofile")
 }

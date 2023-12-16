@@ -41,24 +41,29 @@ import kotlinx.coroutines.launch
 import myplayground.example.learningq.di.Injection
 import myplayground.example.learningq.model.Role
 import myplayground.example.learningq.ui.layout.Appbar
+import myplayground.example.learningq.ui.layout.DrawerBodyAdmin
 import myplayground.example.learningq.ui.layout.DrawerBodyStudent
 import myplayground.example.learningq.ui.layout.DrawerBodyTeacher
 import myplayground.example.learningq.ui.layout.DrawerHeader
 import myplayground.example.learningq.ui.navigation.Screen
+import myplayground.example.learningq.ui.screens.admin.dashboard.AdminDashboardScreen
+import myplayground.example.learningq.ui.screens.admin.profile.AdminProfileScreen
+import myplayground.example.learningq.ui.screens.admin.user.AdminUserScreen
 import myplayground.example.learningq.ui.screens.home.HomeScreen
 import myplayground.example.learningq.ui.screens.landing.LandingScreen
 import myplayground.example.learningq.ui.screens.setting.SettingScreen
 import myplayground.example.learningq.ui.screens.sign_in.SignInScreen
 import myplayground.example.learningq.ui.screens.sign_up.SignUpScreen
 import myplayground.example.learningq.ui.screens.student.dashboard.StudentDashboardScreen
+import myplayground.example.learningq.ui.screens.student.feedback.StudentFeedbackScreen
 import myplayground.example.learningq.ui.screens.student.presence.StudentPresenceScreen
 import myplayground.example.learningq.ui.screens.student.profile.StudentProfileScreen
 import myplayground.example.learningq.ui.screens.student.quiz.StudentQuizScreen
 import myplayground.example.learningq.ui.screens.student.quiz_detail.StudentQuizDetailScreen
 import myplayground.example.learningq.ui.screens.student.report.StudentReportScreen
 import myplayground.example.learningq.ui.screens.student.report_detail.StudentReportDetailScreen
-import myplayground.example.learningq.ui.screens.student.student_feedback.StudentFeedbackScreen
 import myplayground.example.learningq.ui.screens.teacher.dashboard.TeacherDashboardScreen
+import myplayground.example.learningq.ui.screens.teacher.profile.TeacherProfileScreen
 import myplayground.example.learningq.ui.screens.teacher.quiz.TeacherQuizScreen
 import myplayground.example.learningq.ui.screens.teacher.quiz_add.TeacherQuizAddScreen
 import myplayground.example.learningq.ui.utils.debugPlaceholder
@@ -92,6 +97,10 @@ fun LearningQApp(
 
                 is Role.Teacher -> {
                     Screen.TeacherDashboard.route
+                }
+
+                is Role.Admin -> {
+                    Screen.AdminDashboard.route
                 }
 
                 else -> ""
@@ -149,7 +158,22 @@ fun LearningQApp(
                                     )
                                 }
 
-                                Role.Admin -> {}
+                                Role.Admin -> {
+                                    DrawerBodyAdmin(
+                                        modifier = Modifier
+                                            .weight(1F)
+                                            .verticalScroll(rememberScrollState()),
+                                        navController = navController,
+                                        currentRoute = currentRoute ?: "",
+                                        authManager = authManager,
+                                        closeDrawer = {
+                                            scope.launch {
+                                                drawerState.close()
+                                            }
+                                        },
+
+                                        )
+                                }
                             }
                         }
 
@@ -308,6 +332,12 @@ fun LearningQApp(
                     )
                 }
 
+                composable(Screen.TeacherProfile.route) {
+                    TeacherProfileScreen(
+                        modifier = containerModifier,
+                    )
+                }
+
                 composable(Screen.TeacherQuiz.route) {
                     TeacherQuizScreen(
                         modifier = containerModifier,
@@ -315,8 +345,27 @@ fun LearningQApp(
                     )
                 }
 
+
                 composable(Screen.TeacherQuizAdd.route) {
                     TeacherQuizAddScreen(
+                        modifier = containerModifier
+                    )
+                }
+
+                composable(Screen.AdminDashboard.route) {
+                    AdminDashboardScreen(
+                        modifier = containerModifier
+                    )
+                }
+
+                composable(Screen.AdminProfile.route) {
+                    AdminProfileScreen(
+                        modifier = containerModifier
+                    )
+                }
+
+                composable(Screen.AdminUser.route) {
+                    AdminUserScreen(
                         modifier = containerModifier
                     )
                 }

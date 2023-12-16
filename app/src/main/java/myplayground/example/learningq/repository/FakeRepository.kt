@@ -68,6 +68,13 @@ class FakeRepository(
             role = Role.Teacher,
         )
 
+        val adminUser = User(
+            id = "3",
+            name = "Admin",
+            image_url = "https://miro.medium.com/v2/resize:fill:110:110/1*x1I-A7aVdqWFelvJakKWBg.jpeg",
+            role = Role.Admin,
+        )
+
         if (token.length <= "token ".length) {
             return studentUser
         }
@@ -81,9 +88,9 @@ class FakeRepository(
                 teacherUser
             }
 
-            //            "admin" -> {
-            //
-            //            }
+            "admin" -> {
+                adminUser
+            }
 
             else -> studentUser
         }
