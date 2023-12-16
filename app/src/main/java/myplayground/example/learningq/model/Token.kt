@@ -5,4 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Token(
     val auth_token: String,
+    val role: String,
 )

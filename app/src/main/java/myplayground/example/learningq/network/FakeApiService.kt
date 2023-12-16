@@ -5,11 +5,17 @@ import kotlinx.coroutines.delay
 import myplayground.example.learningq.model.Class
 import myplayground.example.learningq.model.Quiz
 import myplayground.example.learningq.model.User
+import myplayground.example.learningq.network.request.LoginRequest
+import myplayground.example.learningq.network.response.LoginResponse
 import myplayground.example.learningq.network.utils.WithPagination
 import retrofit2.Retrofit
 import kotlin.math.ceil
 
 class FakeApiService : ApiService {
+    override suspend fun login(body: LoginRequest): LoginResponse {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun fetchStudentQuiz(page: Int, limit: Int): WithPagination<List<Quiz>> {
         delay(1500)
 

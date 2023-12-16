@@ -9,6 +9,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class NetworkConfig {
     companion object {
+        const val ApiBaseUrl = "http://34.128.96.32"
+
         inline fun <reified T> create(
             baseUrl: String,
             localStorageManager: LocalStorageManager? = null,

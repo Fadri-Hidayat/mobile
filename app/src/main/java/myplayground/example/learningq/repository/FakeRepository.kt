@@ -33,6 +33,7 @@ class FakeRepository(
             if (request.username == existingAccount.username && request.password == existingAccount.password) {
                 return Token(
                     auth_token = "token ${existingAccount.username}",
+                    role = "student",
                 )
             }
         }
