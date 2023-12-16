@@ -3,6 +3,7 @@ package myplayground.example.learningq.network
 import myplayground.example.learningq.model.Class
 import myplayground.example.learningq.model.Quiz
 import myplayground.example.learningq.model.User
+import myplayground.example.learningq.network.request.AdminStudentRequest
 import myplayground.example.learningq.network.request.LoginRequest
 import myplayground.example.learningq.network.response.LoginResponse
 import myplayground.example.learningq.network.utils.WithPagination
@@ -31,4 +32,10 @@ interface ApiService {
         page: Int,
         limit: Int,
     ): WithPagination<List<Quiz>>
+
+    suspend fun createStudent(
+        @Body body: AdminStudentRequest,
+    )
+
+    suspend fun fetchUser(page: Int, limit: Int): WithPagination<List<User>>
 }

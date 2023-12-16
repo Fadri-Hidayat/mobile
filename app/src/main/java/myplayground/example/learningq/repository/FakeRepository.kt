@@ -16,7 +16,7 @@ import myplayground.example.learningq.network.ApiService
 import myplayground.example.learningq.repository.paging.StudentClassPagingSource
 import myplayground.example.learningq.repository.paging.StudentQuizPagingSource
 import myplayground.example.learningq.repository.paging.TeacherQuizPagingSource
-import okhttp3.ResponseBody
+import myplayground.example.learningq.repository.paging.UserPagingSource
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.HttpException
 import retrofit2.Response
@@ -134,6 +134,20 @@ class FakeRepository(
             ),
             pagingSourceFactory = {
                 TeacherQuizPagingSource(
+                    apiService,
+                )
+            }).flow
+    }
+
+    override suspend fun fetchUserPaging(): Flow<PagingData<User>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                initialLoadSize = 10,
+                prefetchDistance = 2
+            ),
+            pagingSourceFactory = {
+                UserPagingSource(
                     apiService,
                 )
             }).flow

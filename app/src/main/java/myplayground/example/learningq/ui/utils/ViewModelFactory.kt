@@ -10,6 +10,7 @@ import myplayground.example.learningq.repository.Repository
 import myplayground.example.learningq.ui.screens.admin.dashboard.AdminDashboardViewModel
 import myplayground.example.learningq.ui.screens.admin.profile.AdminProfileViewModel
 import myplayground.example.learningq.ui.screens.admin.user.AdminUserViewModel
+import myplayground.example.learningq.ui.screens.admin.user_add.AdminUserAddViewModel
 import myplayground.example.learningq.ui.screens.home.HomeViewModel
 import myplayground.example.learningq.ui.screens.sign_in.SignInViewModel
 import myplayground.example.learningq.ui.screens.sign_up.SignUpViewModel
@@ -70,7 +71,9 @@ class ViewModelFactory(
         } else if (modelClass.isAssignableFrom(AdminDashboardViewModel::class.java)) {
             return AdminDashboardViewModel() as T
         } else if (modelClass.isAssignableFrom(AdminUserViewModel::class.java)) {
-            return AdminUserViewModel() as T
+            return AdminUserViewModel(repository) as T
+        } else if (modelClass.isAssignableFrom(AdminUserAddViewModel::class.java)) {
+            return AdminUserAddViewModel(repository) as T
         } else if (modelClass.isAssignableFrom(AdminProfileViewModel::class.java)) {
             return AdminProfileViewModel(authManager) as T
         }

@@ -49,6 +49,7 @@ import myplayground.example.learningq.ui.navigation.Screen
 import myplayground.example.learningq.ui.screens.admin.dashboard.AdminDashboardScreen
 import myplayground.example.learningq.ui.screens.admin.profile.AdminProfileScreen
 import myplayground.example.learningq.ui.screens.admin.user.AdminUserScreen
+import myplayground.example.learningq.ui.screens.admin.user_add.AdminUserAddScreen
 import myplayground.example.learningq.ui.screens.home.HomeScreen
 import myplayground.example.learningq.ui.screens.landing.LandingScreen
 import myplayground.example.learningq.ui.screens.setting.SettingScreen
@@ -366,6 +367,12 @@ fun LearningQApp(
 
                 composable(Screen.AdminUser.route) {
                     AdminUserScreen(
+                        modifier = containerModifier
+                    )
+                }
+
+                composable(Screen.AdminUserAdd.route) {
+                    AdminUserAddScreen(
                         modifier = containerModifier
                     )
                 }

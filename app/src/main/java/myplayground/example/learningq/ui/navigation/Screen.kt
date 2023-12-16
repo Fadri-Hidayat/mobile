@@ -31,5 +31,6 @@ sealed class Screen(val route: String) {
 
     object AdminDashboard : Screen("admindashboard")
     object AdminUser : Screen("adminuser")
+    object AdminUserAdd : Screen("adminuseradd")
     object AdminProfile : Screen("adminprofile")
 }
