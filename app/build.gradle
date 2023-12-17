@@ -8,6 +8,10 @@ android {
     namespace 'myplayground.example.learningq'
     compileSdk 33
 
+    aaptOptions {
+        noCompress "tflite"
+    }
+
     defaultConfig {
         applicationId "myplayground.example.learningq"
         minSdk 24

@@ -41,7 +41,7 @@ class ViewModelFactory(
         } else if (modelClass.isAssignableFrom(ThemeViewModel::class.java)) {
             return ThemeViewModel.getInstance(localStorageManager) as T
         } else if (modelClass.isAssignableFrom(SignInViewModel::class.java)) {
-            return SignInViewModel(repository, localStorageManager) as T
+            return SignInViewModel(application.applicationContext, repository, localStorageManager) as T
         } else if (modelClass.isAssignableFrom(SignUpViewModel::class.java)) {
             return SignUpViewModel(repository) as T
         } else if (modelClass.isAssignableFrom(StudentDashboardViewModel::class.java)) {

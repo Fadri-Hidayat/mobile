@@ -3,6 +3,7 @@ package myplayground.example.learningq.ui.screens.sign_in
 import android.app.Application
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -49,7 +51,7 @@ fun SignInScreen(
     ),
     navController: NavHostController = rememberNavController(),
 ) {
-
+    val localContext = LocalContext.current
     val inputData by vm.uiState
     val event by vm.validationEvent.collectAsState(initial = SignInUIEvent.ValidationEvent.None())
     val isLoading by vm.isLoading
@@ -73,6 +75,13 @@ fun SignInScreen(
                 inclusive = false
             }
         }
+    }
+
+
+    Button(onClick = {
+        vm.predict(localContext)
+    }) {
+        Text("TEST")
     }
 }
 
