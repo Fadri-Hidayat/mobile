@@ -108,7 +108,7 @@ fun LearningQApp(
             }
         }
     } else {
-        Screen.Landing.route
+        Screen.SignIn.route
     }
 
     ModalNavigationDrawer(

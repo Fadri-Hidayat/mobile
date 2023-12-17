@@ -2,10 +2,8 @@ package myplayground.example.learningq.ui.screens.sign_in
 
 import android.app.Application
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -164,16 +161,16 @@ fun SignInContent(
 
         Spacer(modifier = Modifier.height(4.dp))
 
-
-        Text(
-            modifier = Modifier
-                .align(Alignment.End)
-                .clickable { }
-                .padding(10.dp, 4.dp, 0.dp, 8.dp),
-            text = "Forgot Password",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.error,
-        )
+//
+//        Text(
+//            modifier = Modifier
+//                .align(Alignment.End)
+//                .clickable { }
+//                .padding(10.dp, 4.dp, 0.dp, 8.dp),
+//            text = "Forgot Password",
+//            style = MaterialTheme.typography.bodyMedium,
+//            color = MaterialTheme.colorScheme.error,
+//        )
 
         Spacer(modifier = Modifier.height(12.dp))
 
@@ -195,23 +192,23 @@ fun SignInContent(
 
         Spacer(modifier = Modifier.height(4.dp))
 
-        Row(modifier = Modifier
-            .align(Alignment.Start)
-            .clickable {
-                navigateToSignUp()
-            }
-            .padding(0.dp, 4.dp, 10.dp, 8.dp)) {
-            Text(
-                "Don't have an Account? ",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-            Text(
-                "Sign Up",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackground,
-            )
-        }
+//        Row(modifier = Modifier
+//            .align(Alignment.Start)
+//            .clickable {
+//                navigateToSignUp()
+//            }
+//            .padding(0.dp, 4.dp, 10.dp, 8.dp)) {
+//            Text(
+//                "Don't have an Account? ",
+//                style = MaterialTheme.typography.bodyMedium,
+//                color = MaterialTheme.colorScheme.onSurface,
+//            )
+//            Text(
+//                "Sign Up",
+//                style = MaterialTheme.typography.bodyMedium,
+//                color = MaterialTheme.colorScheme.onBackground,
+//            )
+//        }
     }
 }
 
