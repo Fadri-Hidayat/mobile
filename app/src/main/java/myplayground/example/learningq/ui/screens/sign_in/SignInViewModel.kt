@@ -126,7 +126,6 @@ class SignInViewModel(
         val classifier = Classifier(context, "word_dict.json", inputSize)
         classifier.processVocab(object : Classifier.VocabCallback {
             override fun onVocabProcessed() {
-                Log.i("RESULTTTTTTT DONEEE", "LOG")
 
 
                 val tokenizedMessage = classifier.tokenize(inputSentence)
@@ -134,7 +133,6 @@ class SignInViewModel(
 
                 val results = classifySequence(paddedMessage)
 
-                Log.i("RESULTTTTTTT", results[0].toString())
 
                 tfLiteModel?.close()
             }
@@ -246,9 +244,7 @@ class Classifier(context: Context, jsonFilename: String, inputMaxLen: Int) {
     }
 
     fun processVocab(callback: VocabCallback) {
-        Log.i("PASSED", "process")
         CoroutineScope(Dispatchers.Main).launch {
-            Log.i("PASSED", "coroutine")
             loadVocab(callback, loadJSONFromAsset(filename)!!)
         }
     }
@@ -295,7 +291,6 @@ class Classifier(context: Context, jsonFilename: String, inputMaxLen: Int) {
 
     private fun loadVocab(callback: VocabCallback, json: String) {
         with(Dispatchers.Default) {
-            Log.i("PASSED", "A")
             val jsonObject = JSONObject(json)
             val iterator: Iterator<String> = jsonObject.keys()
             val data = HashMap<String, Int>()
@@ -303,14 +298,10 @@ class Classifier(context: Context, jsonFilename: String, inputMaxLen: Int) {
                 val key = iterator.next()
                 data[key] = jsonObject.get(key) as Int
             }
-            Log.i("PASSED", "B")
             with(Dispatchers.Main) {
                 vocabData = data
-                Log.i("PASSED", "D")
                 callback.onVocabProcessed()
-                Log.i("PASSED", "E")
             }
-            Log.i("PASSED", "C")
         }
     }
 
