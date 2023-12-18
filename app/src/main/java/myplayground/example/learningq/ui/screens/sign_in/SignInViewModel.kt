@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import myplayground.example.learningq.di.Injection
 import myplayground.example.learningq.local_storage.LocalStorageManager
+import myplayground.example.learningq.model.Role
 import myplayground.example.learningq.repository.Repository
 import myplayground.example.learningq.repository.UserLoginInput
 import myplayground.example.learningq.ui.utils.StringValidationRule
@@ -84,6 +85,7 @@ class SignInViewModel(
 
                     if (token?.auth_token != null && token.auth_token.isNotEmpty()) {
                         localStorageManager.saveUserToken(token.auth_token ?: "")
+                        localStorageManager.saveUserRole(Role.parseString(token.role))
 
                         validationEvent.emit(SignInUIEvent.ValidationEvent.Success())
                     }

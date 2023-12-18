@@ -1,6 +1,5 @@
 package myplayground.example.learningq.utils
 
-import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -8,6 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import myplayground.example.learningq.local_storage.LocalStorageManager
+import myplayground.example.learningq.model.Role
 import myplayground.example.learningq.model.User
 import myplayground.example.learningq.repository.Repository
 
@@ -16,10 +16,12 @@ class AuthManager(
     private val localStorageManager: LocalStorageManager,
 ) {
     private val _haveToken = MutableStateFlow(false)
+    private val _currentRole: MutableStateFlow<Role?> = MutableStateFlow(null)
     private val _isLoading = MutableStateFlow(false)
     private var _user = MutableStateFlow<User?>(null)
 
     val haveToken: StateFlow<Boolean> = _haveToken
+    val currentRole: StateFlow<Role?> = _currentRole
     val isLoading: StateFlow<Boolean> = _isLoading
     val user: StateFlow<User?> = _user
 
@@ -41,11 +43,19 @@ class AuthManager(
                 _isLoading.value = false
             }
         }
+
+        coroutineScope.launch {
+            localStorageManager.getUserRoleAsync().collect { role ->
+                _currentRole.value = role
+            }
+
+        }
     }
 
     fun logout() {
         coroutineScope.launch {
             localStorageManager.saveUserToken("")
+            localStorageManager.saveUserRole(null)
         }
     }
 

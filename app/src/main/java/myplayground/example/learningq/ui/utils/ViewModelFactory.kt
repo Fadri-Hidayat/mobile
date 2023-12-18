@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import myplayground.example.learningq.ThemeViewModel
 import myplayground.example.learningq.di.Injection
 import myplayground.example.learningq.local_storage.LocalStorageManager
+import myplayground.example.learningq.repository.FakeRepository
 import myplayground.example.learningq.repository.Repository
 import myplayground.example.learningq.ui.screens.admin.dashboard.AdminDashboardViewModel
 import myplayground.example.learningq.ui.screens.admin.profile.AdminProfileViewModel
@@ -34,6 +35,8 @@ class ViewModelFactory(
     private val localStorageManager: LocalStorageManager,
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        val fakeRepository= FakeRepository.getInstance(application.applicationContext)
+
         val authManager = Injection.provideAuthManager(application.applicationContext)
 
         if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
@@ -75,7 +78,8 @@ class ViewModelFactory(
         } else if (modelClass.isAssignableFrom(AdminDashboardViewModel::class.java)) {
             return AdminDashboardViewModel() as T
         } else if (modelClass.isAssignableFrom(AdminUserViewModel::class.java)) {
-            return AdminUserViewModel(repository, localStorageManager) as T
+            return AdminUserViewModel(fakeRepository, localStorageManager) as T
+//            return AdminUserViewModel(repository, localStorageManager) as T
         } else if (modelClass.isAssignableFrom(AdminUserAddViewModel::class.java)) {
             return AdminUserAddViewModel(repository) as T
         } else if (modelClass.isAssignableFrom(AdminProfileViewModel::class.java)) {

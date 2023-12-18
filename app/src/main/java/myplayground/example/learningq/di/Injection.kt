@@ -35,4 +35,8 @@ object Injection {
     fun provideApiService(localStorageManager: LocalStorageManager): ApiService {
         return NetworkConfig.create(NetworkConfig.ApiBaseUrl, localStorageManager)
     }
+
+    fun provideFakeApiService(): ApiService {
+        return FakeApiService.getInstance()
+    }
 }

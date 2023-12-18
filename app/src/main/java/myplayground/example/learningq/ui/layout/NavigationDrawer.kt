@@ -436,6 +436,11 @@ fun DrawerBodyAdmin(
                     }
                 }
 
+                "user" -> {
+                    navController.navigate(Screen.AdminUser.route)
+                }
+
+
                 "profile" -> {
                     navController.navigate(Screen.AdminProfile.route)
                 }

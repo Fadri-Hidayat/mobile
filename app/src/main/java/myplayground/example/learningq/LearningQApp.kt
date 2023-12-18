@@ -1,6 +1,7 @@
 package myplayground.example.learningq
 
 import android.app.Application
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -84,6 +86,7 @@ fun LearningQApp(
         Injection.provideAuthManager(LocalContext.current.applicationContext as Application)
 
     val haveToken = authManager.haveToken.collectAsState()
+    val currentRole = authManager.currentRole.collectAsState()
     val isLoading = authManager.isLoading.collectAsState()
     val user = authManager.user.collectAsState()
 
@@ -91,7 +94,7 @@ fun LearningQApp(
         if (isLoading.value) {
             Screen.AuthLoading.route
         } else {
-            when (user.value?.role) {
+            when (currentRole.value) {
                 is Role.Student -> {
                     Screen.StudentDashboard.route
                 }
@@ -104,7 +107,7 @@ fun LearningQApp(
                     Screen.AdminDashboard.route
                 }
 
-                else -> ""
+                else -> Screen.AuthLoading.route
             }
         }
     } else {
@@ -125,57 +128,57 @@ fun LearningQApp(
                         DrawerHeader(
                             user = user.value,
                         )
-                        if (user.value != null) {
-                            when (user.value!!.role) {
-                                Role.Student -> {
-                                    DrawerBodyStudent(
-                                        modifier = Modifier
-                                            .weight(1F)
-                                            .verticalScroll(rememberScrollState()),
-                                        navController = navController,
-                                        currentRoute = currentRoute ?: "",
-                                        authManager = authManager,
-                                        closeDrawer = {
-                                            scope.launch {
-                                                drawerState.close()
-                                            }
-                                        },
-                                    )
-                                }
-
-                                Role.Teacher -> {
-                                    DrawerBodyTeacher(
-                                        modifier = Modifier
-                                            .weight(1F)
-                                            .verticalScroll(rememberScrollState()),
-                                        navController = navController,
-                                        currentRoute = currentRoute ?: "",
-                                        authManager = authManager,
-                                        closeDrawer = {
-                                            scope.launch {
-                                                drawerState.close()
-                                            }
-                                        },
-                                    )
-                                }
-
-                                Role.Admin -> {
-                                    DrawerBodyAdmin(
-                                        modifier = Modifier
-                                            .weight(1F)
-                                            .verticalScroll(rememberScrollState()),
-                                        navController = navController,
-                                        currentRoute = currentRoute ?: "",
-                                        authManager = authManager,
-                                        closeDrawer = {
-                                            scope.launch {
-                                                drawerState.close()
-                                            }
-                                        },
-
-                                        )
-                                }
+                        when (currentRole.value) {
+                            Role.Student -> {
+                                DrawerBodyStudent(
+                                    modifier = Modifier
+                                        .weight(1F)
+                                        .verticalScroll(rememberScrollState()),
+                                    navController = navController,
+                                    currentRoute = currentRoute ?: "",
+                                    authManager = authManager,
+                                    closeDrawer = {
+                                        scope.launch {
+                                            drawerState.close()
+                                        }
+                                    },
+                                )
                             }
+
+                            Role.Teacher -> {
+                                DrawerBodyTeacher(
+                                    modifier = Modifier
+                                        .weight(1F)
+                                        .verticalScroll(rememberScrollState()),
+                                    navController = navController,
+                                    currentRoute = currentRoute ?: "",
+                                    authManager = authManager,
+                                    closeDrawer = {
+                                        scope.launch {
+                                            drawerState.close()
+                                        }
+                                    },
+                                )
+                            }
+
+                            Role.Admin -> {
+                                DrawerBodyAdmin(
+                                    modifier = Modifier
+                                        .weight(1F)
+                                        .verticalScroll(rememberScrollState()),
+                                    navController = navController,
+                                    currentRoute = currentRoute ?: "",
+                                    authManager = authManager,
+                                    closeDrawer = {
+                                        scope.launch {
+                                            drawerState.close()
+                                        }
+                                    },
+
+                                    )
+                            }
+
+                            else -> {}
                         }
 
                     }
