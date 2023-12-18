@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import myplayground.example.learningq.model.Class
 import myplayground.example.learningq.network.ApiService
+import myplayground.example.learningq.network.utils.WithCourses
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -12,23 +13,32 @@ class StudentClassPagingSource(
 ) : PagingSource<Int, Class>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Class> {
+        val currentPage = params.key ?: 1
+
         return try {
-            val currentPage = params.key ?: 1
             val response = apiService.fetchStudentClasses(
                 currentPage,
                 params.loadSize,
             )
-            val quiz = response.data
+            val `class` = response.data
 
             LoadResult.Page(
-                data = quiz,
+                data = `class`.courses,
                 prevKey = if (currentPage == 1) null else currentPage - 1,
-                nextKey = if (quiz.isEmpty()) null else response.page + 1
+                nextKey = if (`class`.courses.isEmpty()) null else currentPage + 1
             )
         } catch (exception: IOException) {
             return LoadResult.Error(exception)
         } catch (exception: HttpException) {
-            return LoadResult.Error(exception)
+            if (exception.code() == 404) {
+                return LoadResult.Page(
+                    data = listOf(),
+                    prevKey = if (currentPage == 1) null else currentPage - 1,
+                    nextKey = null,
+                )
+            } else {
+                return LoadResult.Error(exception)
+            }
         }
     }
 

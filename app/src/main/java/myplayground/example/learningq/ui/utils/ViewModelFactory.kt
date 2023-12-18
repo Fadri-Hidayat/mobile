@@ -41,37 +41,41 @@ class ViewModelFactory(
         } else if (modelClass.isAssignableFrom(ThemeViewModel::class.java)) {
             return ThemeViewModel.getInstance(localStorageManager) as T
         } else if (modelClass.isAssignableFrom(SignInViewModel::class.java)) {
-            return SignInViewModel(application.applicationContext, repository, localStorageManager) as T
+            return SignInViewModel(
+                application.applicationContext,
+                repository,
+                localStorageManager
+            ) as T
         } else if (modelClass.isAssignableFrom(SignUpViewModel::class.java)) {
             return SignUpViewModel(repository) as T
         } else if (modelClass.isAssignableFrom(StudentDashboardViewModel::class.java)) {
-            return StudentDashboardViewModel(repository) as T
+            return StudentDashboardViewModel(repository, localStorageManager) as T
         } else if (modelClass.isAssignableFrom(StudentQuizViewModel::class.java)) {
-            return StudentQuizViewModel(repository) as T
+            return StudentQuizViewModel(repository, localStorageManager) as T
         } else if (modelClass.isAssignableFrom(StudentQuizDetailViewModel::class.java)) {
             return StudentQuizDetailViewModel(repository) as T
         } else if (modelClass.isAssignableFrom(StudentPresenceViewModel::class.java)) {
-            return StudentPresenceViewModel(repository) as T
+            return StudentPresenceViewModel(repository, localStorageManager) as T
         } else if (modelClass.isAssignableFrom(StudentProfileViewModel::class.java)) {
             return StudentProfileViewModel(authManager) as T
         } else if (modelClass.isAssignableFrom(StudentReportViewModel::class.java)) {
-            return StudentReportViewModel(repository) as T
+            return StudentReportViewModel(repository, localStorageManager) as T
         } else if (modelClass.isAssignableFrom(StudentReportDetailViewModel::class.java)) {
             return StudentReportDetailViewModel(repository) as T
         } else if (modelClass.isAssignableFrom(StudentFeedbackViewModel::class.java)) {
             return StudentFeedbackViewModel(repository) as T
         } else if (modelClass.isAssignableFrom(TeacherDashboardViewModel::class.java)) {
-            return TeacherDashboardViewModel(repository) as T
+            return TeacherDashboardViewModel(repository, localStorageManager) as T
         } else if (modelClass.isAssignableFrom(TeacherProfileViewModel::class.java)) {
             return TeacherProfileViewModel(authManager) as T
         } else if (modelClass.isAssignableFrom(TeacherQuizViewModel::class.java)) {
-            return TeacherQuizViewModel(repository) as T
+            return TeacherQuizViewModel(repository, localStorageManager) as T
         } else if (modelClass.isAssignableFrom(TeacherQuizAddViewModel::class.java)) {
             return TeacherQuizAddViewModel(repository) as T
         } else if (modelClass.isAssignableFrom(AdminDashboardViewModel::class.java)) {
             return AdminDashboardViewModel() as T
         } else if (modelClass.isAssignableFrom(AdminUserViewModel::class.java)) {
-            return AdminUserViewModel(repository) as T
+            return AdminUserViewModel(repository, localStorageManager) as T
         } else if (modelClass.isAssignableFrom(AdminUserAddViewModel::class.java)) {
             return AdminUserAddViewModel(repository) as T
         } else if (modelClass.isAssignableFrom(AdminProfileViewModel::class.java)) {

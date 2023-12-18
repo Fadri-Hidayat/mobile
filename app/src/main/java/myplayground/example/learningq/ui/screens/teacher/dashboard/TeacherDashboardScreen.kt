@@ -82,7 +82,7 @@ fun TeacherDashboardContent(
                     ) {
                         Text(
                             modifier = Modifier.align(Alignment.CenterVertically),
-                            text = currentClass.name,
+                            text = currentClass.courseName,
                             style = MaterialTheme.typography.titleSmall,
                             color = MaterialTheme.colorScheme.onSurface,
                         )

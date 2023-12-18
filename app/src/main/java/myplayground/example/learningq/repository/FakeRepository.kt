@@ -23,10 +23,9 @@ import retrofit2.Response
 
 class FakeRepository(
     context: Context,
-    private val apiService: ApiService,
 ) : Repository {
 
-    override suspend fun userLogin(request: UserLoginInput): Token? {
+    override suspend fun userLogin(request: UserLoginInput, apiService: ApiService): Token? {
         delay(1500)
 
         for (existingAccount in existingAccounts) {
@@ -97,7 +96,7 @@ class FakeRepository(
         }
     }
 
-    override suspend fun fetchStudentQuizPaging(): Flow<PagingData<Quiz>> {
+    override suspend fun fetchStudentQuizPaging(apiService: ApiService): Flow<PagingData<Quiz>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 10,
@@ -111,7 +110,7 @@ class FakeRepository(
             }).flow
     }
 
-    override suspend fun fetchStudentClassPaging(): Flow<PagingData<Class>> {
+    override suspend fun fetchStudentClassPaging(apiService: ApiService): Flow<PagingData<Class>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 7,
@@ -125,7 +124,7 @@ class FakeRepository(
             }).flow
     }
 
-    override suspend fun fetchTeacherQuizPaging(): Flow<PagingData<Quiz>> {
+    override suspend fun fetchTeacherQuizPaging(apiService: ApiService): Flow<PagingData<Quiz>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 10,
@@ -139,7 +138,7 @@ class FakeRepository(
             }).flow
     }
 
-    override suspend fun fetchUserPaging(): Flow<PagingData<User>> {
+    override suspend fun fetchUserPaging(apiService: ApiService): Flow<PagingData<User>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 10,
@@ -173,11 +172,9 @@ class FakeRepository(
 
         fun getInstance(
             context: Context,
-            apiService: ApiService,
         ): FakeRepository = instance ?: synchronized(this) {
             FakeRepository(
                 context,
-                apiService,
             ).apply {
                 instance = this
             }

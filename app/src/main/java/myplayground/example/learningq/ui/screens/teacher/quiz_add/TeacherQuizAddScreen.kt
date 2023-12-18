@@ -135,23 +135,23 @@ fun TeacherQuizAddContent(
                 ) { ->
                     listOf(
                         Class(
-                            id = "1",
-                            name = "Class A",
+                            id = 1,
+                            courseName = "Class A",
                         ),
                         Class(
-                            id = "2",
-                            name = "Class B",
+                            id = 2,
+                            courseName = "Class B",
                         ),
                         Class(
-                            id = "3",
-                            name = "Class C",
+                            id = 3,
+                            courseName = "Class C",
                         ),
                     ).forEach { item ->
                         DropdownMenuItem(onClick = {
                             onEvent(TeacherQuizAddEvent.ClassSelected(item))
                             isMenuExpanded.value = false
                         }, text = {
-                            Text(text = item.name)
+                            Text(text = item.courseName)
                         })
                     }
                 }

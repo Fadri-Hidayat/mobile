@@ -66,7 +66,7 @@ fun StudentReportScreen(
 fun StudentReportContent(
     modifier: Modifier = Modifier,
     classesPagingItem: LazyPagingItems<Class>? = null,
-    navigateToReportDetail: (classId: String) -> Unit = {},
+    navigateToReportDetail: (classId: Int) -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -126,7 +126,7 @@ fun StudentReportContent(
 @Composable
 fun StudentReportCard(
     studentClass: Class,
-    navigateToDetail: (classId: String) -> Unit = {},
+    navigateToDetail: (classId: Int) -> Unit = {},
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -140,7 +140,7 @@ fun StudentReportCard(
                 .padding(12.dp),
         ) {
             Text(
-                text = studentClass.name,
+                text = studentClass.courseName,
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface,
             )
@@ -190,8 +190,8 @@ fun StudentReportCardPreview() {
     LearningQTheme {
         StudentReportCard(
             Class(
-                id = "1",
-                name = "Class A",
+                id = 1,
+                courseName = "Class A",
             )
         )
     }

@@ -126,7 +126,7 @@ fun StudentPresenceCard(studentClass: Class) {
                 .padding(12.dp),
         ) {
             Text(
-                text = studentClass.name,
+                text = studentClass.courseName,
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface,
             )
@@ -174,8 +174,9 @@ fun StudentPresenceCardPreview() {
     LearningQTheme {
         StudentPresenceCard(
             Class(
-                id = "1",
-                name = "Class A",
+                id = 1,
+                courseName = "Class A",
+
             )
         )
     }

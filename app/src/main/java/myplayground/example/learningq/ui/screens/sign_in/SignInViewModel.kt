@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
+import myplayground.example.learningq.di.Injection
 import myplayground.example.learningq.local_storage.LocalStorageManager
 import myplayground.example.learningq.repository.Repository
 import myplayground.example.learningq.repository.UserLoginInput
@@ -15,10 +16,8 @@ import myplayground.example.learningq.ui.utils.StringValidationRule
 import myplayground.example.learningq.ui.utils.validate
 import myplayground.example.learningq.utils.allNull
 import org.tensorflow.lite.Interpreter
-import org.tensorflow.lite.support.common.FileUtil
 import retrofit2.HttpException
 import java.io.FileInputStream
-import java.lang.Float
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.MappedByteBuffer
@@ -79,7 +78,8 @@ class SignInViewModel(
                         UserLoginInput(
                             username = _uiState.value.username,
                             password = _uiState.value.password,
-                        )
+                        ),
+                        Injection.provideApiService(localStorageManager),
                     )
 
                     if (token?.auth_token != null && token.auth_token.isNotEmpty()) {
@@ -117,11 +117,9 @@ class SignInViewModel(
 
 //        val output = ByteBuffer.allocateDirect(2)
 //        output.order(ByteOrder.nativeOrder())
-        val output : Array<FloatArray> = arrayOf( floatArrayOf( 0.0f , 0.0f ) )
+        val output: Array<FloatArray> = arrayOf(floatArrayOf(0.0f, 0.0f))
 
         tfLiteModel.run(byteBuffer, output)
-
-        Log.i("OUTPUTTTTTTTTTTTT", output.toString())
 
         tfLiteModel.close()
 

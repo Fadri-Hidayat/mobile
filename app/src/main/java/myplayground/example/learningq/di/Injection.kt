@@ -6,15 +6,22 @@ import myplayground.example.learningq.local_storage.LocalStorageManager
 import myplayground.example.learningq.local_storage.dataStore
 import myplayground.example.learningq.network.ApiService
 import myplayground.example.learningq.network.FakeApiService
+import myplayground.example.learningq.network.NetworkConfig
 import myplayground.example.learningq.repository.FakeRepository
+import myplayground.example.learningq.repository.LearningQRepository
 import myplayground.example.learningq.repository.Repository
 import myplayground.example.learningq.utils.AuthManager
 
 object Injection {
     fun provideRepository(context: Context): Repository {
+        return LearningQRepository.getInstance(
+            context,
+        )
+    }
+
+    fun provideFakeRepository(context: Context): Repository {
         return FakeRepository.getInstance(
             context,
-            provideApiService(),
         )
     }
 
@@ -25,7 +32,7 @@ object Injection {
         )
     }
 
-    fun provideApiService(): ApiService {
-        return FakeApiService.getInstance()
+    fun provideApiService(localStorageManager: LocalStorageManager): ApiService {
+        return NetworkConfig.create(NetworkConfig.ApiBaseUrl, localStorageManager)
     }
 }
