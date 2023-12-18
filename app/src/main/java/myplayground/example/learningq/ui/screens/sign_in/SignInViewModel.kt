@@ -110,47 +110,23 @@ class SignInViewModel(
 
         val inputSentence =
             "Gurunya sangat baik, rajin mengajar, dan menjelaskan agar murid mudah mengerti tentang mata pelajaran yang diajarkan"
-        val inputSize = inputSentence.length * 2;
+        val inputSize = inputSentence.length;
 
-        val byteBuffer = ByteBuffer.allocateDirect(inputSize)
-        byteBuffer.order(ByteOrder.nativeOrder())
-
-
-//        val temp = Float.parseFloat(inputSentence)
-
-//        byteBuffer.putFloat(temp)
-//        for (element in inputSentence) {
-//            byteBuffer.putChar(element)
-//        }
-
-        val classifier = Classifier(context, "word_dict.json", inputSize)
+        val classifier = Classifier(context, "nlp_token.json", inputSize)
         classifier.processVocab(object : Classifier.VocabCallback {
             override fun onVocabProcessed() {
-
-
                 val tokenizedMessage = classifier.tokenize(inputSentence)
                 val paddedMessage = classifier.padSequence(tokenizedMessage)
 
                 val results = classifySequence(paddedMessage)
 
+                Log.i("PREDICTION", results.toList().toString())
 
                 tfLiteModel?.close()
             }
         })
-//        val tokenizedMessage = tokenize(inputSentence)
-//        val paddedMessage = padSequence(tokenizedMessage)
-
-
-//        val output = ByteBuffer.allocateDirect(2)
-//        output.order(ByteOrder.nativeOrder())
-//        val output: Array<FloatArray> = arrayOf(floatArrayOf(0.0f, 0.0f))
-
-//        tfLiteModel.run(byteBuffer, output)
-
-
     }
 
-    // Perform inference, given the input sequence.
     private fun classifySequence(sequence: IntArray): FloatArray {
         // Input shape -> ( 1 , INPUT_MAXLEN )
         val inputs: Array<FloatArray> = arrayOf(sequence.map { it.toFloat() }.toFloatArray())
@@ -160,42 +136,6 @@ class SignInViewModel(
         return outputs[0]
     }
 
-
-//    private fun tokenize ( message : String ): IntArray {
-//        val parts : List<String> = message.split(" " )
-//        val tokenizedMessage = ArrayList<Int>()
-//        for ( part in parts ) {
-//            if (part.trim() != ""){
-//                var index : Int? = 0
-//                if ( vocabData!![part] == null ) {
-//                    index = 0
-//                }
-//                else{
-//                    index = vocabData!![part]
-//                }
-//                tokenizedMessage.add( index!! )
-//            }
-//        }
-//        return tokenizedMessage.toIntArray()
-//    }
-//
-//    private fun padSequence ( sequence : IntArray ) : IntArray {
-//        val maxlen = this.maxlen
-//        if ( sequence.size > maxlen!!) {
-//            return sequence.sliceArray( 0..maxlen )
-//        }
-//        else if ( sequence.size < maxlen ) {
-//            val array = ArrayList<Int>()
-//            array.addAll( sequence.asList() )
-//            for ( i in array.size until maxlen ){
-//                array.add(0)
-//            }
-//            return array.toIntArray()
-//        }
-//        else{
-//            return sequence
-//        }
-//    }
 
     private fun loadModelFile(context: Context): MappedByteBuffer {
         val fileDescriptor = context.assets.openFd("nlp.tflite")
@@ -218,15 +158,12 @@ class Classifier(context: Context, jsonFilename: String, inputMaxLen: Int) {
 
     private var context: Context? = context
 
-    // Filename for the exported vocab ( .json )
     private var filename: String = jsonFilename
 
-    // Max length of the input sequence for the given model.
     private var maxlen: Int = inputMaxLen
 
     private var vocabData: HashMap<String, Int>? = null
 
-    // Load the contents of the vocab ( see assets/word_dict.json )
     private fun loadJSONFromAsset(filename: String): String? {
         var json: String?
         try {
@@ -249,7 +186,6 @@ class Classifier(context: Context, jsonFilename: String, inputMaxLen: Int) {
         }
     }
 
-    // Tokenize the given sentence
     fun tokenize(message: String): IntArray {
         val parts: List<String> = message.split(" ")
         val tokenizedMessage = ArrayList<Int>()
@@ -267,7 +203,6 @@ class Classifier(context: Context, jsonFilename: String, inputMaxLen: Int) {
         return tokenizedMessage.toIntArray()
     }
 
-    // Pad the given sequence to maxlen with zeros.
     fun padSequence(sequence: IntArray): IntArray {
         val maxlen = this.maxlen
         if (sequence.size > maxlen) {
