@@ -109,8 +109,8 @@ class SignInViewModel(
         tfLiteModel = Interpreter(loadModelFile(context))
 
         val inputSentence =
-            "Gurunya sangat baik, rajin mengajar, dan menjelaskan agar murid mudah mengerti tentang mata pelajaran yang diajarkan"
-        val inputSize = inputSentence.length;
+            "Guru ini sangat pandai dalam mengajar dan membuat materi mudah dipahami"
+        val inputSize = inputSentence.split(" ").size;
 
         val classifier = Classifier(context, "nlp_token.json", inputSize)
         classifier.processVocab(object : Classifier.VocabCallback {
@@ -118,9 +118,7 @@ class SignInViewModel(
                 val tokenizedMessage = classifier.tokenize(inputSentence)
                 val paddedMessage = classifier.padSequence(tokenizedMessage)
 
-                val results = classifySequence(paddedMessage)
-
-                Log.i("PREDICTION", results.toList().toString())
+//                val results = classifySequence(paddedMessage)
 
                 tfLiteModel?.close()
             }
@@ -128,9 +126,8 @@ class SignInViewModel(
     }
 
     private fun classifySequence(sequence: IntArray): FloatArray {
-        // Input shape -> ( 1 , INPUT_MAXLEN )
         val inputs: Array<FloatArray> = arrayOf(sequence.map { it.toFloat() }.toFloatArray())
-        // Output shape -> ( 1,  2 ) ( as numClasses = 2 )
+
         val outputs: Array<FloatArray> = arrayOf(FloatArray(1))
         tfLiteModel?.run(inputs, outputs)
         return outputs[0]
