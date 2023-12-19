@@ -14,9 +14,12 @@ import myplayground.example.learningq.utils.AuthManager
 
 object Injection {
     fun provideRepository(context: Context): Repository {
-        return LearningQRepository.getInstance(
+        return FakeRepository.getInstance(
             context,
         )
+//        return LearningQRepository.getInstance(
+//            context,
+//        )
     }
 
     fun provideFakeRepository(context: Context): Repository {
@@ -33,7 +36,8 @@ object Injection {
     }
 
     fun provideApiService(localStorageManager: LocalStorageManager): ApiService {
-        return NetworkConfig.create(NetworkConfig.ApiBaseUrl, localStorageManager)
+        return FakeApiService.getInstance()
+//        return NetworkConfig.create(NetworkConfig.ApiBaseUrl, localStorageManager)
     }
 
     fun provideFakeApiService(): ApiService {

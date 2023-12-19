@@ -1,8 +1,8 @@
 package myplayground.example.learningq.network.request
 
-data class AdminStudentRequest (
-    val studentName: String,
+data class AdminCreateUserRequest(
+    val name: String,
     val email: String,
-    val age: Int,
-    val courses: List<String>,
+    val password: String,
+    val role: String,
 )

@@ -78,11 +78,11 @@ fun SignInScreen(
     }
 
 
-    Button(onClick = {
-        vm.predict(localContext)
-    }) {
-        Text("TEST")
-    }
+//    Button(onClick = {
+//        vm.predict(localContext)
+//    }) {
+//        Text("TEST")
+//    }
 }
 
 @Composable

@@ -5,7 +5,7 @@ import myplayground.example.learningq.model.Class
 import myplayground.example.learningq.model.Quiz
 import myplayground.example.learningq.model.Role
 import myplayground.example.learningq.model.User
-import myplayground.example.learningq.network.request.AdminStudentRequest
+import myplayground.example.learningq.network.request.AdminCreateUserRequest
 import myplayground.example.learningq.network.request.LoginRequest
 import myplayground.example.learningq.network.response.LoginResponse
 import myplayground.example.learningq.network.utils.WithCourses
@@ -64,7 +64,7 @@ class FakeApiService : ApiService {
         )
     }
 
-    override suspend fun createStudent(body: AdminStudentRequest) {
+    override suspend fun createUser(body: AdminCreateUserRequest) {
         TODO("Not yet implemented")
     }
 
