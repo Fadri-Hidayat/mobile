@@ -1,4 +1,4 @@
-package myplayground.example.learningq.ui.screens.student.report
+package myplayground.example.learningq.ui.screens.student.presence_detail
 
 import android.app.Application
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
@@ -18,6 +18,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,59 +28,68 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import myplayground.example.learningq.di.Injection
 import myplayground.example.learningq.local_storage.DatastoreSettings
 import myplayground.example.learningq.local_storage.dataStore
-import myplayground.example.learningq.model.Class
+import myplayground.example.learningq.model.Course
+import myplayground.example.learningq.ui.components.CustomButton
 import myplayground.example.learningq.ui.components.shimmerBrush
 import myplayground.example.learningq.ui.navigation.Screen
 import myplayground.example.learningq.ui.theme.LearningQTheme
 import myplayground.example.learningq.ui.utils.ViewModelFactory
+import myplayground.example.learningq.utils.GlobalManager
 
 @Composable
-fun StudentReportScreen(
+fun StudentPresenceDetailScreen(
     modifier: Modifier = Modifier,
-    vm: StudentReportViewModel = viewModel(
+    vm: StudentPresenceDetailViewModel = viewModel(
         factory = ViewModelFactory(
             LocalContext.current.applicationContext as Application,
             Injection.provideRepository(LocalContext.current),
             DatastoreSettings.getInstance(LocalContext.current.dataStore),
         )
     ),
-    navController: NavHostController = rememberNavController(),
+    classId: String = "",
 ) {
-    val classesPagingItem = vm.classState.collectAsLazyPagingItems()
+    val coursesPagingItem = vm.courseState.collectAsLazyPagingItems()
+    val inputData by vm.inputData
 
-    StudentReportContent(
-        modifier = modifier,
-        classesPagingItem = classesPagingItem,
-    ) {
-        navController.navigate(Screen.StudentReportDetail.route)
+    LaunchedEffect(classId) {
+        vm.onEvent(StudentPresenceDetailEvent.FetchPresence(classId))
     }
+
+    StudentPresenceDetailContent(
+        modifier = modifier,
+        coursesPagingItem = coursesPagingItem,
+        inputData = inputData,
+        vm::onEvent,
+    )
 }
 
 @Composable
-fun StudentReportContent(
+fun StudentPresenceDetailContent(
     modifier: Modifier = Modifier,
-    classesPagingItem: LazyPagingItems<Class>? = null,
-    navigateToReportDetail: (classId: String) -> Unit = {},
+    coursesPagingItem: LazyPagingItems<Course>? = null,
+    inputData: StudentPresenceDetailData = StudentPresenceDetailData(),
+    onEvent: (StudentPresenceDetailEvent) -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
     ) {
-        classesPagingItem?.let { classesPagingItem ->
+        coursesPagingItem?.let { classesPagingItem ->
 
             items(classesPagingItem.itemCount) { index ->
-                val currentClass = classesPagingItem[index]!!
+                val currentCourse = classesPagingItem[index]!!
 
-                StudentReportCard(
-                    studentClass = currentClass,
-                    navigateToDetail = navigateToReportDetail,
+                StudentPresenceDetailCard(
+                    studentCourse = currentCourse,
+                    inputData = inputData,
+                    onPresenceClick = {
+                        onEvent(StudentPresenceDetailEvent.CoursePresenceSubmit(currentCourse))
+                    },
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -88,7 +99,7 @@ fun StudentReportContent(
                 when {
                     loadState.refresh is LoadState.Loading -> {
                         items(10) {
-                            StudentReportCardSkeletonView()
+                            StudentPresenceDetailCardSkeletonView()
                             Spacer(modifier = Modifier.height(12.dp))
                         }
                     }
@@ -124,10 +135,13 @@ fun StudentReportContent(
 }
 
 @Composable
-fun StudentReportCard(
-    studentClass: Class,
-    navigateToDetail: (classId: String) -> Unit = {},
+fun StudentPresenceDetailCard(
+    studentCourse: Course,
+    inputData: StudentPresenceDetailData = StudentPresenceDetailData(),
+    onPresenceClick: () -> Unit = {},
 ) {
+    val isLoading = inputData.processedCourseId == studentCourse.id && inputData.isLoading
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
@@ -140,21 +154,23 @@ fun StudentReportCard(
                 .padding(12.dp),
         ) {
             Text(
-                text = studentClass.name,
+                text = studentCourse.name,
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface,
             )
 
             Spacer(modifier = Modifier.height(20.dp))
-            Button(
+            CustomButton(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 shape = MaterialTheme.shapes.small,
+                isLoading = isLoading,
+                enabled = !isLoading,
                 onClick = {
-                    navigateToDetail(studentClass.id)
+                    onPresenceClick()
                 },
             ) {
                 Text(
-                    text = "Detail",
+                    text = "Presence",
                     color = MaterialTheme.colorScheme.onPrimary,
                     style = MaterialTheme.typography.headlineSmall,
                 )
@@ -164,7 +180,7 @@ fun StudentReportCard(
 }
 
 @Composable
-fun StudentReportCardSkeletonView() {
+fun StudentPresenceDetailCardSkeletonView() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -177,19 +193,19 @@ fun StudentReportCardSkeletonView() {
 @Preview(showBackground = true, device = Devices.PIXEL_4)
 @Preview(showBackground = true, device = Devices.PIXEL_4, uiMode = UI_MODE_NIGHT_YES)
 @Composable
-fun StudentReportContentPreview() {
+fun StudentPresenceDetailContentPreview() {
     LearningQTheme {
-        StudentReportContent()
+        StudentPresenceDetailContent()
     }
 }
 
 @Preview(showBackground = true, device = Devices.PIXEL_4)
 @Preview(showBackground = true, device = Devices.PIXEL_4, uiMode = UI_MODE_NIGHT_YES)
 @Composable
-fun StudentReportCardPreview() {
+fun StudentPresenceDetailCardPreview() {
     LearningQTheme {
-        StudentReportCard(
-            Class(
+        StudentPresenceDetailCard(
+            Course(
                 id = "1",
                 name = "Class A",
             )

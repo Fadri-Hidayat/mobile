@@ -16,13 +16,14 @@ import myplayground.example.learningq.ui.screens.home.HomeViewModel
 import myplayground.example.learningq.ui.screens.sign_in.SignInViewModel
 import myplayground.example.learningq.ui.screens.sign_up.SignUpViewModel
 import myplayground.example.learningq.ui.screens.student.dashboard.StudentDashboardViewModel
+import myplayground.example.learningq.ui.screens.student.feedback.StudentFeedbackViewModel
 import myplayground.example.learningq.ui.screens.student.presence.StudentPresenceViewModel
+import myplayground.example.learningq.ui.screens.student.presence_detail.StudentPresenceDetailViewModel
 import myplayground.example.learningq.ui.screens.student.profile.StudentProfileViewModel
 import myplayground.example.learningq.ui.screens.student.quiz.StudentQuizViewModel
 import myplayground.example.learningq.ui.screens.student.quiz_detail.StudentQuizDetailViewModel
 import myplayground.example.learningq.ui.screens.student.report.StudentReportViewModel
 import myplayground.example.learningq.ui.screens.student.report_detail.StudentReportDetailViewModel
-import myplayground.example.learningq.ui.screens.student.feedback.StudentFeedbackViewModel
 import myplayground.example.learningq.ui.screens.teacher.dashboard.TeacherDashboardViewModel
 import myplayground.example.learningq.ui.screens.teacher.profile.TeacherProfileViewModel
 import myplayground.example.learningq.ui.screens.teacher.quiz.TeacherQuizViewModel
@@ -35,7 +36,7 @@ class ViewModelFactory(
     private val localStorageManager: LocalStorageManager,
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        val fakeRepository= FakeRepository.getInstance(application.applicationContext)
+        val fakeRepository = FakeRepository.getInstance(application.applicationContext)
 
         val authManager = Injection.provideAuthManager(application.applicationContext)
 
@@ -59,6 +60,8 @@ class ViewModelFactory(
             return StudentQuizDetailViewModel(repository) as T
         } else if (modelClass.isAssignableFrom(StudentPresenceViewModel::class.java)) {
             return StudentPresenceViewModel(repository, localStorageManager) as T
+        } else if (modelClass.isAssignableFrom(StudentPresenceDetailViewModel::class.java)) {
+            return StudentPresenceDetailViewModel(repository, localStorageManager) as T
         } else if (modelClass.isAssignableFrom(StudentProfileViewModel::class.java)) {
             return StudentProfileViewModel(authManager) as T
         } else if (modelClass.isAssignableFrom(StudentReportViewModel::class.java)) {

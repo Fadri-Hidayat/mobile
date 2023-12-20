@@ -32,7 +32,7 @@ class AdminUserViewModel(
             when (event) {
                 is StudentDashboardEvent.Init -> {
                     repository.fetchUserPaging(
-                        Injection.provideFakeApiService()
+                        Injection.provideFakeApiService(localStorageManager)
                     )
                         .distinctUntilChanged()
                         .cachedIn(viewModelScope)

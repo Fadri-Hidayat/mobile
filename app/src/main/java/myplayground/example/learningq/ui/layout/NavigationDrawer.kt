@@ -1,5 +1,6 @@
 package myplayground.example.learningq.ui.layout
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -37,14 +38,18 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import myplayground.example.learningq.LearningQApp
 import myplayground.example.learningq.R
 import myplayground.example.learningq.di.Injection
 import myplayground.example.learningq.model.User
 import myplayground.example.learningq.ui.navigation.Screen
+import myplayground.example.learningq.ui.theme.LearningQTheme
 import myplayground.example.learningq.ui.utils.debugPlaceholder
 import myplayground.example.learningq.utils.AuthManager
 
@@ -64,20 +69,38 @@ fun DrawerHeader(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                AsyncImage(
-                    model = user.image_url,
-                    contentDescription = "Profile Photo",
-                    placeholder = debugPlaceholder(debugPreview = R.drawable.avatar_placeholder),
-                    contentScale = ContentScale.FillWidth,
-                    modifier = Modifier
-                        .width(120.dp)
-                        .clip(CircleShape),
-                )
+                if (user.imageUrl != null) {
+                    AsyncImage(
+                        modifier = Modifier
+                            .width(120.dp)
+                            .clip(CircleShape),
+                        model = user.imageUrl,
+                        contentDescription = "Profile Photo",
+                        placeholder = debugPlaceholder(debugPreview = R.drawable.avatar_placeholder),
+                        contentScale = ContentScale.FillWidth,
+                    )
+                } else {
+                    Image(
+                        modifier = Modifier
+                            .width(120.dp)
+                            .height(120.dp)
+                            .clip(CircleShape),
+                        painter = painterResource(R.drawable.avatar_placeholder),
+                        contentDescription = "Profile Photo",
+                        contentScale = ContentScale.FillWidth,
+                    )
+                }
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = user.name,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     style = MaterialTheme.typography.titleSmall,
+                )
+
+                Text(
+                    text = user.email,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    style = MaterialTheme.typography.bodyMedium,
                 )
             }
         }
@@ -519,4 +542,10 @@ data class MenuItem(
     val isSpacing: Boolean = false,
 )
 
-
+@Composable
+@Preview(showBackground = true)
+fun DrawerHeaderPreview() {
+    LearningQTheme {
+        DrawerHeader()
+    }
+}

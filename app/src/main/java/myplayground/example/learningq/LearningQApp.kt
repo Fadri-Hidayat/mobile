@@ -1,7 +1,7 @@
 package myplayground.example.learningq
 
 import android.app.Application
-import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,13 +23,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -60,6 +60,7 @@ import myplayground.example.learningq.ui.screens.sign_up.SignUpScreen
 import myplayground.example.learningq.ui.screens.student.dashboard.StudentDashboardScreen
 import myplayground.example.learningq.ui.screens.student.feedback.StudentFeedbackScreen
 import myplayground.example.learningq.ui.screens.student.presence.StudentPresenceScreen
+import myplayground.example.learningq.ui.screens.student.presence_detail.StudentPresenceDetailScreen
 import myplayground.example.learningq.ui.screens.student.profile.StudentProfileScreen
 import myplayground.example.learningq.ui.screens.student.quiz.StudentQuizScreen
 import myplayground.example.learningq.ui.screens.student.quiz_detail.StudentQuizDetailScreen
@@ -85,10 +86,15 @@ fun LearningQApp(
     val authManager =
         Injection.provideAuthManager(LocalContext.current.applicationContext as Application)
 
+    val globalManager =
+        Injection.provideGlobalManager(LocalContext.current.applicationContext as Application)
+
     val haveToken = authManager.haveToken.collectAsState()
     val currentRole = authManager.currentRole.collectAsState()
     val isLoading = authManager.isLoading.collectAsState()
     val user = authManager.user.collectAsState()
+
+    val appbarTitle = globalManager.appbarTitle.collectAsState()
 
     val startDestination = if (haveToken.value) {
         if (isLoading.value) {
@@ -191,6 +197,7 @@ fun LearningQApp(
                 if (!(currentRoute == Screen.SignIn.route || currentRoute == Screen.SignUp.route || currentRoute == Screen.Landing.route)) {
                     Appbar(
                         navController = navController,
+                        title = appbarTitle.value,
                         displayBackButton = hasNavPreviousBackStack,
                         onNavigationIconClick = {
                             scope.launch {
@@ -219,15 +226,27 @@ fun LearningQApp(
 
                                 Spacer(modifier = Modifier.width(16.dp))
 
-                                AsyncImage(
-                                    model = user.value?.image_url,
-                                    contentDescription = "Profile Photo",
-                                    placeholder = debugPlaceholder(debugPreview = R.drawable.avatar_placeholder),
-                                    contentScale = ContentScale.FillWidth,
-                                    modifier = Modifier
-                                        .width(40.dp)
-                                        .clip(CircleShape),
-                                )
+                                if (user.value?.imageUrl != null) {
+                                    AsyncImage(
+                                        model = user.value?.imageUrl,
+                                        contentDescription = "Profile Photo",
+                                        placeholder = debugPlaceholder(debugPreview = R.drawable.avatar_placeholder),
+                                        contentScale = ContentScale.FillWidth,
+                                        modifier = Modifier
+                                            .width(40.dp)
+                                            .clip(CircleShape),
+                                    )
+                                } else {
+                                    Image(
+                                        modifier = Modifier
+                                            .width(40.dp)
+                                            .clip(CircleShape),
+                                        painter = painterResource(R.drawable.avatar_placeholder),
+                                        contentDescription = "Profile Photo",
+                                        contentScale = ContentScale.FillWidth,
+                                    )
+                                }
+
                             }
                         }
                     }
@@ -247,11 +266,13 @@ fun LearningQApp(
                 }
 
                 composable(Screen.Landing.route) {
+                    globalManager.setAppbarTitle("")
                     LandingScreen(
                         modifier = containerModifier, navController = navController
                     )
                 }
                 composable(Screen.SignIn.route) {
+                    globalManager.setAppbarTitle("")
                     SignInScreen(
                         modifier = containerModifier,
                         navController = navController,
@@ -259,34 +280,40 @@ fun LearningQApp(
                 }
 
                 composable(Screen.SignUp.route) {
+                    globalManager.setAppbarTitle("")
                     SignUpScreen(
                         modifier = containerModifier, navController = navController
                     )
                 }
 
                 composable(Screen.Setting.route) {
+                    globalManager.setAppbarTitle("Setting")
                     SettingScreen(
                         modifier = containerModifier,
                     )
                 }
 
                 composable(Screen.Home.route) {
+                    globalManager.setAppbarTitle("")
                     HomeScreen(
                         modifier = containerModifier,
                     )
                 }
 
                 composable(Screen.StudentProfile.route) {
+                    globalManager.setAppbarTitle("Profile")
                     StudentProfileScreen()
                 }
 
                 composable(Screen.StudentDashboard.route) {
+                    globalManager.setAppbarTitle("")
                     StudentDashboardScreen(
                         modifier = containerModifier,
                     )
                 }
 
                 composable(Screen.StudentQuiz.route) {
+                    globalManager.setAppbarTitle("")
                     StudentQuizScreen(
                         modifier = containerModifier,
                         navController = navController,
@@ -305,8 +332,24 @@ fun LearningQApp(
                 }
 
                 composable(Screen.StudentPresence.route) {
+                    globalManager.setAppbarTitle("Presence")
+
                     StudentPresenceScreen(
                         modifier = containerModifier,
+                        navController = navController,
+                    )
+                }
+
+                composable(
+                    Screen.StudentPresenceDetail.route,
+                    arguments = listOf(navArgument("id") { type = NavType.StringType }),
+                ) {
+                    globalManager.setAppbarTitle("")
+
+                    val classId = it.arguments?.getString("id") ?: ""
+                    StudentPresenceDetailScreen(
+                        modifier = containerModifier,
+                        classId = classId,
                     )
                 }
 

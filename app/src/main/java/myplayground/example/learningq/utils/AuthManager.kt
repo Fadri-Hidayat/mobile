@@ -6,6 +6,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import myplayground.example.learningq.di.Injection
 import myplayground.example.learningq.local_storage.LocalStorageManager
 import myplayground.example.learningq.model.Role
 import myplayground.example.learningq.model.User
@@ -34,7 +35,10 @@ class AuthManager(
                     _haveToken.value = true
                     _isLoading.value = true
 
-                    _user.value = repository.userMe(token)
+                    _user.value = repository.userMe(
+                        token,
+                        Injection.provideApiService(localStorageManager),
+                    )
                 } else {
                     _haveToken.value = false
                     _user.value = null

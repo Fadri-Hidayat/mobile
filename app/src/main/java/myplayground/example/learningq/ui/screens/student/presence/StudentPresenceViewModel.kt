@@ -16,7 +16,8 @@ import myplayground.example.learningq.repository.Repository
 class StudentPresenceViewModel(
     private val repository: Repository,
     private val localStorageManager: LocalStorageManager,
-) : ViewModel() {
+) :
+    ViewModel() {
     private val _classState: MutableStateFlow<PagingData<Class>> =
         MutableStateFlow(PagingData.empty())
     val classState: StateFlow<PagingData<Class>> = _classState
@@ -30,8 +31,10 @@ class StudentPresenceViewModel(
             when (event) {
                 is StudentPresenceEvent.Init -> {
                     repository.fetchStudentClassPaging(
-                        Injection.provideApiService(localStorageManager = localStorageManager)
-                    ).distinctUntilChanged().cachedIn(viewModelScope)
+                        Injection.provideApiService(localStorageManager= localStorageManager),
+                    )
+                        .distinctUntilChanged()
+                        .cachedIn(viewModelScope)
                         .collect {
                             _classState.value = it
                         }

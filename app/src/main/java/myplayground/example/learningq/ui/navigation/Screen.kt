@@ -21,9 +21,13 @@ sealed class Screen(val route: String) {
     }
 
     object StudentPresence : Screen("studentpresence")
+    object StudentPresenceDetail : Screen("studentpresence/{id}") {
+        fun createRoute(classId: String) = "studentpresence/$classId"
+    }
+
     object StudentFeedback : Screen("studentfeedback")
 
-    object TeacherProfile: Screen("teacherprofile")
+    object TeacherProfile : Screen("teacherprofile")
     object TeacherDashboard : Screen("teacherdashboard")
     object TeacherQuiz : Screen("teacherquiz")
     object TeacherQuizAdd : Screen("teacherquizadd")

@@ -2,7 +2,9 @@ package myplayground.example.learningq.model
 
 data class User(
     val id: String,
+    val email: String = "",
     val name: String,
     val role: Role,
-    val image_url: String? = "",
+    val password: String = "",
+    val imageUrl: String? = null,
 )

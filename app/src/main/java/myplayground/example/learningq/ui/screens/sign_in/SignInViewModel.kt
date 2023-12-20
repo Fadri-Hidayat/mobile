@@ -1,7 +1,6 @@
 package myplayground.example.learningq.ui.screens.sign_in
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -23,8 +22,6 @@ import org.tensorflow.lite.Interpreter
 import retrofit2.HttpException
 import java.io.FileInputStream
 import java.io.IOException
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
 
@@ -60,19 +57,20 @@ class SignInViewModel(
     }
 
     private fun validateAndSubmit() {
-        val usernameResultError = _uiState.value.username.validate(
+        val emailResultError = _uiState.value.username.validate(
             StringValidationRule.Required("Required field"),
+            StringValidationRule.Email("Not a valid email"),
         ).toErrorMessage()
 
         val passwordResultError = _uiState.value.password.validate(
             StringValidationRule.Required("Required field")
         ).toErrorMessage()
 
-        _uiState.value = _uiState.value.copy(usernameError = usernameResultError)
+        _uiState.value = _uiState.value.copy(usernameError = emailResultError)
         _uiState.value = _uiState.value.copy(passwordError = passwordResultError)
 
         val hasError = !listOf(
-            usernameResultError,
+            emailResultError,
             passwordResultError,
         ).allNull()
 
@@ -83,7 +81,7 @@ class SignInViewModel(
                 try {
                     val token = repository.userLogin(
                         UserLoginInput(
-                            username = _uiState.value.username,
+                            email = _uiState.value.username,
                             password = _uiState.value.password,
                         ),
                         Injection.provideApiService(localStorageManager),

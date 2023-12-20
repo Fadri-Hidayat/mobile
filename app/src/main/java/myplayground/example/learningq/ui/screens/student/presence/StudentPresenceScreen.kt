@@ -2,9 +2,8 @@ package myplayground.example.learningq.ui.screens.student.presence
 
 import android.app.Application
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,12 +19,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -33,32 +33,38 @@ import myplayground.example.learningq.di.Injection
 import myplayground.example.learningq.local_storage.DatastoreSettings
 import myplayground.example.learningq.local_storage.dataStore
 import myplayground.example.learningq.model.Class
-import myplayground.example.learningq.ui.components.shimmerBrush
+import myplayground.example.learningq.ui.navigation.Screen
+import myplayground.example.learningq.ui.screens.student.quiz.StudentQuizCardSkeletonView
 import myplayground.example.learningq.ui.theme.LearningQTheme
 import myplayground.example.learningq.ui.utils.ViewModelFactory
 
 @Composable
 fun StudentPresenceScreen(
-    modifier: Modifier = Modifier, vm: StudentPresenceViewModel = viewModel(
+    modifier: Modifier = Modifier,
+    vm: StudentPresenceViewModel = viewModel(
         factory = ViewModelFactory(
             LocalContext.current.applicationContext as Application,
             Injection.provideRepository(LocalContext.current),
             DatastoreSettings.getInstance(LocalContext.current.dataStore),
         )
-    )
+    ),
+    navController: NavHostController = rememberNavController(),
 ) {
     val classesPagingItem = vm.classState.collectAsLazyPagingItems()
 
     StudentPresenceContent(
         modifier = modifier,
         classesPagingItem = classesPagingItem
-    )
+    ) { classId ->
+        navController.navigate(Screen.StudentPresenceDetail.createRoute(classId))
+    }
 }
 
 @Composable
 fun StudentPresenceContent(
     modifier: Modifier = Modifier,
     classesPagingItem: LazyPagingItems<Class>? = null,
+    navigateToPresenceDetail: (classId: String) -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -67,8 +73,37 @@ fun StudentPresenceContent(
 
             items(classesPagingItem.itemCount) { index ->
                 val currentClass = classesPagingItem[index]!!
-
-                StudentPresenceCard(studentClass = currentClass)
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.tertiary,
+                    ),
+                ) {
+                    Row(
+                        modifier = Modifier.padding(8.dp, 8.dp, 12.dp, 8.dp),
+                    ) {
+                        Text(
+                            modifier = Modifier.align(Alignment.CenterVertically),
+                            text = currentClass.name,
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.onSurface,
+                        )
+                        Spacer(modifier = Modifier.weight(1F))
+                        Button(
+                            modifier = Modifier.align(Alignment.CenterVertically),
+                            shape = MaterialTheme.shapes.small,
+                            onClick = {
+                                navigateToPresenceDetail(currentClass.id)
+                            },
+                        ) {
+                            Text(
+                                text = "Detail",
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                style = MaterialTheme.typography.headlineSmall,
+                            )
+                        }
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(12.dp))
             }
@@ -77,7 +112,7 @@ fun StudentPresenceContent(
                 when {
                     loadState.refresh is LoadState.Loading -> {
                         items(10) {
-                            StudentPresenceCardSkeletonView()
+                            StudentQuizCardSkeletonView()
                             Spacer(modifier = Modifier.height(12.dp))
                         }
                     }
@@ -112,73 +147,12 @@ fun StudentPresenceContent(
     }
 }
 
-@Composable
-fun StudentPresenceCard(studentClass: Class) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.tertiary,
-        ),
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-        ) {
-            Text(
-                text = studentClass.courseName,
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-            Button(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                shape = MaterialTheme.shapes.small,
-                onClick = {},
-            ) {
-                Text(
-                    text = "Presence",
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    style = MaterialTheme.typography.headlineSmall,
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun StudentPresenceCardSkeletonView() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(100.dp)
-            .clip(MaterialTheme.shapes.medium)
-            .background(shimmerBrush()),
-    )
-}
-
 @Preview(showBackground = true, device = Devices.PIXEL_4)
 @Preview(showBackground = true, device = Devices.PIXEL_4, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun StudentPresenceContentPreview() {
     LearningQTheme {
         StudentPresenceContent()
-    }
-}
-
-@Preview(showBackground = true, device = Devices.PIXEL_4)
-@Preview(showBackground = true, device = Devices.PIXEL_4, uiMode = UI_MODE_NIGHT_YES)
-@Composable
-fun StudentPresenceCardPreview() {
-    LearningQTheme {
-        StudentPresenceCard(
-            Class(
-                id = 1,
-                courseName = "Class A",
-
-            )
-        )
     }
 }
 

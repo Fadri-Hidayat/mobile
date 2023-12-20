@@ -2,6 +2,7 @@ package myplayground.example.learningq.ui.screens.student.profile
 
 import android.app.Application
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,8 +24,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -80,15 +83,26 @@ fun StudentProfileContent(
                 .padding(0.dp, 28.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            AsyncImage(
-                model = user?.image_url,
-                contentDescription = "Profile Photo",
-                placeholder = debugPlaceholder(debugPreview = R.drawable.avatar_placeholder),
-                contentScale = ContentScale.FillWidth,
-                modifier = Modifier
-                    .width(160.dp)
-                    .clip(CircleShape),
-            )
+            if (user?.imageUrl != null) {
+                AsyncImage(
+                    model = user.imageUrl,
+                    contentDescription = "Profile Photo",
+                    placeholder = debugPlaceholder(debugPreview = R.drawable.avatar_placeholder),
+                    contentScale = ContentScale.FillWidth,
+                    modifier = Modifier
+                        .width(160.dp)
+                        .clip(CircleShape),
+                )
+            } else {
+                Image(
+                    modifier = Modifier
+                        .width(160.dp)
+                        .clip(CircleShape),
+                    painter = painterResource(R.drawable.avatar_placeholder),
+                    contentDescription = "Profile Photo",
+                    contentScale = ContentScale.FillWidth,
+                )
+            }
             Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = user?.name ?: "",
@@ -167,7 +181,7 @@ fun StudentProfileContentPreview() {
             user = User(
                 id = "1",
                 name = "Student",
-                image_url = "https://miro.medium.com/v2/resize:fill:110:110/1*x1I-A7aVdqWFelvJakKWBg.jpeg",
+                imageUrl = "https://miro.medium.com/v2/resize:fill:110:110/1*x1I-A7aVdqWFelvJakKWBg.jpeg",
                 role = Role.Student,
             )
         )

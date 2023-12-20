@@ -15,6 +15,7 @@ import myplayground.example.learningq.local_storage.dataStore
 import myplayground.example.learningq.ui.theme.LearningQTheme
 import myplayground.example.learningq.ui.utils.ViewModelFactory
 import myplayground.example.learningq.utils.AuthManager
+import myplayground.example.learningq.utils.GlobalManager
 
 class MainActivity : AppCompatActivity() {
     private val themeViewModel: ThemeViewModel by viewModels {
@@ -26,11 +27,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private lateinit var authManager: AuthManager
+    private lateinit var globalManager: GlobalManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         authManager = Injection.provideAuthManager(this)
+        globalManager = Injection.provideGlobalManager(this)
 
         setContent {
             val isDarkTheme = themeViewModel.isDarkMode.collectAsState(initial = false)

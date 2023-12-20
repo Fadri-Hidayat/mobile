@@ -1,7 +1,7 @@
 package myplayground.example.learningq.repository
 
 data class UserLoginInput (
-    val username: String = "",
+    val email: String = "",
     val password: String = "",
 )
 

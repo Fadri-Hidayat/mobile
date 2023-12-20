@@ -81,7 +81,7 @@ fun TeacherProfileContent(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             AsyncImage(
-                model = user?.image_url,
+                model = user?.imageUrl,
                 contentDescription = "Profile Photo",
                 placeholder = debugPlaceholder(debugPreview = R.drawable.avatar_placeholder),
                 contentScale = ContentScale.FillWidth,
@@ -167,7 +167,7 @@ fun TeacherProfileContentPreview() {
             user = User(
                 id = "1",
                 name = "Student",
-                image_url = "https://miro.medium.com/v2/resize:fill:110:110/1*x1I-A7aVdqWFelvJakKWBg.jpeg",
+                imageUrl = "https://miro.medium.com/v2/resize:fill:110:110/1*x1I-A7aVdqWFelvJakKWBg.jpeg",
                 role = Role.Student,
             )
         )

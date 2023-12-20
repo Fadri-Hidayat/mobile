@@ -19,7 +19,6 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -135,23 +134,23 @@ fun TeacherQuizAddContent(
                 ) { ->
                     listOf(
                         Class(
-                            id = 1,
-                            courseName = "Class A",
+                            id = "1",
+                            name = "Class A",
                         ),
                         Class(
-                            id = 2,
-                            courseName = "Class B",
+                            id = "2",
+                            name = "Class B",
                         ),
                         Class(
-                            id = 3,
-                            courseName = "Class C",
+                            id = "3",
+                            name = "Class C",
                         ),
                     ).forEach { item ->
                         DropdownMenuItem(onClick = {
                             onEvent(TeacherQuizAddEvent.ClassSelected(item))
                             isMenuExpanded.value = false
                         }, text = {
-                            Text(text = item.courseName)
+                            Text(text = item.name)
                         })
                     }
                 }
