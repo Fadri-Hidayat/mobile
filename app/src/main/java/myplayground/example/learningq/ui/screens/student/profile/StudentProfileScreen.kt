@@ -39,6 +39,7 @@ import myplayground.example.learningq.local_storage.DatastoreSettings
 import myplayground.example.learningq.local_storage.dataStore
 import myplayground.example.learningq.model.Role
 import myplayground.example.learningq.model.User
+import myplayground.example.learningq.ui.screens.admin.profile.AdminProfileInformationRow
 import myplayground.example.learningq.ui.theme.LearningQTheme
 import myplayground.example.learningq.ui.utils.ViewModelFactory
 import myplayground.example.learningq.ui.utils.debugPlaceholder
@@ -129,6 +130,10 @@ fun StudentProfileContent(
                 StudentProfileInformationRow(
                     title = "Nama",
                     content = user.name,
+                )
+                StudentProfileInformationRow(
+                    title = "Email",
+                    content = user.email,
                 )
             }
         }

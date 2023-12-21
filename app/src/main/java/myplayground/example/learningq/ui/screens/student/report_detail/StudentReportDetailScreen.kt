@@ -94,7 +94,7 @@ fun StudentReportDetailContent(
             )
         }
 
-        repeat(12) {
+        repeat(1) {
             Row {
                 TableCellText(
                     modifier = cellModifier,

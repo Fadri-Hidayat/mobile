@@ -116,6 +116,10 @@ fun AdminProfileContent(
                     title = "Nama",
                     content = user.name,
                 )
+                AdminProfileInformationRow(
+                    title = "Email",
+                    content = user.email,
+                )
             }
         }
     }

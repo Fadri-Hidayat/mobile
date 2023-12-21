@@ -73,37 +73,11 @@ fun StudentPresenceContent(
 
             items(classesPagingItem.itemCount) { index ->
                 val currentClass = classesPagingItem[index]!!
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.tertiary,
-                    ),
-                ) {
-                    Row(
-                        modifier = Modifier.padding(8.dp, 8.dp, 12.dp, 8.dp),
-                    ) {
-                        Text(
-                            modifier = Modifier.align(Alignment.CenterVertically),
-                            text = currentClass.name,
-                            style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.onSurface,
-                        )
-                        Spacer(modifier = Modifier.weight(1F))
-                        Button(
-                            modifier = Modifier.align(Alignment.CenterVertically),
-                            shape = MaterialTheme.shapes.small,
-                            onClick = {
-                                navigateToPresenceDetail(currentClass.id)
-                            },
-                        ) {
-                            Text(
-                                text = "Detail",
-                                color = MaterialTheme.colorScheme.onPrimary,
-                                style = MaterialTheme.typography.headlineSmall,
-                            )
-                        }
-                    }
-                }
+
+                StudentPresenceCard(
+                    `class` = currentClass,
+                    navigateToPresenceDetail = navigateToPresenceDetail,
+                )
 
                 Spacer(modifier = Modifier.height(12.dp))
             }
@@ -147,12 +121,68 @@ fun StudentPresenceContent(
     }
 }
 
+@Composable
+fun StudentPresenceCard(
+    `class`: Class,
+    navigateToPresenceDetail: (classId: String) -> Unit = {},
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.tertiary,
+        ),
+    ) {
+        Row(
+            modifier = Modifier.padding(8.dp, 8.dp, 12.dp, 8.dp),
+        ) {
+            Text(
+                modifier = Modifier.align(Alignment.CenterVertically),
+                text = `class`.name,
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            Spacer(modifier = Modifier.weight(1F))
+            Button(
+                modifier = Modifier.align(Alignment.CenterVertically),
+                shape = MaterialTheme.shapes.small,
+                onClick = {
+                    navigateToPresenceDetail(`class`.id)
+                },
+            ) {
+                Text(
+                    text = "Detail",
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    style = MaterialTheme.typography.headlineSmall,
+                )
+            }
+        }
+    }
+}
+
 @Preview(showBackground = true, device = Devices.PIXEL_4)
 @Preview(showBackground = true, device = Devices.PIXEL_4, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun StudentPresenceContentPreview() {
     LearningQTheme {
         StudentPresenceContent()
+    }
+}
+
+@Preview(showBackground = true, device = Devices.PIXEL_4)
+@Preview(showBackground = true, device = Devices.PIXEL_4, uiMode = UI_MODE_NIGHT_YES)
+@Composable
+fun StudentPresenceCardPreview() {
+    LearningQTheme {
+        StudentPresenceCard(
+            `class` = Class(
+                id = "1",
+                courseId = "",
+                name = "Matematika",
+                instructorId = 0,
+                schedule = "",
+                description = "",
+            )
+        )
     }
 }
 

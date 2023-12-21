@@ -274,7 +274,7 @@ fun LearningQApp(
                 composable(Screen.SignIn.route) {
                     globalManager.setAppbarTitle("")
                     SignInScreen(
-                        modifier = containerModifier,
+//                        modifier = containerModifier,
                         navController = navController,
                     )
                 }
@@ -354,6 +354,7 @@ fun LearningQApp(
                 }
 
                 composable(Screen.StudentReport.route) {
+                    globalManager.setAppbarTitle("Report")
                     StudentReportScreen(
                         modifier = containerModifier,
                         navController = navController,
@@ -361,6 +362,7 @@ fun LearningQApp(
                 }
 
                 composable(Screen.StudentReportDetail.route) {
+                    globalManager.setAppbarTitle("Report")
                     StudentReportDetailScreen(
                         modifier = containerModifier,
                         navController = navController,

@@ -2,6 +2,8 @@ package myplayground.example.learningq.ui.screens.sign_in
 
 import android.app.Application
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,13 +23,18 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import myplayground.example.learningq.R
 import myplayground.example.learningq.di.Injection
 import myplayground.example.learningq.local_storage.DatastoreSettings
 import myplayground.example.learningq.local_storage.dataStore
@@ -93,9 +100,18 @@ fun SignInContent(
     onEvent: (SignInUIEvent) -> Unit = {},
     navigateToSignUp: () -> Unit = {},
 ) {
+    Image(
+        modifier = Modifier
+            .fillMaxSize()
+            .alpha(0.5F),
+        painter = painterResource(R.drawable.mobile_bg),
+        contentDescription = null,
+        contentScale = ContentScale.FillBounds,
+    )
     Column(
         modifier = modifier
             .fillMaxSize()
+            .background(Color.Transparent)
             .verticalScroll(rememberScrollState())
             .padding(16.dp, 0.dp),
         verticalArrangement = Arrangement.Center,

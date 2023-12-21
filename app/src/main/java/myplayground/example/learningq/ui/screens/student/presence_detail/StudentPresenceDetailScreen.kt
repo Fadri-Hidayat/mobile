@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -37,10 +36,10 @@ import myplayground.example.learningq.local_storage.dataStore
 import myplayground.example.learningq.model.Course
 import myplayground.example.learningq.ui.components.CustomButton
 import myplayground.example.learningq.ui.components.shimmerBrush
-import myplayground.example.learningq.ui.navigation.Screen
 import myplayground.example.learningq.ui.theme.LearningQTheme
 import myplayground.example.learningq.ui.utils.ViewModelFactory
-import myplayground.example.learningq.utils.GlobalManager
+import myplayground.example.learningq.utils.CustomDayOfWeek
+import myplayground.example.learningq.utils.TimeInSeconds
 
 @Composable
 fun StudentPresenceDetailScreen(
@@ -152,14 +151,26 @@ fun StudentPresenceDetailCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
                 text = studentCourse.name,
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface,
             )
+            Text(
+                text = studentCourse.dayOfWeek.toString(),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Text(
+                text = "${studentCourse.startTimeInMinutes.toString()} - ${studentCourse.endTimeInMinutes.toString()}",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
             CustomButton(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 shape = MaterialTheme.shapes.small,
@@ -208,6 +219,9 @@ fun StudentPresenceDetailCardPreview() {
             Course(
                 id = "1",
                 name = "Class A",
+                dayOfWeek = CustomDayOfWeek.MONDAY,
+                startTimeInMinutes = TimeInSeconds(3600),
+                endTimeInMinutes = TimeInSeconds(7200)
             )
         )
     }

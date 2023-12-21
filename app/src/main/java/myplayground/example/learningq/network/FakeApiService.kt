@@ -15,6 +15,8 @@ import myplayground.example.learningq.network.response.LoginResponse
 import myplayground.example.learningq.network.response.MeResponse
 import myplayground.example.learningq.network.utils.WithCourses
 import myplayground.example.learningq.network.utils.WithPagination
+import myplayground.example.learningq.utils.CustomDayOfWeek
+import myplayground.example.learningq.utils.TimeInSeconds
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.HttpException
 import retrofit2.Response
@@ -24,7 +26,10 @@ class FakeApiService(val localStorageManager: LocalStorageManager) : ApiService 
     override suspend fun login(body: LoginRequest): LoginResponse {
         delay(1500)
         for (currentUser in listUser) {
-            if (body.email == currentUser.email && body.password == currentUser.password) {
+            if (body.email.equals(
+                    currentUser.email, ignoreCase = true
+                ) && body.password == currentUser.password
+            ) {
                 return LoginResponse(
                     accessToken = "token ${currentUser.role}",
                     role = currentUser.role.toString(),
@@ -98,8 +103,7 @@ class FakeApiService(val localStorageManager: LocalStorageManager) : ApiService 
     }
 
     override suspend fun fetchStudentClasses(
-        page: Int,
-        limit: Int
+        page: Int, limit: Int
     ): WithPagination<WithCourses<List<Class>>> {
         delay(1500)
 
@@ -190,12 +194,10 @@ class FakeApiService(val localStorageManager: LocalStorageManager) : ApiService 
 
             val classList = mutableListOf(
                 Class(
-                    id = "1",
-                    name = "Kelas IX-1"
+                    id = "1", name = "Kelas IX-1"
                 ),
                 Class(
-                    id = "2",
-                    name = "Kelas IX-2"
+                    id = "2", name = "Kelas IX-2"
                 ),
             )
             classList.toList()
@@ -208,9 +210,9 @@ class FakeApiService(val localStorageManager: LocalStorageManager) : ApiService 
                     classId = "1",
                     name = "Matematika",
                     teacherUserId = "2",
-                    dayOfWeek = 1,
-                    startTimeInMinutes = 28800,
-                    endTimeInMinutes = 54000,
+                    dayOfWeek = CustomDayOfWeek.MONDAY,
+                    startTimeInMinutes = TimeInSeconds(28800),
+                    endTimeInMinutes = TimeInSeconds(54000),
                     description = null,
                 ),
                 Course(
@@ -218,9 +220,9 @@ class FakeApiService(val localStorageManager: LocalStorageManager) : ApiService 
                     classId = "1",
                     name = "Fisika",
                     teacherUserId = "2",
-                    dayOfWeek = 2,
-                    startTimeInMinutes = 28800,
-                    endTimeInMinutes = 54000,
+                    dayOfWeek = CustomDayOfWeek.TUESDAY,
+                    startTimeInMinutes = TimeInSeconds(28800),
+                    endTimeInMinutes = TimeInSeconds(54000),
                     description = null,
                 ),
             )
@@ -266,10 +268,7 @@ class FakeApiService(val localStorageManager: LocalStorageManager) : ApiService 
         )
 
         val listUser = listOf(
-            studentUser,
-            teacherUser,
-            adminUser,
-            parentUser
+            studentUser, teacherUser, adminUser, parentUser
         )
 
 //        val USER_LIST: List<User> by lazy {
