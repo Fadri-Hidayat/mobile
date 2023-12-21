@@ -71,13 +71,13 @@ class ViewModelFactory(
         } else if (modelClass.isAssignableFrom(StudentFeedbackViewModel::class.java)) {
             return StudentFeedbackViewModel(repository) as T
         } else if (modelClass.isAssignableFrom(TeacherDashboardViewModel::class.java)) {
-            return TeacherDashboardViewModel(repository, localStorageManager) as T
+            return TeacherDashboardViewModel(repository, localStorageManager, authManager) as T
         } else if (modelClass.isAssignableFrom(TeacherProfileViewModel::class.java)) {
             return TeacherProfileViewModel(authManager) as T
         } else if (modelClass.isAssignableFrom(TeacherQuizViewModel::class.java)) {
             return TeacherQuizViewModel(repository, localStorageManager) as T
         } else if (modelClass.isAssignableFrom(TeacherQuizAddViewModel::class.java)) {
-            return TeacherQuizAddViewModel(repository) as T
+            return TeacherQuizAddViewModel(repository, localStorageManager, authManager) as T
         } else if (modelClass.isAssignableFrom(AdminDashboardViewModel::class.java)) {
             return AdminDashboardViewModel() as T
         } else if (modelClass.isAssignableFrom(AdminUserViewModel::class.java)) {

@@ -15,7 +15,6 @@ import myplayground.example.learningq.network.utils.WithPagination
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
@@ -46,7 +45,16 @@ interface ApiService {
         @Body body: StudentCourseFetchRequest,
     ): WithPagination<List<Course>>
 
-    @GET("/")
+
+    suspend fun fetchTeacherClassByTeacherUserId(
+        teacherUserId: String,
+    ): List<Class>
+
+    suspend fun fetchTeacherCoursesByTeacherUserId(
+        teacherUserId: String,
+        page: Int,
+        limit: Int,
+    ): WithPagination<List<Course>>
 
     suspend fun fetchTeacherQuiz(
         page: Int,

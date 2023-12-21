@@ -18,6 +18,7 @@ import myplayground.example.learningq.network.request.LoginRequest
 import myplayground.example.learningq.repository.paging.StudentClassPagingSource
 import myplayground.example.learningq.repository.paging.StudentCoursePagingSource
 import myplayground.example.learningq.repository.paging.StudentQuizPagingSource
+import myplayground.example.learningq.repository.paging.TeacherCoursePagingSource
 import myplayground.example.learningq.repository.paging.TeacherQuizPagingSource
 import myplayground.example.learningq.repository.paging.UserPagingSource
 
@@ -116,6 +117,33 @@ class FakeRepository(
             ),
             pagingSourceFactory = {
                 TeacherQuizPagingSource(
+                    apiService,
+                )
+            }).flow
+    }
+
+    override suspend fun fetchTeacherClassByTeacherUserId(
+        teacherUserId: String,
+        apiService: ApiService
+    ): List<Class> {
+        return apiService.fetchTeacherClassByTeacherUserId(
+            teacherUserId
+        )
+    }
+
+    override suspend fun fetchTeacherCoursePaging(
+        teacherId: String,
+        apiService: ApiService
+    ): Flow<PagingData<Course>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                initialLoadSize = 10,
+                prefetchDistance = 2
+            ),
+            pagingSourceFactory = {
+                TeacherCoursePagingSource(
+                    teacherId,
                     apiService,
                 )
             }).flow

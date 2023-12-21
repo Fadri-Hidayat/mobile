@@ -3,12 +3,15 @@ package myplayground.example.learningq.ui.screens.teacher.dashboard
 import android.app.Application
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -30,15 +33,14 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import myplayground.example.learningq.di.Injection
 import myplayground.example.learningq.local_storage.DatastoreSettings
 import myplayground.example.learningq.local_storage.dataStore
-import myplayground.example.learningq.model.Class
+import myplayground.example.learningq.model.Course
 import myplayground.example.learningq.ui.screens.student.quiz.StudentQuizCardSkeletonView
 import myplayground.example.learningq.ui.theme.LearningQTheme
 import myplayground.example.learningq.ui.utils.ViewModelFactory
 
 @Composable
 fun TeacherDashboardScreen(
-    modifier: Modifier = Modifier,
-    vm: TeacherDashboardViewModel = viewModel(
+    modifier: Modifier = Modifier, vm: TeacherDashboardViewModel = viewModel(
         factory = ViewModelFactory(
             LocalContext.current.applicationContext as Application,
             Injection.provideRepository(LocalContext.current),
@@ -46,61 +48,34 @@ fun TeacherDashboardScreen(
         )
     )
 ) {
-    val classesPagingItem = vm.classState.collectAsLazyPagingItems()
+    val coursesPagingItems = vm.courseState.collectAsLazyPagingItems()
 
     TeacherDashboardContent(
-        modifier = modifier,
-        classesPagingItem = classesPagingItem
+        modifier = modifier, coursesPagingItems = coursesPagingItems
     )
 }
 
 @Composable
 fun TeacherDashboardContent(
     modifier: Modifier = Modifier,
-    classesPagingItem: LazyPagingItems<Class>? = null,
+    coursesPagingItems: LazyPagingItems<Course>? = null,
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
     ) {
-        classesPagingItem?.let { classesPagingItem ->
+        coursesPagingItems?.let { coursePagingItem ->
 
-            items(classesPagingItem.itemCount) { index ->
-                val currentClass = classesPagingItem[index]!!
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.tertiary,
-                    ),
-                ) {
-                    Row(
-                        modifier = Modifier.padding(8.dp, 8.dp, 12.dp, 8.dp),
-                    ) {
-                        Text(
-                            modifier = Modifier.align(Alignment.CenterVertically),
-                            text = currentClass.name,
-                            style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.onSurface,
-                        )
-                        Spacer(modifier = Modifier.weight(1F))
-                        Button(
-                            modifier = Modifier.align(Alignment.CenterVertically),
-                            shape = MaterialTheme.shapes.small,
-                            onClick = {
-                            },
-                        ) {
-                            Text(
-                                text = "Detail",
-                                color = MaterialTheme.colorScheme.onPrimary,
-                                style = MaterialTheme.typography.headlineSmall,
-                            )
-                        }
-                    }
-                }
+            items(coursePagingItem.itemCount) { index ->
+                val currentCourse = coursePagingItem[index]!!
+
+                TeacherDashboardCourse(
+                    currentCourse,
+                )
 
                 Spacer(modifier = Modifier.height(12.dp))
             }
 
-            classesPagingItem.apply {
+            coursePagingItem.apply {
                 when {
                     loadState.refresh is LoadState.Loading -> {
                         items(10) {
@@ -110,7 +85,7 @@ fun TeacherDashboardContent(
                     }
 
                     loadState.refresh is LoadState.Error -> {
-                        val error = classesPagingItem.loadState.refresh as LoadState.Error
+                        val error = coursePagingItem.loadState.refresh as LoadState.Error
                         item {
                             Text(error.toString())
                         }
@@ -128,12 +103,58 @@ fun TeacherDashboardContent(
                     }
 
                     loadState.append is LoadState.Error -> {
-                        val error = classesPagingItem.loadState.append as LoadState.Error
+                        val error = coursePagingItem.loadState.append as LoadState.Error
                         item {
                             Text(error.toString())
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun TeacherDashboardCourse(
+    course: Course,
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.tertiary,
+        ),
+    ) {
+        Row(
+            modifier = Modifier.padding(8.dp, 8.dp, 12.dp, 8.dp),
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .align(Alignment.CenterVertically)
+                    .widthIn(0.dp, 260.dp),
+            ) {
+                Text(
+                    text = course.name,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+                Text(
+                    text = course.`class`?.name ?: "",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+            }
+            Spacer(modifier = Modifier.weight(1F))
+            Button(
+                modifier = Modifier.align(Alignment.CenterVertically),
+                shape = MaterialTheme.shapes.small,
+                onClick = {},
+            ) {
+                Text(
+                    text = "Detail",
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    style = MaterialTheme.typography.headlineSmall,
+                )
             }
         }
     }

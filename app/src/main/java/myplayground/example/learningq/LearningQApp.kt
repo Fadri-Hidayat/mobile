@@ -376,18 +376,21 @@ fun LearningQApp(
                 }
 
                 composable(Screen.TeacherDashboard.route) {
+                    globalManager.setAppbarTitle("")
                     TeacherDashboardScreen(
                         modifier = containerModifier,
                     )
                 }
 
                 composable(Screen.TeacherProfile.route) {
+                    globalManager.setAppbarTitle("Profile")
                     TeacherProfileScreen(
                         modifier = containerModifier,
                     )
                 }
 
                 composable(Screen.TeacherQuiz.route) {
+                    globalManager.setAppbarTitle("Quiz")
                     TeacherQuizScreen(
                         modifier = containerModifier,
                         navController = navController,
@@ -396,6 +399,7 @@ fun LearningQApp(
 
 
                 composable(Screen.TeacherQuizAdd.route) {
+                    globalManager.setAppbarTitle("New Quiz")
                     TeacherQuizAddScreen(
                         modifier = containerModifier
                     )

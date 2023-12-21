@@ -498,7 +498,8 @@ fun DialogLogout(
     onDismissRequest: () -> Unit = {},
     logout: () -> Unit = {},
 ) {
-    AlertDialog(containerColor = MaterialTheme.colorScheme.background,
+    AlertDialog(
+        containerColor = MaterialTheme.colorScheme.surface,
         onDismissRequest = onDismissRequest,
         icon = { //                        Icon(icon, contentDescription = "Example Icon")
         },

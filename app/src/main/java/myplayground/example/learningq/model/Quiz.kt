@@ -10,8 +10,8 @@ data class Quiz(
     val courseId: String = "",
     val name: String = "",
     val totalQuestion: Int = 0,
-    val course: Course? = null,
     val isCompleted: Boolean = false,
+    val course: Course? = null,
 )
 
 data class QuizQuestion(

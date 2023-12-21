@@ -13,6 +13,8 @@ data class Course(
     val startTimeInMinutes: TimeInSeconds = TimeInSeconds(0), // 3600 = 01:00, 7200 = 02:00
     val endTimeInMinutes: TimeInSeconds = TimeInSeconds(0),
     val description: String? = null,
+
+    val `class`: Class? = null,
 )
 
 data class CourseStudent(

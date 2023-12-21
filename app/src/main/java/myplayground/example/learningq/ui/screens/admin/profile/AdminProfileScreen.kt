@@ -67,7 +67,6 @@ fun AdminProfileContent(
     isLoading: Boolean = false,
     user: User? = null,
 ) {
-
     Column(
         modifier = modifier
             .fillMaxSize()

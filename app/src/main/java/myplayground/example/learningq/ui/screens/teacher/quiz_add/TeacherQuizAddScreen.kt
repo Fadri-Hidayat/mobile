@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
@@ -28,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -66,7 +69,7 @@ fun TeacherQuizAddScreen(
 @Composable
 fun TeacherQuizAddContent(
     modifier: Modifier = Modifier,
-    inputData: TeacherQuizAddInputData = TeacherQuizAddInputData(),
+    inputData: TeacherQuizAddData = TeacherQuizAddData(),
     isMenuExpanded: MutableState<Boolean> = mutableStateOf(false),
     onEvent: (TeacherQuizAddEvent) -> Unit = {},
 ) {
@@ -82,32 +85,6 @@ fun TeacherQuizAddContent(
             color = MaterialTheme.colorScheme.onBackground,
         )
         Spacer(modifier = Modifier.height(28.dp))
-        Row {
-            CustomRadioBadge(
-                modifier = Modifier.weight(1F),
-                selected = inputData.selectedQuizType == 1,
-                onClick = {
-                    onEvent(TeacherQuizAddEvent.QuizTypeSelected(1))
-                },
-                text = "Essay",
-                contentAlignment = Alignment.Center,
-            )
-
-            Spacer(modifier = Modifier.width(40.dp))
-
-            CustomRadioBadge(
-                modifier = Modifier.weight(1F),
-                selected = inputData.selectedQuizType == 2,
-                onClick = {
-                    onEvent(TeacherQuizAddEvent.QuizTypeSelected(2))
-                },
-                text = "Pilgan",
-                contentAlignment = Alignment.Center,
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
 
         Box {
 
@@ -117,8 +94,11 @@ fun TeacherQuizAddContent(
                     isMenuExpanded.value = !isMenuExpanded.value
                 },
             ) {
-                CustomOutlinedTextField(value = "",
-                    onValueChange = {},
+                CustomOutlinedTextField(
+                    value = inputData.selectedClass?.name ?: "",
+                    onValueChange = {
+//                                    onEvent(TeacherQuizAddEvent.ClassSelected(it))
+                    },
                     label = { Text("Class") },
                     modifier = Modifier
                         .menuAnchor()
@@ -132,27 +112,17 @@ fun TeacherQuizAddContent(
                         isMenuExpanded.value = false
                     }, modifier = Modifier.fillMaxWidth()
                 ) { ->
-                    listOf(
-                        Class(
-                            id = "1",
-                            name = "Class A",
-                        ),
-                        Class(
-                            id = "2",
-                            name = "Class B",
-                        ),
-                        Class(
-                            id = "3",
-                            name = "Class C",
-                        ),
-                    ).forEach { item ->
-                        DropdownMenuItem(onClick = {
-                            onEvent(TeacherQuizAddEvent.ClassSelected(item))
-                            isMenuExpanded.value = false
-                        }, text = {
-                            Text(text = item.name)
-                        })
-                    }
+                    inputData
+                        .classList
+                        ?.toList()
+                        ?.forEach { item ->
+                            DropdownMenuItem(onClick = {
+                                onEvent(TeacherQuizAddEvent.ClassSelected(item))
+                                isMenuExpanded.value = false
+                            }, text = {
+                                Text(text = item.name)
+                            })
+                        }
                 }
             }
         }
@@ -188,16 +158,19 @@ fun TeacherQuizAddContent(
 
         CustomOutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = inputData.title,
+            value = "${inputData.totalQuestion}",
             onValueChange = {
-                onEvent(TeacherQuizAddEvent.DescriptionChanged(it))
+                onEvent(TeacherQuizAddEvent.TotalQuestionChanged(it.toInt()))
             },
-            minLines = 3,
-            maxLines = 5,
+            minLines = 1,
+            maxLines = 1,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number,
+            ),
 //            enabled = !isLoading,
             label = {
                 Text(
-                    "Description",
+                    "Total question",
                     style = MaterialTheme.typography.bodyLarge,
                 )
             },

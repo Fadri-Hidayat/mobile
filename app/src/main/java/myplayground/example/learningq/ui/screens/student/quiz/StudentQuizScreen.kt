@@ -3,9 +3,12 @@ package myplayground.example.learningq.ui.screens.student.quiz
 import android.app.Application
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -162,14 +165,23 @@ fun StudentQuizCard(
         Row(
             modifier = Modifier.padding(8.dp, 8.dp, 12.dp, 8.dp),
         ) {
-            Text(
+            Column(
                 modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .widthIn(0.dp, 240.dp),
-                text = quiz.name,
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
+                    .fillMaxHeight()
+                    .widthIn(0.dp, 260.dp),
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Text(
+                    text = "${quiz.course?.name ?: ""}\n${quiz.course?.`class`?.name ?: ""}",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+                Text(
+                    text = quiz.name,
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+            }
             Spacer(modifier = Modifier.weight(1F))
 
             if (!quiz.isCompleted) {

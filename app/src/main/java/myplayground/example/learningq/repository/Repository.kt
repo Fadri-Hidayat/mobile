@@ -30,6 +30,16 @@ interface Repository {
 
     suspend fun fetchTeacherQuizPaging(apiService: ApiService): Flow<PagingData<Quiz>>
 
+    suspend fun fetchTeacherClassByTeacherUserId(
+        teacherUserId: String,
+        apiService: ApiService
+    ): List<Class>
+
+    suspend fun fetchTeacherCoursePaging(
+        teacherId: String,
+        apiService: ApiService
+    ): Flow<PagingData<Course>>
+
     suspend fun fetchUserPaging(apiService: ApiService): Flow<PagingData<User>>
 }
 

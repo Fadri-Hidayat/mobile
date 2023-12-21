@@ -1,6 +1,5 @@
 package myplayground.example.learningq.network
 
-import android.util.Log
 import kotlinx.coroutines.delay
 import myplayground.example.learningq.local_storage.LocalStorageManager
 import myplayground.example.learningq.model.Class
@@ -20,6 +19,7 @@ import myplayground.example.learningq.network.utils.WithCourses
 import myplayground.example.learningq.network.utils.WithPagination
 import myplayground.example.learningq.utils.CustomDayOfWeek
 import myplayground.example.learningq.utils.TimeInSeconds
+import myplayground.example.learningq.utils.removeDuplicatesBy
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.HttpException
 import retrofit2.Response
@@ -108,8 +108,6 @@ class FakeApiService(val localStorageManager: LocalStorageManager) : ApiService 
     override suspend fun fetchStudentQuizQuestion(quizId: String): List<QuizQuestion> {
         delay(500)
 
-        Log.i("CCCCCCC", quizId)
-
         return QUIZ_QUESTION_LIST.filter { it.quizId == quizId }
     }
 
@@ -137,6 +135,32 @@ class FakeApiService(val localStorageManager: LocalStorageManager) : ApiService 
         val (classId, page, limit) = body
 
         val filteredCourseList = COURSE_LIST.filter { it.classId == classId }
+
+        val startIndex = minOf((page - 1) * limit, filteredCourseList.size)
+        val endIndex = minOf(startIndex + limit, filteredCourseList.size)
+
+        return WithPagination(
+            data = filteredCourseList.subList(startIndex, endIndex),
+            page = page,
+            status = "success",
+            totalPage = ceil(filteredCourseList.size.toFloat() / limit.toFloat()).toInt(),
+        )
+    }
+
+    override suspend fun fetchTeacherClassByTeacherUserId(teacherUserId: String): List<Class> {
+        delay(400)
+
+        return COURSE_LIST.map { course -> course.`class`!! }.removeDuplicatesBy { it.id }
+    }
+
+    override suspend fun fetchTeacherCoursesByTeacherUserId(
+        teacherUserId: String,
+        page: Int,
+        limit: Int
+    ): WithPagination<List<Course>> {
+        delay(1500)
+
+        val filteredCourseList = COURSE_LIST.filter { it.teacherUserId == teacherUserId }
 
         val startIndex = minOf((page - 1) * limit, filteredCourseList.size)
         val endIndex = minOf(startIndex + limit, filteredCourseList.size)
@@ -211,16 +235,20 @@ class FakeApiService(val localStorageManager: LocalStorageManager) : ApiService 
                     startTimeInMinutes = TimeInSeconds(28800),
                     endTimeInMinutes = TimeInSeconds(54000),
                     description = null,
+
+                    `class` = CLASS_LIST[0],
                 ),
                 Course(
                     id = "2",
                     classId = "1",
-                    name = "English",
+                    name = "Inggris",
                     teacherUserId = "2",
                     dayOfWeek = CustomDayOfWeek.TUESDAY,
                     startTimeInMinutes = TimeInSeconds(28800),
                     endTimeInMinutes = TimeInSeconds(54000),
                     description = null,
+
+                    `class` = CLASS_LIST[0],
                 ),
             )
 
@@ -247,8 +275,16 @@ class FakeApiService(val localStorageManager: LocalStorageManager) : ApiService 
                 Quiz(
                     id = "3",
                     courseId = COURSE_LIST[1].id,
-                    name = "Quiz BAB I",
+                    name = "Quiz BAB I.I",
                     totalQuestion = 3,
+                    course = COURSE_LIST[1],
+                    isCompleted = true,
+                ),
+                Quiz(
+                    id = "4",
+                    courseId = COURSE_LIST[1].id,
+                    name = "Quiz BAB I.II",
+                    totalQuestion = 1,
                     course = COURSE_LIST[1],
                     isCompleted = true,
                 ),
@@ -306,6 +342,8 @@ class FakeApiService(val localStorageManager: LocalStorageManager) : ApiService 
 
             quizQuestionList.toList()
         }
+
+//        val REPORT_LIST : List<>
 
 
         val studentUser = User(
