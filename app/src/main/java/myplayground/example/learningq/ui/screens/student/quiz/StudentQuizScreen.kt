@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -21,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
@@ -53,8 +55,6 @@ fun StudentQuizScreen(
     navController: NavHostController = rememberNavController()
 ) {
     val quizPagingItems: LazyPagingItems<Quiz> = vm.quizState.collectAsLazyPagingItems()
-
-
 
     StudentQuizContent(
         modifier = modifier,
@@ -99,37 +99,10 @@ fun StudentQuizContent(
             items(quizPagingItems.itemCount) { index ->
                 val currentQuiz = quizPagingItems[index]!!
 
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.tertiary,
-                    ),
-                ) {
-                    Row(
-                        modifier = Modifier.padding(8.dp, 8.dp, 12.dp, 8.dp),
-                    ) {
-                        Text(
-                            modifier = Modifier.align(Alignment.CenterVertically),
-                            text = currentQuiz.name,
-                            style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.onSurface,
-                        )
-                        Spacer(modifier = Modifier.weight(1F))
-                        Button(
-                            modifier = Modifier.align(Alignment.CenterVertically),
-                            shape = MaterialTheme.shapes.small,
-                            onClick = {
-                                navigateToDetail(currentQuiz.id)
-                            },
-                        ) {
-                            Text(
-                                text = "Start",
-                                color = MaterialTheme.colorScheme.onPrimary,
-                                style = MaterialTheme.typography.headlineSmall,
-                            )
-                        }
-                    }
-                }
+                StudentQuizCard(
+                    currentQuiz,
+                    navigateToDetail,
+                )
 
                 Spacer(modifier = Modifier.height(12.dp))
             }
@@ -176,6 +149,65 @@ fun StudentQuizContent(
 }
 
 @Composable
+fun StudentQuizCard(
+    quiz: Quiz,
+    navigateToDetail: (id: String) -> Unit = {},
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.tertiary,
+        ),
+    ) {
+        Row(
+            modifier = Modifier.padding(8.dp, 8.dp, 12.dp, 8.dp),
+        ) {
+            Text(
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .widthIn(0.dp, 240.dp),
+                text = quiz.name,
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            Spacer(modifier = Modifier.weight(1F))
+
+            if (!quiz.isCompleted) {
+                Button(
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    shape = MaterialTheme.shapes.small,
+                    onClick = {
+                        navigateToDetail(quiz.id)
+                    },
+                ) {
+                    Text(
+                        text = "Start",
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        style = MaterialTheme.typography.headlineSmall,
+                    )
+                }
+            } else {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .clip(MaterialTheme.shapes.extraLarge)
+                        .background(
+                            Color.Green
+                        )
+                        .padding(8.dp, 4.dp),
+                ) {
+                    Text(
+                        text = "Completed",
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        style = MaterialTheme.typography.headlineSmall,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
 fun StudentQuizCardSkeletonView() {
     Box(
         modifier = Modifier
@@ -201,5 +233,28 @@ fun StudentQuizContentPreview() {
 fun StudentQuizCardSkeletonViewPreview() {
     LearningQTheme {
         StudentQuizCardSkeletonView()
+    }
+}
+
+@Preview(showBackground = true, device = Devices.PIXEL_4)
+@Preview(showBackground = true, device = Devices.PIXEL_4, uiMode = UI_MODE_NIGHT_YES)
+@Composable
+fun StudentQuizCardPreview() {
+    LearningQTheme {
+        StudentQuizCard(
+            quiz = Quiz(
+                id = "1",
+                name = "Quiz BAB I",
+                isCompleted = false,
+            )
+        )
+
+        StudentQuizCard(
+            quiz = Quiz(
+                id = "1",
+                name = "Quiz BAB I",
+                isCompleted = true,
+            )
+        )
     }
 }

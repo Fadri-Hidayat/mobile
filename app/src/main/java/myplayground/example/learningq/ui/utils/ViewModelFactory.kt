@@ -57,7 +57,7 @@ class ViewModelFactory(
         } else if (modelClass.isAssignableFrom(StudentQuizViewModel::class.java)) {
             return StudentQuizViewModel(repository, localStorageManager) as T
         } else if (modelClass.isAssignableFrom(StudentQuizDetailViewModel::class.java)) {
-            return StudentQuizDetailViewModel(repository) as T
+            return StudentQuizDetailViewModel(repository, localStorageManager) as T
         } else if (modelClass.isAssignableFrom(StudentPresenceViewModel::class.java)) {
             return StudentPresenceViewModel(repository, localStorageManager) as T
         } else if (modelClass.isAssignableFrom(StudentPresenceDetailViewModel::class.java)) {

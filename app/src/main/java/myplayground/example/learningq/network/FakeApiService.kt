@@ -1,10 +1,13 @@
 package myplayground.example.learningq.network
 
+import android.util.Log
 import kotlinx.coroutines.delay
 import myplayground.example.learningq.local_storage.LocalStorageManager
 import myplayground.example.learningq.model.Class
 import myplayground.example.learningq.model.Course
 import myplayground.example.learningq.model.Quiz
+import myplayground.example.learningq.model.QuizQuestion
+import myplayground.example.learningq.model.QuizQuestionType
 import myplayground.example.learningq.model.Role
 import myplayground.example.learningq.model.Token
 import myplayground.example.learningq.model.User
@@ -102,6 +105,14 @@ class FakeApiService(val localStorageManager: LocalStorageManager) : ApiService 
         )
     }
 
+    override suspend fun fetchStudentQuizQuestion(quizId: String): List<QuizQuestion> {
+        delay(500)
+
+        Log.i("CCCCCCC", quizId)
+
+        return QUIZ_QUESTION_LIST.filter { it.quizId == quizId }
+    }
+
     override suspend fun fetchStudentClasses(
         page: Int, limit: Int
     ): WithPagination<WithCourses<List<Class>>> {
@@ -176,20 +187,6 @@ class FakeApiService(val localStorageManager: LocalStorageManager) : ApiService 
         @Volatile
         private var instance: FakeApiService? = null
 
-        val QUIZ_LIST: List<Quiz> by lazy {
-
-            val quizList = mutableListOf<Quiz>()
-            for (i in 1..30) {
-                val quiz = Quiz(
-                    id = "$i",
-                    name = "Quiz $i",
-                )
-                quizList.add(quiz)
-            }
-
-            quizList.toList()
-        }
-
         val CLASS_LIST: List<Class> by lazy {
 
             val classList = mutableListOf(
@@ -218,7 +215,7 @@ class FakeApiService(val localStorageManager: LocalStorageManager) : ApiService 
                 Course(
                     id = "2",
                     classId = "1",
-                    name = "Fisika",
+                    name = "English",
                     teacherUserId = "2",
                     dayOfWeek = CustomDayOfWeek.TUESDAY,
                     startTimeInMinutes = TimeInSeconds(28800),
@@ -228,6 +225,86 @@ class FakeApiService(val localStorageManager: LocalStorageManager) : ApiService 
             )
 
             courseList.toList()
+        }
+
+
+        val QUIZ_LIST: List<Quiz> by lazy {
+            val quizList = mutableListOf(
+                Quiz(
+                    id = "1",
+                    courseId = COURSE_LIST[0].id,
+                    name = "Quiz BAB II Penjumlahan, Pengurangan",
+                    totalQuestion = 3,
+                    course = COURSE_LIST[0],
+                ),
+                Quiz(
+                    id = "2",
+                    courseId = COURSE_LIST[1].id,
+                    name = "Quiz BAB II Essay",
+                    totalQuestion = 2,
+                    course = COURSE_LIST[1],
+                ),
+                Quiz(
+                    id = "3",
+                    courseId = COURSE_LIST[1].id,
+                    name = "Quiz BAB I",
+                    totalQuestion = 3,
+                    course = COURSE_LIST[1],
+                    isCompleted = true,
+                ),
+            )
+
+            quizList.toList()
+        }
+
+        val QUIZ_QUESTION_LIST: List<QuizQuestion> by lazy {
+            val quizQuestionList = mutableListOf(
+                QuizQuestion(
+                    id = "1",
+                    quizOrder = 1,
+                    quizId = QUIZ_LIST[0].id,
+                    title = "1 + 1",
+                    quizType = QuizQuestionType.MultipleChoice,
+                    multipleChoiceList = listOf("1", "2", "3", "4"),
+                    multipleChoiceAnswerIndex = 2,
+                ),
+                QuizQuestion(
+                    id = "2",
+                    quizOrder = 2,
+                    quizId = QUIZ_LIST[0].id,
+                    title = "33 + 77",
+                    quizType = QuizQuestionType.MultipleChoice,
+                    multipleChoiceList = listOf("100", "110", "120", "130"),
+                    multipleChoiceAnswerIndex = 2,
+                ),
+                QuizQuestion(
+                    id = "3",
+                    quizOrder = 3,
+                    quizId = QUIZ_LIST[0].id,
+                    title = "25-6",
+                    quizType = QuizQuestionType.MultipleChoice,
+                    multipleChoiceList = listOf("15", "17", "18", "19"),
+                    multipleChoiceAnswerIndex = 4,
+                ),
+                QuizQuestion(
+                    id = "4",
+                    quizOrder = 1,
+                    quizId = QUIZ_LIST[1].id,
+                    title = "I ___ to school everyday.",
+                    quizType = QuizQuestionType.MultipleChoice,
+                    multipleChoiceList = listOf("go", "goes", "going", "am going"),
+                    multipleChoiceAnswerIndex = 1,
+                ),
+                QuizQuestion(
+                    id = "5",
+                    quizOrder = 2,
+                    quizId = QUIZ_LIST[1].id,
+                    title = "Describe yourself.",
+                    quizType = QuizQuestionType.Essay,
+                ),
+            )
+
+            quizQuestionList.toList()
         }
 
 

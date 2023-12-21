@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.flow
 import myplayground.example.learningq.model.Class
 import myplayground.example.learningq.model.Course
 import myplayground.example.learningq.model.Quiz
+import myplayground.example.learningq.model.QuizQuestion
 import myplayground.example.learningq.model.Token
 import myplayground.example.learningq.model.User
 import myplayground.example.learningq.network.ApiService
@@ -50,31 +51,6 @@ class FakeRepository(
         delay(1500)
 
         return apiService.userMe().user
-//
-//
-//        if (token.length <= "token ".length) {
-//            return studentUser
-//        }
-//
-//        return when (token.substring("token ".length)) {
-//            "student" -> {
-//                studentUser
-//            }
-//
-//            "teacher" -> {
-//                teacherUser
-//            }
-//
-//            "admin" -> {
-//                adminUser
-//            }
-//
-//            "parent" -> {
-//                parentUser
-//            }
-//
-//            else -> studentUser
-//        }
     }
 
     override suspend fun fetchStudentQuizPaging(apiService: ApiService): Flow<PagingData<Quiz>> {
@@ -90,6 +66,14 @@ class FakeRepository(
                 )
             }).flow
     }
+
+    override suspend fun fetchStudentQuizQuestionByQuizId(
+        quizId: String,
+        apiService: ApiService
+    ): List<QuizQuestion> {
+        return apiService.fetchStudentQuizQuestion(quizId)
+    }
+
 
     override suspend fun fetchStudentClassPaging(apiService: ApiService): Flow<PagingData<Class>> {
         return Pager(

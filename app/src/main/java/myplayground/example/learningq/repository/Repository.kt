@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import myplayground.example.learningq.model.Class
 import myplayground.example.learningq.model.Course
 import myplayground.example.learningq.model.Quiz
+import myplayground.example.learningq.model.QuizQuestion
 import myplayground.example.learningq.model.Token
 import myplayground.example.learningq.model.User
 import myplayground.example.learningq.network.ApiService
@@ -15,6 +16,11 @@ interface Repository {
     suspend fun userMe(token: String, apiService: ApiService): User?
 
     suspend fun fetchStudentQuizPaging(apiService: ApiService): Flow<PagingData<Quiz>>
+    suspend fun fetchStudentQuizQuestionByQuizId(
+        quizId: String,
+        apiService: ApiService
+    ): List<QuizQuestion>
+
     suspend fun fetchStudentClassPaging(apiService: ApiService): Flow<PagingData<Class>>
 
     suspend fun fetchStudentCourseByClassId(

@@ -3,6 +3,7 @@ package myplayground.example.learningq.network
 import myplayground.example.learningq.model.Class
 import myplayground.example.learningq.model.Course
 import myplayground.example.learningq.model.Quiz
+import myplayground.example.learningq.model.QuizQuestion
 import myplayground.example.learningq.model.User
 import myplayground.example.learningq.network.request.AdminCreateUserRequest
 import myplayground.example.learningq.network.request.LoginRequest
@@ -14,6 +15,7 @@ import myplayground.example.learningq.network.utils.WithPagination
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
@@ -30,6 +32,9 @@ interface ApiService {
         limit: Int,
     ): WithPagination<List<Quiz>>
 
+    suspend fun fetchStudentQuizQuestion(
+        quizId: String,
+    ): List<QuizQuestion>
 
     @GET("/course")
     suspend fun fetchStudentClasses(
