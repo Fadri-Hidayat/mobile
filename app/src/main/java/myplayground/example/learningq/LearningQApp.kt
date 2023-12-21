@@ -68,6 +68,7 @@ import myplayground.example.learningq.ui.screens.student.report.StudentReportScr
 import myplayground.example.learningq.ui.screens.student.report_detail.StudentReportDetailScreen
 import myplayground.example.learningq.ui.screens.teacher.dashboard.TeacherDashboardScreen
 import myplayground.example.learningq.ui.screens.teacher.feedback.TeacherFeedbackScreen
+import myplayground.example.learningq.ui.screens.teacher.feedback_detail.TeacherFeedbackDetailScreen
 import myplayground.example.learningq.ui.screens.teacher.profile.TeacherProfileScreen
 import myplayground.example.learningq.ui.screens.teacher.quiz.TeacherQuizScreen
 import myplayground.example.learningq.ui.screens.teacher.quiz_add.TeacherQuizAddScreen
@@ -394,8 +395,24 @@ fun LearningQApp(
                     TeacherFeedbackScreen(
                         modifier = containerModifier,
                         courseId = courseId,
+                        navController = navController,
                     )
                 }
+
+
+                composable(
+                    Screen.TeacherFeedbackDetail.route,
+                    arguments = listOf(navArgument("id") { type = NavType.StringType }),
+                ) {
+                    globalManager.setAppbarTitle("Feedback")
+
+                    val feedbackId = it.arguments?.getString("id") ?: ""
+                    TeacherFeedbackDetailScreen(
+                        modifier = containerModifier,
+                        feedbackId = feedbackId,
+                    )
+                }
+
 
 
                 composable(Screen.TeacherProfile.route) {

@@ -183,6 +183,10 @@ class FakeApiService(val localStorageManager: LocalStorageManager) : ApiService 
         return FEEDBACK_LIST.filter { it.teacherUserId == teacherUserId && it.quiz!!.courseId == courseId }
     }
 
+    override suspend fun fetchFeedbackById(feedbackId: String): Feedback? {
+        return FEEDBACK_LIST.find { it.id == feedbackId }
+    }
+
     override suspend fun fetchTeacherQuiz(page: Int, limit: Int): WithPagination<List<Quiz>> {
         delay(1500)
 

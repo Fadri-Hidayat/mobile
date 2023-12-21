@@ -42,6 +42,11 @@ interface Repository {
         apiService: ApiService,
     ): List<Feedback>
 
+    suspend fun fetchFeedbackById(
+        feedbackId: String,
+        apiService: ApiService,
+    ): Feedback?
+
     suspend fun fetchTeacherCoursePaging(
         teacherId: String,
         apiService: ApiService

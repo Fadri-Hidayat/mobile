@@ -33,6 +33,10 @@ sealed class Screen(val route: String) {
         fun createRoute(courseId: String) = "teacherfeedback/$courseId"
     }
 
+    object TeacherFeedbackDetail : Screen("teacherfeedbackdetail/{id}") {
+        fun createRoute(feedbackId: String) = "teacherfeedbackdetail/$feedbackId"
+    }
+
     object TeacherQuiz : Screen("teacherquiz")
     object TeacherQuizAdd : Screen("teacherquizadd")
 

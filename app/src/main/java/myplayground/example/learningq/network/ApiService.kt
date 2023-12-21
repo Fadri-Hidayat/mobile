@@ -62,6 +62,10 @@ interface ApiService {
         courseId: String,
     ): List<Feedback>
 
+    suspend fun fetchFeedbackById(
+        feedbackId: String,
+    ): Feedback?
+
     suspend fun fetchTeacherQuiz(
         page: Int,
         limit: Int,

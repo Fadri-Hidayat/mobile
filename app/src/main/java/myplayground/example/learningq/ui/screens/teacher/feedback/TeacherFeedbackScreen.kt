@@ -39,11 +39,14 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import myplayground.example.learningq.di.Injection
 import myplayground.example.learningq.local_storage.DatastoreSettings
 import myplayground.example.learningq.local_storage.dataStore
 import myplayground.example.learningq.model.Course
 import myplayground.example.learningq.model.Feedback
+import myplayground.example.learningq.ui.navigation.Screen
 import myplayground.example.learningq.ui.screens.student.quiz.StudentQuizCardSkeletonView
 import myplayground.example.learningq.ui.theme.LearningQTheme
 import myplayground.example.learningq.ui.utils.ViewModelFactory
@@ -59,6 +62,7 @@ fun TeacherFeedbackScreen(
         )
     ),
     courseId: String = "",
+    navController: NavHostController = rememberNavController(),
 ) {
     val inputData by vm.uiState
     val context = LocalContext.current
@@ -79,13 +83,16 @@ fun TeacherFeedbackScreen(
     TeacherFeedbackContent(
         modifier = modifier,
         inputData = inputData,
-    )
+    ) { feedbackId ->
+        navController.navigate(Screen.TeacherFeedbackDetail.createRoute(feedbackId))
+    }
 }
 
 @Composable
 fun TeacherFeedbackContent(
     modifier: Modifier = Modifier,
     inputData: TeacherFeedbackData = TeacherFeedbackData(),
+    navigateToFeedbackDetail: (feedbackId: String) -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -99,6 +106,7 @@ fun TeacherFeedbackContent(
             items(inputData.listFeedback.toList()) { currentFeedback ->
                 TeacherFeedbackCourse(
                     currentFeedback,
+                    navigateToFeedbackDetail,
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -111,6 +119,7 @@ fun TeacherFeedbackContent(
 @Composable
 fun TeacherFeedbackCourse(
     feedback: Feedback,
+    navigateToFeedbackDetail: (feedbackId: String) -> Unit = {},
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -149,7 +158,9 @@ fun TeacherFeedbackCourse(
             Button(
                 modifier = Modifier.align(Alignment.CenterVertically),
                 shape = MaterialTheme.shapes.small,
-                onClick = {},
+                onClick = {
+                    navigateToFeedbackDetail(feedback.id)
+                },
             ) {
                 Text(
                     text = "Detail",

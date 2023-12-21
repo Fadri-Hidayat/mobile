@@ -140,6 +140,13 @@ class FakeRepository(
         return apiService.fetchTeacherFeedbackByTeacherUserIdAndCourseId(teacherUserId, courseId)
     }
 
+    override suspend fun fetchFeedbackById(
+        feedbackId: String,
+        apiService: ApiService,
+    ): Feedback? {
+        return apiService.fetchFeedbackById(feedbackId)
+    }
+
     override suspend fun fetchTeacherCoursePaging(
         teacherId: String,
         apiService: ApiService
