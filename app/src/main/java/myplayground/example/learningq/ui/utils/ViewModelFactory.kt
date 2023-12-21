@@ -25,6 +25,7 @@ import myplayground.example.learningq.ui.screens.student.quiz_detail.StudentQuiz
 import myplayground.example.learningq.ui.screens.student.report.StudentReportViewModel
 import myplayground.example.learningq.ui.screens.student.report_detail.StudentReportDetailViewModel
 import myplayground.example.learningq.ui.screens.teacher.dashboard.TeacherDashboardViewModel
+import myplayground.example.learningq.ui.screens.teacher.feedback.TeacherFeedbackViewModel
 import myplayground.example.learningq.ui.screens.teacher.profile.TeacherProfileViewModel
 import myplayground.example.learningq.ui.screens.teacher.quiz.TeacherQuizViewModel
 import myplayground.example.learningq.ui.screens.teacher.quiz_add.TeacherQuizAddViewModel
@@ -78,6 +79,8 @@ class ViewModelFactory(
             return TeacherQuizViewModel(repository, localStorageManager) as T
         } else if (modelClass.isAssignableFrom(TeacherQuizAddViewModel::class.java)) {
             return TeacherQuizAddViewModel(repository, localStorageManager, authManager) as T
+        } else if (modelClass.isAssignableFrom(TeacherFeedbackViewModel::class.java)) {
+            return TeacherFeedbackViewModel(repository, localStorageManager, authManager) as T
         } else if (modelClass.isAssignableFrom(AdminDashboardViewModel::class.java)) {
             return AdminDashboardViewModel() as T
         } else if (modelClass.isAssignableFrom(AdminUserViewModel::class.java)) {

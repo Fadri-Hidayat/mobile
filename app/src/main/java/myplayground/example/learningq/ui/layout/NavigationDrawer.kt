@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Quiz
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.ShortText
 import androidx.compose.material.icons.filled.SupervisedUserCircle
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -312,11 +313,11 @@ fun DrawerBodyTeacher(
         closeDrawer = closeDrawer,
         items = listOf(
             MenuItem(
-                id = "home",
-                title = "Home",
-                contentDescription = "Home",
+                id = "feedback",
+                title = "Feedback",
+                contentDescription = "Feedback",
                 activeRoute = Screen.TeacherDashboard.route,
-                icon = Icons.Default.Home,
+                icon = Icons.Default.ShortText,
                 color = MaterialTheme.colorScheme.onBackground,
             ),
             MenuItem(
@@ -352,7 +353,7 @@ fun DrawerBodyTeacher(
         ),
         onItemClick = { menuItem ->
             when (menuItem.id) {
-                "home" -> {
+                "feedback" -> {
                     navController.navigate(Screen.TeacherDashboard.route) {
                         popUpTo(0)
                     }

@@ -5,8 +5,6 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import myplayground.example.learningq.di.Injection
@@ -17,13 +15,8 @@ import myplayground.example.learningq.repository.UserLoginInput
 import myplayground.example.learningq.ui.utils.StringValidationRule
 import myplayground.example.learningq.ui.utils.validate
 import myplayground.example.learningq.utils.allNull
-import org.json.JSONObject
 import org.tensorflow.lite.Interpreter
 import retrofit2.HttpException
-import java.io.FileInputStream
-import java.io.IOException
-import java.nio.MappedByteBuffer
-import java.nio.channels.FileChannel
 
 class SignInViewModel(
     private val context: Context,
@@ -38,7 +31,6 @@ class SignInViewModel(
 
     val validationEvent = MutableSharedFlow<SignInUIEvent.ValidationEvent>()
 
-    var tfLiteModel: Interpreter? = null
 
     fun onEvent(event: SignInUIEvent) {
         when (event) {
@@ -102,137 +94,5 @@ class SignInViewModel(
             }
         }
     }
-
-    fun predict(context: Context) {
-        tfLiteModel = Interpreter(loadModelFile(context))
-
-        val inputSentence =
-            "Guru ini sangat pandai dalam mengajar dan membuat materi mudah dipahami"
-        val inputSize = inputSentence.split(" ").size;
-
-        val classifier = Classifier(context, "nlp_token.json", inputSize)
-        classifier.processVocab(object : Classifier.VocabCallback {
-            override fun onVocabProcessed() {
-                val tokenizedMessage = classifier.tokenize(inputSentence)
-                val paddedMessage = classifier.padSequence(tokenizedMessage)
-
-//                val results = classifySequence(paddedMessage)
-
-                tfLiteModel?.close()
-            }
-        })
-    }
-
-    private fun classifySequence(sequence: IntArray): FloatArray {
-        val inputs: Array<FloatArray> = arrayOf(sequence.map { it.toFloat() }.toFloatArray())
-
-        val outputs: Array<FloatArray> = arrayOf(FloatArray(1))
-        tfLiteModel?.run(inputs, outputs)
-        return outputs[0]
-    }
-
-
-    private fun loadModelFile(context: Context): MappedByteBuffer {
-        val fileDescriptor = context.assets.openFd("nlp.tflite")
-        val inputStream = FileInputStream(fileDescriptor.fileDescriptor)
-        val fileChannel = inputStream.channel
-        val startOffset = fileDescriptor.startOffset
-        val declareLength = fileDescriptor.declaredLength
-
-        return fileChannel.map(
-            FileChannel.MapMode.READ_ONLY,
-            startOffset,
-            declareLength,
-        )
-    }
-
 }
 
-
-class Classifier(context: Context, jsonFilename: String, inputMaxLen: Int) {
-
-    private var context: Context? = context
-
-    private var filename: String = jsonFilename
-
-    private var maxlen: Int = inputMaxLen
-
-    private var vocabData: HashMap<String, Int>? = null
-
-    private fun loadJSONFromAsset(filename: String): String? {
-        var json: String?
-        try {
-            val inputStream = context!!.assets.open(filename)
-            val size = inputStream.available()
-            val buffer = ByteArray(size)
-            inputStream.read(buffer)
-            inputStream.close()
-            json = String(buffer)
-        } catch (ex: IOException) {
-            ex.printStackTrace()
-            return null
-        }
-        return json
-    }
-
-    fun processVocab(callback: VocabCallback) {
-        CoroutineScope(Dispatchers.Main).launch {
-            loadVocab(callback, loadJSONFromAsset(filename)!!)
-        }
-    }
-
-    fun tokenize(message: String): IntArray {
-        val parts: List<String> = message.split(" ")
-        val tokenizedMessage = ArrayList<Int>()
-        for (part in parts) {
-            if (part.trim() != "") {
-                var index: Int? = 0
-                index = if (vocabData!![part] == null) {
-                    0
-                } else {
-                    vocabData!![part]
-                }
-                tokenizedMessage.add(index!!)
-            }
-        }
-        return tokenizedMessage.toIntArray()
-    }
-
-    fun padSequence(sequence: IntArray): IntArray {
-        val maxlen = this.maxlen
-        if (sequence.size > maxlen) {
-            return sequence.sliceArray(0..maxlen)
-        } else if (sequence.size < maxlen) {
-            val array = ArrayList<Int>()
-            array.addAll(sequence.asList())
-            for (i in array.size until maxlen) {
-                array.add(0)
-            }
-            return array.toIntArray()
-        } else {
-            return sequence
-        }
-    }
-
-
-    interface VocabCallback {
-        fun onVocabProcessed()
-    }
-
-    private fun loadVocab(callback: VocabCallback, json: String) {
-        with(Dispatchers.Default) {
-            val jsonObject = JSONObject(json)
-            val iterator: Iterator<String> = jsonObject.keys()
-            val data = HashMap<String, Int>()
-            while (iterator.hasNext()) {
-                val key = iterator.next()
-                data[key] = jsonObject.get(key) as Int
-            }
-            with(Dispatchers.Main) {
-                vocabData = data
-                callback.onVocabProcessed()
-            }
-        }
-    }
-
-}

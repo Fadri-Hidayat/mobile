@@ -4,6 +4,7 @@ import kotlinx.coroutines.delay
 import myplayground.example.learningq.local_storage.LocalStorageManager
 import myplayground.example.learningq.model.Class
 import myplayground.example.learningq.model.Course
+import myplayground.example.learningq.model.Feedback
 import myplayground.example.learningq.model.Quiz
 import myplayground.example.learningq.model.QuizQuestion
 import myplayground.example.learningq.model.QuizQuestionType
@@ -171,6 +172,15 @@ class FakeApiService(val localStorageManager: LocalStorageManager) : ApiService 
             status = "success",
             totalPage = ceil(filteredCourseList.size.toFloat() / limit.toFloat()).toInt(),
         )
+    }
+
+    override suspend fun fetchTeacherFeedbackByTeacherUserIdAndCourseId(
+        teacherUserId: String,
+        courseId: String
+    ): List<Feedback> {
+        delay(1000)
+
+        return FEEDBACK_LIST.filter { it.teacherUserId == teacherUserId && it.quiz!!.courseId == courseId }
     }
 
     override suspend fun fetchTeacherQuiz(page: Int, limit: Int): WithPagination<List<Quiz>> {
@@ -343,7 +353,42 @@ class FakeApiService(val localStorageManager: LocalStorageManager) : ApiService 
             quizQuestionList.toList()
         }
 
-//        val REPORT_LIST : List<>
+        val FEEDBACK_LIST: List<Feedback> by lazy {
+            val feedbackList = mutableListOf(
+                Feedback(
+                    id = "1",
+                    quizId = QUIZ_LIST[2].id,
+                    studentUserId = studentUser.id,
+                    teacherUserId = teacherUser.id,
+                    content = "Guru ini selalu memberikan kesempatan kepada siswa untuk berbicara",
+                    quiz = QUIZ_LIST[2],
+                    studentUser = studentUser,
+                    teacherUser = teacherUser,
+                ),
+                Feedback(
+                    id = "2",
+                    quizId = QUIZ_LIST[3].id,
+                    studentUserId = studentUser.id,
+                    teacherUserId = teacherUser.id,
+                    content = "Kurang memberikan dukungan kepada siswa yang mengalami kesulitan belajar",
+                    quiz = QUIZ_LIST[3],
+                    studentUser = studentUser,
+                    teacherUser = teacherUser,
+                ),
+                Feedback(
+                    id = "2",
+                    quizId = QUIZ_LIST[0].id,
+                    studentUserId = studentUser.id,
+                    teacherUserId = teacherUser.id,
+                    content = "Saya merasa guru ini memberikan nilai lebih dalam proses pembelajaran",
+                    quiz = QUIZ_LIST[0],
+                    studentUser = studentUser,
+                    teacherUser = teacherUser,
+                ),
+            )
+
+            feedbackList
+        }
 
 
         val studentUser = User(

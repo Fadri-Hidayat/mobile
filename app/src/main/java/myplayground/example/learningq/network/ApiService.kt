@@ -2,6 +2,7 @@ package myplayground.example.learningq.network
 
 import myplayground.example.learningq.model.Class
 import myplayground.example.learningq.model.Course
+import myplayground.example.learningq.model.Feedback
 import myplayground.example.learningq.model.Quiz
 import myplayground.example.learningq.model.QuizQuestion
 import myplayground.example.learningq.model.User
@@ -55,6 +56,11 @@ interface ApiService {
         page: Int,
         limit: Int,
     ): WithPagination<List<Course>>
+
+    suspend fun fetchTeacherFeedbackByTeacherUserIdAndCourseId(
+        teacherUserId: String,
+        courseId: String,
+    ): List<Feedback>
 
     suspend fun fetchTeacherQuiz(
         page: Int,

@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import myplayground.example.learningq.model.Class
 import myplayground.example.learningq.model.Course
+import myplayground.example.learningq.model.Feedback
 import myplayground.example.learningq.model.Quiz
 import myplayground.example.learningq.model.QuizQuestion
 import myplayground.example.learningq.model.Token
@@ -129,6 +130,14 @@ class FakeRepository(
         return apiService.fetchTeacherClassByTeacherUserId(
             teacherUserId
         )
+    }
+
+    override suspend fun fetchTeacherFeedbackByTeacherUserIdAndCourseId(
+        teacherUserId: String,
+        courseId: String,
+        apiService: ApiService
+    ): List<Feedback> {
+        return apiService.fetchTeacherFeedbackByTeacherUserIdAndCourseId(teacherUserId, courseId)
     }
 
     override suspend fun fetchTeacherCoursePaging(

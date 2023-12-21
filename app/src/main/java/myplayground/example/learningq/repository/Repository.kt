@@ -4,6 +4,7 @@ import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 import myplayground.example.learningq.model.Class
 import myplayground.example.learningq.model.Course
+import myplayground.example.learningq.model.Feedback
 import myplayground.example.learningq.model.Quiz
 import myplayground.example.learningq.model.QuizQuestion
 import myplayground.example.learningq.model.Token
@@ -34,6 +35,12 @@ interface Repository {
         teacherUserId: String,
         apiService: ApiService
     ): List<Class>
+
+    suspend fun fetchTeacherFeedbackByTeacherUserIdAndCourseId(
+        teacherUserId: String,
+        courseId: String,
+        apiService: ApiService,
+    ): List<Feedback>
 
     suspend fun fetchTeacherCoursePaging(
         teacherId: String,
